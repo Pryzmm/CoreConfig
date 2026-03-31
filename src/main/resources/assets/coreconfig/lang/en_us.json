@@ -1,0 +1,8 @@
+{
+  "key.category.coreconfig.coreconfig": "CoreConfig",
+  "key.coreconfig.open_config": "Open Config",
+
+  "ui.coreconfig.list": "Configuration List",
+  "ui.coreconfig.save": "Save",
+  "ui.coreconfig.exit": "Exit"
+}
