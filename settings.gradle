@@ -7,3 +7,8 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+rootProject.name = "coreconfig"
+
+include("coreconfig-api")
+include("coreconfig-core")
