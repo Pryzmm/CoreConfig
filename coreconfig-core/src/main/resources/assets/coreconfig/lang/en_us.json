@@ -1,0 +1,31 @@
+{
+
+  "config.coreconfig.coreconfig": "Core Config",
+  "config.coreconfig.switch_texture": "Switch Boolean Textures To Switches",
+  "config.coreconfig.switch_texture.desc": "Use a switch texture for boolean options instead of a checkmark. This is purely visual and has no effect on functionality.",
+
+  "key.category.coreconfig.coreconfig": "CoreConfig",
+  "key.coreconfig.open_config": "Open Config",
+
+  "ui.coreconfig.list": "Configuration List",
+  "ui.coreconfig.config_list": "Configurations for %s",
+  "ui.coreconfig.save": "Save Changes",
+  "ui.coreconfig.exit": "Exit",
+  "ui.coreconfig.no_config": "No configuration has been set up for this mod!",
+  "ui.coreconfig.cant_save": "You cannot save yet! Some options are invalid and need to be changed.",
+  "ui.coreconfig.restart_required": "RESTART REQUIRED",
+  "ui.coreconfig.restart_required_desc": "Your changes have been saved, but one or more changes require a restart. Other changes that do not require a restart have been automatically applied.",
+  "ui.coreconfig.confirm": "Confirm",
+  "ui.coreconfig.cancel": "Cancel",
+  "ui.coreconfig.exit_without_saving": "Exit Without Saving?",
+  "ui.coreconfig.exit_without_saving_desc": "Configuration changes you made will not save, and will be lost! Are you sure you want to do this?",
+
+  "error.coreconfig.error": "§c§lERROR",
+  "error.coreconfig.not_int": "§cValue must be an integer!",
+  "error.coreconfig.not_float": "§cValue must be a float!",
+  "error.coreconfig.lower_than_min": "§cValue is lower than the minimum!\n§f(%s < %s)",
+  "error.coreconfig.higher_than_max": "§cValue is higher than the maximum!\n§f(%s > %s)",
+  "error.coreconfig.lower_than_min_string": "§cLength is smaller than the minimum size!\n§f(%s < %s)",
+  "error.coreconfig.higher_than_max_string": "§cLength is larger than the maximum size!\n§f(%s > %s)",
+  "error.coreconfig.unknown": "§cCan't provide any information..."
+}
