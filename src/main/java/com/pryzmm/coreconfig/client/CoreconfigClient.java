@@ -1,6 +1,8 @@
 package com.pryzmm.coreconfig.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.pryzmm.coreconfig.CoreConfigConstants;
+import com.pryzmm.coreconfig.entry.CCEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -13,6 +15,8 @@ public class CoreconfigClient implements ClientModInitializer {
 
     public static KeyMapping OPEN_CONFIG;
 
+    public static CCEntry hoveredEntry = null;
+
     @Override
     public void onInitializeClient() {
 
@@ -24,7 +28,7 @@ public class CoreconfigClient implements ClientModInitializer {
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (OPEN_CONFIG.consumeClick()) client.execute(() -> client.setScreen(new CoreConfigScreen(null)));
+            while (OPEN_CONFIG.consumeClick()) client.execute(() -> client.setScreen(new CoreConfigScreen(CoreConfigConstants.MOD_ID)));
         });
 
     }

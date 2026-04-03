@@ -1,10 +1,14 @@
 package com.pryzmm.coreconfig.ui.objects;
 
-import com.pryzmm.coreconfig.Coreconfig;
+import com.pryzmm.coreconfig.CoreConfigConstants;
+import com.pryzmm.coreconfig.data.ModData;
+import com.pryzmm.coreconfig.data.ModHolder;
+import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -17,22 +21,25 @@ public class CCListMod extends AbstractWidget {
     private final Identifier image;
     private final CCContainer container;
     private final String modDisplayName;
+    private final int hoverColor;
+
+    final CoreConfigScreen screen;
 
     List<String> resourceLocations = List.of(
-        "icon.png",
-        "textures/icon.png"
+        "missing.png",
+        "textures/missing.png"
     );
 
-
-    public CCListMod(int width, int height, String modID, CCContainer assignedContainer) {
-        this(width, height, modID, modID, assignedContainer);
-    }
-
-    public CCListMod(int width, int height, String modID, String modDisplayName, CCContainer assignedContainer) {
-        this.modID = modID;
+    /**
+     * @param width The width of the widget. This is decreased by 6 automatically if the container is scrollable. This is also decreased further automatically for ease of use.
+     */
+    public CCListMod(CoreConfigScreen screen, int width, int height, Identifier identifier, CCContainer assignedContainer, int hoverColor) {
+        this.modID = identifier.getNamespace();
         this.container = assignedContainer;
-        this.modDisplayName = modDisplayName;
-        super(assignedContainer.getX(), 0, width, height, Component.empty());
+        this.modDisplayName = identifier.getPath();
+        this.hoverColor = hoverColor;
+        this.screen = screen;
+        super(0, 0, width - 4, height, Component.empty());
 
         for (String location : resourceLocations) {
             if (Minecraft.getInstance().getResourceManager().getResource(Identifier.fromNamespaceAndPath(modID, location)).isPresent()) {
@@ -40,7 +47,7 @@ public class CCListMod extends AbstractWidget {
                 return;
             }
         }
-        this.image = Identifier.fromNamespaceAndPath(Coreconfig.MOD_ID, "icon.png");
+        this.image = Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/icon/missing.png");
     }
 
     @Override
@@ -49,11 +56,15 @@ public class CCListMod extends AbstractWidget {
         int width = this.width;
         if (container.scrollable()) width = this.width - 6;
 
-        graphics.fill(this.getX() + 14, this.getY(), this.getX() + width + 10, this.getY() + this.height, 0x55000000);
+        ModData data = ModHolder.getModData(modID);
+        if (data.modBanner() != null) graphics.blit(RenderPipelines.GUI_TEXTURED, data.modBanner(), this.getX(), this.getY(), 0, 0, width, this.height, 200, 30, 200, 30);
+        if (this.isHovered) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
+        else if (data.modBanner() == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x55000000);
+
         graphics.text(
             Minecraft.getInstance().font,
-            modDisplayName,
-            this.getX() + 50,
+            Component.translatable(modDisplayName),
+            this.getX() + 36,
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             0xFFFFFFFF,
             true
@@ -61,12 +72,18 @@ public class CCListMod extends AbstractWidget {
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
             image,
-            this.getX() + 16,
+            this.getX() + 1,
             this.getY() + 1,
             0, 0,
             28, 28,
             28, 28
         );
+    }
+
+    @Override
+    public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
+        super.onClick(event, doubleClick);
+        screen.updateConfigScreen(modID);
     }
 
     @Override
