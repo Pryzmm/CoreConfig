@@ -1,7 +1,20 @@
 package com.pryzmm.coreconfig.config;
 
-/**
- * This is the config for the mod CoreConfig, NOT for managing configs of other mods, nor for managing config options.
- */
+import com.pryzmm.coreconfig.CoreConfigConstants;
+import com.pryzmm.coreconfig.entry.BooleanEntry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+
 public class Config {
+
+    public static BooleanEntry booleanUseSwitchTexture = new BooleanEntry.Builder(Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "config.coreconfig.switch_texture"), false)
+        .descriptor(Component.translatable("config.coreconfig.switch_texture.desc"))
+        .image(Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/config/switch_texture.png"), 170, 43)
+        .requiresRestart(false)
+        .hoverColor(0x551A1A1A)
+        .priority(-1)
+        .build();
+
+    public static void register() {}
+
 }

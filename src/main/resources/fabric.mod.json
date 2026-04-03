@@ -15,7 +15,7 @@
       "com.pryzmm.coreconfig.client.CoreconfigClient"
     ],
     "main": [
-      "com.pryzmm.coreconfig.Coreconfig"
+      "com.pryzmm.coreconfig.CoreConfig"
     ]
   },
   "mixins": [
