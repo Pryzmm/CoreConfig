@@ -1,0 +1,4 @@
+jitpack:
+  modules:
+    - coreconfig-api
+    - coreconfig-core
