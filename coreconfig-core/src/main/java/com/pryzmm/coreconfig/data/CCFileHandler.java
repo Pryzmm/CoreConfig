@@ -1,6 +1,7 @@
-package com.pryzmm.coreconfigapi.data;
+package com.pryzmm.coreconfig.data;
 
 import com.pryzmm.coreconfigapi.Constants;
+import com.pryzmm.coreconfigapi.data.CCFile;
 import com.pryzmm.coreconfigapi.entry.MainEntry;
 import com.pryzmm.coreconfigapi.screen.ConfigScreen;
 import net.minecraft.client.Minecraft;
@@ -9,7 +10,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CCFileHandler {
+public class CCFileHandler extends CCFile {
 
     private static File getConfigFile(Identifier identifier) {
         return new File("coreconfig/" + identifier.getNamespace() + ".yml");
@@ -70,7 +71,8 @@ public class CCFileHandler {
         return requiresRestart;
     }
 
-    public static <T> T getConfigValue(Identifier identifier, Class<T> type) {
+    @Override
+    public <T> T getConfigValue(Identifier identifier, Class<T> clazz) {
         File configFile = getConfigFile(identifier);
         if (!configFile.exists()) return null;
         try (BufferedReader reader = new BufferedReader(new FileReader(configFile))) {
@@ -81,18 +83,18 @@ public class CCFileHandler {
             if (line == null) return null;
             String valueStr = line.substring(line.indexOf(":") + 1).trim();
             Object value;
-            if (type == Boolean.class)      value = Boolean.parseBoolean(valueStr);
-            else if (type == String.class)  value = valueStr;
-            else if (type == Integer.class) value = Integer.parseInt(valueStr);
-            else if (type == Float.class)   value = Float.parseFloat(valueStr);
-            else if (type == Double.class)  value = Double.parseDouble(valueStr);
+            if (clazz == Boolean.class)      value = Boolean.parseBoolean(valueStr);
+            else if (clazz == String.class)  value = valueStr;
+            else if (clazz == Integer.class) value = Integer.parseInt(valueStr);
+            else if (clazz == Float.class)   value = Float.parseFloat(valueStr);
+            else if (clazz == Double.class)  value = Double.parseDouble(valueStr);
             else {
-                Constants.LOGGER.severe("Unsupported config type: " + type.getName());
+                Constants.LOGGER.severe("Unsupported config type: " + clazz.getName());
                 return null;
             }
-            return type.cast(value);
+            return clazz.cast(value);
         } catch (NumberFormatException e) {
-            Constants.LOGGER.severe("Failed to parse config value for " + identifier + " as " + type.getSimpleName() + ": " + e.getMessage());
+            Constants.LOGGER.severe("Failed to parse config value for " + identifier + " as " + clazz.getSimpleName() + ": " + e.getMessage());
         } catch (Exception e) {
             Constants.LOGGER.severe("Failed to read config file for " + identifier.getNamespace() + ": " + e.getMessage());
         }

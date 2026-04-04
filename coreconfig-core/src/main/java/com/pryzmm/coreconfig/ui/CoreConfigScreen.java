@@ -2,8 +2,8 @@ package com.pryzmm.coreconfig.ui;
 
 import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.client.CoreconfigClient;
-import com.pryzmm.coreconfigapi.data.CCFileHandler;
-import com.pryzmm.coreconfigapi.data.EntryHolder;
+import com.pryzmm.coreconfig.data.CCFileHandler;
+import com.pryzmm.coreconfig.data.EntryHolder;
 import com.pryzmm.coreconfigapi.entry.*;
 import com.pryzmm.coreconfigapi.data.ModData;
 import com.pryzmm.coreconfigapi.data.ModHolder;

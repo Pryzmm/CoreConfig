@@ -1,8 +1,8 @@
 package com.pryzmm.coreconfigapi.entry;
 
 import com.pryzmm.coreconfigapi.component.ImageComponent;
-import com.pryzmm.coreconfigapi.data.CCFileHandler;
-import com.pryzmm.coreconfigapi.data.EntryHolder;
+import com.pryzmm.coreconfigapi.data.CCEntries;
+import com.pryzmm.coreconfigapi.data.CCFile;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -84,10 +84,10 @@ public class StringEntry implements MainEntry {
             entry.priority = priority;
             entry.defaultValue = defaultValue;
 
-            String configValue = CCFileHandler.getConfigValue(identifier, String.class);
+            String configValue = CCFile.getInstance().getConfigValue(identifier, String.class);
             if (configValue != null) entry.value = configValue;
 
-            EntryHolder.addEntry(entry.identifier.getNamespace(), entry);
+            CCEntries.addEntry(entry.identifier.getNamespace(), entry);
             return entry;
         }
     }

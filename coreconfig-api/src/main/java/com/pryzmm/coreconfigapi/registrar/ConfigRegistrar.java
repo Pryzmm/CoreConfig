@@ -1,7 +1,6 @@
 package com.pryzmm.coreconfigapi.registrar;
 
 import com.pryzmm.coreconfigapi.data.ModHolder;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +13,7 @@ public class ConfigRegistrar {
         register(modNameIdentifier, modBannerIdentifier, null, null);
     }
     public static void register(Identifier modNameIdentifier, @Nullable Identifier modBannerIdentifier, @Nullable Integer backgroundColor, @Nullable Integer buttonColor) {
-        if (FabricLoader.getInstance().isModLoaded("coreconfig")) ModHolder.addRegisteredMod(modNameIdentifier, modBannerIdentifier, backgroundColor, buttonColor);
+        ModHolder.addRegisteredMod(modNameIdentifier, modBannerIdentifier, backgroundColor, buttonColor);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.pryzmm.coreconfig.ui.popup;
 
-import com.pryzmm.coreconfigapi.data.EntryHolder;
+import com.pryzmm.coreconfig.data.EntryHolder;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCButton;
 import net.minecraft.client.Minecraft;
