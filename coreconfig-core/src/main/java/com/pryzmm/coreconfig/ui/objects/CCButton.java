@@ -1,6 +1,6 @@
 package com.pryzmm.coreconfig.ui.objects;
 
-import com.pryzmm.coreconfigapi.data.EntryHolder;
+import com.pryzmm.coreconfig.data.EntryHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;

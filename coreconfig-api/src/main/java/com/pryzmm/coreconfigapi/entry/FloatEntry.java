@@ -1,8 +1,8 @@
 package com.pryzmm.coreconfigapi.entry;
 
 import com.pryzmm.coreconfigapi.component.ImageComponent;
-import com.pryzmm.coreconfigapi.data.CCFileHandler;
-import com.pryzmm.coreconfigapi.data.EntryHolder;
+import com.pryzmm.coreconfigapi.data.CCEntries;
+import com.pryzmm.coreconfigapi.data.CCFile;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
@@ -90,10 +90,10 @@ public class FloatEntry implements MainEntry {
             entry.defaultValue = defaultValue;
             entry.image = image;
 
-            Float configValue = CCFileHandler.getConfigValue(identifier, Float.class);
+            Float configValue = CCFile.getInstance().getConfigValue(identifier, Float.class);
             if (configValue != null) entry.value = configValue;
 
-            EntryHolder.addEntry(entry.identifier.getNamespace(), entry);
+            CCEntries.addEntry(entry.identifier.getNamespace(), entry);
             return entry;
         }
     }

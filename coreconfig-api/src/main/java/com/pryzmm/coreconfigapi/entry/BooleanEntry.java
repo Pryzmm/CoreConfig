@@ -1,8 +1,8 @@
 package com.pryzmm.coreconfigapi.entry;
 
 import com.pryzmm.coreconfigapi.component.ImageComponent;
-import com.pryzmm.coreconfigapi.data.CCFileHandler;
-import com.pryzmm.coreconfigapi.data.EntryHolder;
+import com.pryzmm.coreconfigapi.data.CCEntries;
+import com.pryzmm.coreconfigapi.data.CCFile;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
@@ -73,11 +73,12 @@ public class BooleanEntry implements MainEntry {
             entry.priority = priority;
             entry.defaultValue = defaultValue;
 
-            Boolean configValue = CCFileHandler.getConfigValue(identifier, Boolean.class);
+            Boolean configValue = CCFile.getInstance().getConfigValue(identifier, Boolean.class);
             if (configValue != null) entry.value = configValue;
 
-            EntryHolder.addEntry(entry.identifier.getNamespace(), entry);
+            CCEntries.addEntry(entry.identifier.getNamespace(), entry);
             return entry;
         }
     }
+
 }

@@ -1,30 +1,23 @@
-package com.pryzmm.coreconfigapi.data;
+package com.pryzmm.coreconfig.data;
 
+import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.entry.FloatEntry;
 import com.pryzmm.coreconfigapi.entry.IntegerEntry;
 import com.pryzmm.coreconfigapi.entry.MainEntry;
 import com.pryzmm.coreconfigapi.entry.StringEntry;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class EntryHolder {
 
-    private static final HashMap<String, ArrayList<MainEntry>> configEntries = new HashMap<>();
-
-    public static void addEntry(String modID, MainEntry entry) {
-        configEntries.computeIfAbsent(modID, k -> new ArrayList<>()).add(entry);
-    }
-
     public static Collection<MainEntry> get(String modID) {
-        return configEntries.getOrDefault(modID, new ArrayList<>()).stream().sorted((e1, e2) -> Integer.compare(e2.priority(), e1.priority())).toList();
+        return CCEntries.configEntries.getOrDefault(modID, new ArrayList<>()).stream().sorted((e1, e2) -> Integer.compare(e2.priority(), e1.priority())).toList();
     }
 
     public static boolean isInvalidConfig(String modID) {
-        if (configEntries.containsKey(modID)) {
-            for (MainEntry entry : configEntries.get(modID)) {
+        if (CCEntries.configEntries.containsKey(modID)) {
+            for (MainEntry entry : CCEntries.configEntries.get(modID)) {
                 if (entry instanceof StringEntry stringEntry) {
                     String value = stringEntry.getUnsavedValue();
                     if (value.length() < stringEntry.minimumLength() || value.length() > stringEntry.maximumLength()) return true;
@@ -49,8 +42,8 @@ public class EntryHolder {
     }
 
     public static boolean isUpdatedConfig(String modID) {
-        if (configEntries.containsKey(modID)) {
-            for (MainEntry entry : configEntries.get(modID)) {
+        if (CCEntries.configEntries.containsKey(modID)) {
+            for (MainEntry entry : CCEntries.configEntries.get(modID)) {
                      if (entry.getValue() instanceof Boolean && !Objects.equals(entry.getValue(),                                entry.getUnsavedValue()  )) return true;
                 else if (entry.getValue() instanceof String  && !Objects.equals(entry.getValue(),                                entry.getUnsavedValue()  )) return true;
                 else if (entry.getValue() instanceof Float   && !Objects.equals(entry.getValue(),   Float.valueOf(String.valueOf(entry.getUnsavedValue())))) return true;
@@ -62,12 +55,12 @@ public class EntryHolder {
     }
 
     public static boolean containsAnyInvalidConfigs() {
-        for (String modID : configEntries.keySet()) if (isInvalidConfig(modID)) return true;
+        for (String modID : CCEntries.configEntries.keySet()) if (isInvalidConfig(modID)) return true;
         return false;
     }
 
     public static boolean containsAnyUpdatedConfigs() {
-        for (String modID : configEntries.keySet()) if (isUpdatedConfig(modID)) return true;
+        for (String modID : CCEntries.configEntries.keySet()) if (isUpdatedConfig(modID)) return true;
         return false;
     }
 
@@ -75,8 +68,8 @@ public class EntryHolder {
      * Will refresh all configurations back to their last saved state.
      */
     public static void refreshConfigs() {
-        for (String modID : configEntries.keySet()) {
-            for (MainEntry entry : configEntries.get(modID)) {
+        for (String modID : CCEntries.configEntries.keySet()) {
+            for (MainEntry entry : CCEntries.configEntries.get(modID)) {
                 entry.refreshValue();
             }
         }
