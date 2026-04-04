@@ -1,3 +1,6 @@
+jdk:
+  - openjdk25
+
 jitpack:
   modules:
     - coreconfig-api
