@@ -4,14 +4,12 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.client.CoreconfigClient;
 import com.pryzmm.coreconfig.data.CCFileHandler;
 import com.pryzmm.coreconfig.data.EntryHolder;
+import com.pryzmm.coreconfig.ui.option.*;
+import com.pryzmm.coreconfig.ui.popup.ColorPopup;
 import com.pryzmm.coreconfigapi.entry.*;
 import com.pryzmm.coreconfigapi.data.ModData;
 import com.pryzmm.coreconfigapi.data.ModHolder;
 import com.pryzmm.coreconfig.ui.objects.*;
-import com.pryzmm.coreconfig.ui.option.CCButtonBoolean;
-import com.pryzmm.coreconfig.ui.option.CCButtonFloat;
-import com.pryzmm.coreconfig.ui.option.CCButtonInteger;
-import com.pryzmm.coreconfig.ui.option.CCButtonString;
 import com.pryzmm.coreconfig.ui.popup.AbstractPopup;
 import com.pryzmm.coreconfig.ui.popup.ExitWithoutSavingPopup;
 import com.pryzmm.coreconfig.ui.popup.RestartPopup;
@@ -33,7 +31,7 @@ public class CoreConfigScreen extends Screen implements ConfigScreen {
 
     private final List<CCElement> containers = new ArrayList<>();
     private String activeModID;
-    private static AbstractPopup activePopup = null;
+    public static AbstractPopup activePopup = null;
     private final List<AbstractWidget> configWidgets = new ArrayList<>();
     private static CCContainer configContainer;
     private static CCButton exitButton;
@@ -78,12 +76,17 @@ public class CoreConfigScreen extends Screen implements ConfigScreen {
         configContainer = new CCContainer(this.minecraft, 210, 25, minecraft.screen.width - 215, minecraft.screen.height - 30, data.backgroundColor());
         configWidgets.clear();
         try {
-            for (MainEntry entry : EntryHolder.get(activeModID)) {
+            for (CCEntry entry : EntryHolder.get(activeModID)) {
                 switch (entry) {
                     case BooleanEntry booleanEntry -> configWidgets.add(new CCButtonBoolean(booleanEntry, configContainer.getWidth(), 20, booleanEntry.identifier(), configContainer, booleanEntry.hoverColor() != null ? booleanEntry.hoverColor() : 0x55000000, data.buttonColor()));
-                    case StringEntry stringEntry -> configWidgets.add(new CCButtonString(stringEntry, configContainer.getWidth(), 20, stringEntry.identifier(), configContainer, stringEntry.hoverColor() != null ? stringEntry.hoverColor() : 0x55000000, data.buttonColor()));
+                    case StringEntry  stringEntry  -> configWidgets.add(new CCButtonString(stringEntry,   configContainer.getWidth(), 20, stringEntry.identifier(),  configContainer, stringEntry.hoverColor()  != null ? stringEntry.hoverColor()  : 0x55000000, data.buttonColor()));
                     case IntegerEntry integerEntry -> configWidgets.add(new CCButtonInteger(integerEntry, configContainer.getWidth(), 20, integerEntry.identifier(), configContainer, integerEntry.hoverColor() != null ? integerEntry.hoverColor() : 0x55000000, data.buttonColor()));
-                    case FloatEntry floatEntry -> configWidgets.add(new CCButtonFloat(floatEntry, configContainer.getWidth(), 20, floatEntry.identifier(), configContainer, floatEntry.hoverColor() != null ? floatEntry.hoverColor() : 0x55000000, data.buttonColor()));
+                    case FloatEntry   floatEntry   -> configWidgets.add(new CCButtonFloat(floatEntry,     configContainer.getWidth(), 20, floatEntry.identifier(),   configContainer, floatEntry.hoverColor()   != null ? floatEntry.hoverColor()   : 0x55000000, data.buttonColor()));
+                    case DoubleEntry  doubleEntry  -> configWidgets.add(new CCButtonDouble(doubleEntry,   configContainer.getWidth(), 20, doubleEntry.identifier(),  configContainer, doubleEntry.hoverColor()  != null ? doubleEntry.hoverColor()  : 0x55000000, data.buttonColor()));
+                    case ColorEntry   colorEntry   -> configWidgets.add(new CCButtonColor(colorEntry,     configContainer.getWidth(), 20, colorEntry.identifier(),   configContainer, colorEntry.hoverColor()   != null ? colorEntry.hoverColor()   : 0x55000000, data.buttonColor()));
+                    case WebsiteEntry websiteEntry -> configWidgets.add(new CCButtonWebsite(websiteEntry, configContainer.getWidth(), 20, websiteEntry.identifier(), configContainer, websiteEntry.hoverColor() != null ? websiteEntry.hoverColor() : 0x55000000, data.buttonColor()));
+                    case CustomEntry  customEntry  -> configWidgets.add(new CCButtonCustom(customEntry,   configContainer.getWidth(), 20, customEntry.identifier(),  configContainer, customEntry.hoverColor()  != null ? customEntry.hoverColor()  : 0x55000000, data.buttonColor()));
+                    case DividerEntry dividerEntry -> configWidgets.add(new CCDivider(dividerEntry, configContainer.getWidth(), configWidgets.isEmpty() ? 20 : 30, dividerEntry.identifier(), dividerEntry.textColor()));
                     case null, default -> CoreConfigConstants.LOGGER.warning("Unsupported config entry type: " + (entry == null ? "null" : entry.getClass()));
                 }
             }
@@ -112,6 +115,12 @@ public class CoreConfigScreen extends Screen implements ConfigScreen {
         activePopup = new ExitWithoutSavingPopup(Minecraft.getInstance(), 200, 100, screen);
     }
 
+    public void sendColorPopup(ColorEntry entry) {
+        Screen screen = Minecraft.getInstance().screen;
+        assert screen != null;
+        activePopup = new ColorPopup(Minecraft.getInstance(), 200, 150, screen, entry);
+    }
+
     public void updateConfigScreen(String modID) {
         activeModID = modID;
         this.init();
@@ -127,6 +136,7 @@ public class CoreConfigScreen extends Screen implements ConfigScreen {
             if (widget instanceof CCButtonString stringWidget) stringWidget.updateFocus(event);
             else if (widget instanceof CCButtonInteger integerWidget) integerWidget.updateFocus(event);
             else if (widget instanceof CCButtonFloat floatWidget) floatWidget.updateFocus(event);
+            else if (widget instanceof CCButtonDouble doubleWidget) doubleWidget.updateFocus(event);
         }
         return super.mouseClicked(event, doubleClick);
     }

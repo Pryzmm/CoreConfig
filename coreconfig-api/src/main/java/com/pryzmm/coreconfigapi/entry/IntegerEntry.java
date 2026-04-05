@@ -16,9 +16,10 @@ public class IntegerEntry implements MainEntry {
     private Identifier identifier;
     private Integer hoverColor;
     private boolean requiresRestart;
-    private int minimum = Integer.MIN_VALUE;
-    private int maximum = Integer.MAX_VALUE;
+    private int minimum;
+    private int maximum;
     private int priority = 0;
+    private DividerEntry divider;
 
     private IntegerEntry() {}
 
@@ -30,6 +31,7 @@ public class IntegerEntry implements MainEntry {
     public int priority() { return priority; }
     public Integer minimum() { return minimum; }
     public Integer maximum() { return maximum; }
+    public DividerEntry divider() { return divider; }
 
     public Object getUnsavedValue() { return newValue != null ? newValue : value; }
     public Integer getDefaultValue() { return defaultValue; }
@@ -63,6 +65,7 @@ public class IntegerEntry implements MainEntry {
         private int minimum = Integer.MIN_VALUE;
         private int maximum = Integer.MAX_VALUE;
         private int priority = 0;
+        private DividerEntry divider = null;
 
         public Builder(Identifier identifier, Integer defaultValue) {
             this.defaultValue = defaultValue == null ? 0 : defaultValue;
@@ -75,6 +78,7 @@ public class IntegerEntry implements MainEntry {
         public Builder minimum(int minimum) { this.minimum = minimum; return this; }
         public Builder maximum(int maximum) { this.maximum = maximum; return this; }
         public Builder priority(int priority) { this.priority = priority; return this; }
+        public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder image(Identifier identifier, int width, int height) { this.image = new ImageComponent(identifier, width, height); return this; }
 
         public IntegerEntry build() {
@@ -89,6 +93,7 @@ public class IntegerEntry implements MainEntry {
             entry.priority = priority;
             entry.defaultValue = defaultValue;
             entry.image = image;
+            entry.divider = divider;
 
             Integer configValue = CCFile.getInstance().getConfigValue(identifier, Integer.class);
             if (configValue != null) entry.value = configValue;

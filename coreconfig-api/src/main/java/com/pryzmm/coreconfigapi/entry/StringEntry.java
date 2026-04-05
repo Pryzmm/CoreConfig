@@ -17,9 +17,10 @@ public class StringEntry implements MainEntry {
     private Identifier identifier;
     private Integer hoverColor;
     private boolean requiresRestart;
-    private int minimumLength = 0;
-    private int maximumLength = Integer.MAX_VALUE;
-    private int priority = 0;
+    private int minimumLength;
+    private int maximumLength;
+    private int priority;
+    private DividerEntry divider;
 
     private StringEntry() {}
 
@@ -31,6 +32,7 @@ public class StringEntry implements MainEntry {
     public int priority() { return priority; }
     public Integer minimumLength() { return minimumLength; }
     public Integer maximumLength() { return maximumLength; }
+    public DividerEntry divider() { return divider; }
 
     public String getUnsavedValue() { return newValue != null ? newValue : value; }
     public String getDefaultValue() { return defaultValue; }
@@ -57,6 +59,7 @@ public class StringEntry implements MainEntry {
         private int minimumLength = 0;
         private int maximumLength = Integer.MAX_VALUE;
         private int priority = 0;
+        private DividerEntry divider = null;
 
         public Builder(Identifier identifier, String defaultValue) {
             this.defaultValue = defaultValue == null ? "" : defaultValue;
@@ -69,6 +72,7 @@ public class StringEntry implements MainEntry {
         public Builder minimumLength(int minimumLength) { this.minimumLength = minimumLength; return this; }
         public Builder maximumLength(int maximumLength) { this.maximumLength = maximumLength; return this; }
         public Builder priority(int priority) { this.priority = priority; return this; }
+        public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder image(Identifier identifier, int width, int height) { this.image = new ImageComponent(identifier, width, height); return this; }
 
         public StringEntry build() {
@@ -83,6 +87,7 @@ public class StringEntry implements MainEntry {
             entry.maximumLength = maximumLength;
             entry.priority = priority;
             entry.defaultValue = defaultValue;
+            entry.divider = divider;
 
             String configValue = CCFile.getInstance().getConfigValue(identifier, String.class);
             if (configValue != null) entry.value = configValue;

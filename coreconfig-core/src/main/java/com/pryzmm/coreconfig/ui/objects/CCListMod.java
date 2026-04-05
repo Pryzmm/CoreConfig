@@ -58,7 +58,7 @@ public class CCListMod extends AbstractWidget {
 
         ModData data = ModHolder.getModData(modID);
         if (data.modBanner() != null) graphics.blit(RenderPipelines.GUI_TEXTURED, data.modBanner(), this.getX(), this.getY(), 0, 0, width, this.height, 200, 30, 200, 30);
-        if (this.isHovered) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
+        if (this.isHovered && CoreConfigScreen.activePopup == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
         else if (data.modBanner() == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x55000000);
 
         graphics.text(

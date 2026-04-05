@@ -1,6 +1,7 @@
 package com.pryzmm.coreconfig.ui.objects;
 
 import com.pryzmm.coreconfig.data.EntryHolder;
+import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -15,7 +16,7 @@ public class CCButton extends AbstractWidget implements CCElement {
     private final int x, y, width, height, hoverColor;
     private final Integer color;
     private final Runnable runnable;
-    private final boolean isSaveButton;
+    private final boolean isSaveButton, isInPopup;
 
     public int getX() { return x; }
     public int getY() { return y; }
@@ -24,9 +25,12 @@ public class CCButton extends AbstractWidget implements CCElement {
     public Integer getColor() { return color; }
 
     public CCButton(int x, int y, int width, int height, Component text, int hoverColor, boolean isSaveButton, Runnable runnable) {
-        this(x, y, width, height, text, null, hoverColor, isSaveButton, runnable);
+        this(x, y, width, height, text, null, hoverColor, isSaveButton, false, runnable);
     }
     public CCButton(int x, int y, int width, int height, Component text, Integer color, int hoverColor, boolean isSaveButton, Runnable runnable) {
+        this(x, y, width, height, text, color, hoverColor, isSaveButton, false, runnable);
+    }
+    public CCButton(int x, int y, int width, int height, Component text, Integer color, int hoverColor, boolean isSaveButton, boolean isInPopup, Runnable runnable) {
         super(x, y, width, height, text);
         this.x = x;
         this.y = y;
@@ -36,16 +40,17 @@ public class CCButton extends AbstractWidget implements CCElement {
         this.hoverColor = hoverColor;
         this.runnable = runnable;
         this.isSaveButton = isSaveButton;
+        this.isInPopup = isInPopup;
     }
 
     @Override
     public void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x551A1A1A);
         if (this.isHovered) {
-            graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, hoverColor);
+            if (CoreConfigScreen.activePopup == null || isInPopup) graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, hoverColor);
             if (EntryHolder.containsAnyInvalidConfigs() && isSaveButton) setTooltip(Tooltip.create(Component.translatable("ui.coreconfig.cant_save")));
             else setTooltip(null);
         }
-        else graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x551A1A1A);
         graphics.text(
             Minecraft.getInstance().font,
             this.getMessage(),

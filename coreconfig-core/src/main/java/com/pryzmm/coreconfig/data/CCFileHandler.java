@@ -2,6 +2,7 @@ package com.pryzmm.coreconfig.data;
 
 import com.pryzmm.coreconfigapi.Constants;
 import com.pryzmm.coreconfigapi.data.CCFile;
+import com.pryzmm.coreconfigapi.entry.CCEntry;
 import com.pryzmm.coreconfigapi.entry.MainEntry;
 import com.pryzmm.coreconfigapi.screen.ConfigScreen;
 import net.minecraft.client.Minecraft;
@@ -49,20 +50,22 @@ public class CCFileHandler extends CCFile {
         }
         BufferedWriter writer = new BufferedWriter(new FileWriter(configFile));
         List<String> newLines = new ArrayList<>();
-        for (MainEntry entry : EntryHolder.get(identifier.getNamespace())) {
-            String key = entry.identifier().getPath() + ":";
-            String newLine = key + entry.getUnsavedValue();
-            String oldLine = existingLines.stream()
-                .filter(l -> l.startsWith(key))
-                .findFirst()
-                .orElse(null);
-            if (oldLine != null) {
-                String oldValue = oldLine.substring(oldLine.indexOf(":") + 1).trim();
-                String newValue = String.valueOf(entry.getUnsavedValue());
-                if (!oldValue.equals(newValue) && entry.requiresRestart()) requiresRestart = true;
-            } else if (entry.requiresRestart()) requiresRestart = true;
-            entry.save();
-            newLines.add(newLine);
+        for (CCEntry e : EntryHolder.get(identifier.getNamespace())) {
+            if (e instanceof MainEntry entry) {
+                String key = entry.identifier().getPath() + ":";
+                String newLine = key + entry.getUnsavedValue();
+                String oldLine = existingLines.stream()
+                    .filter(l -> l.startsWith(key))
+                    .findFirst()
+                    .orElse(null);
+                if (oldLine != null) {
+                    String oldValue = oldLine.substring(oldLine.indexOf(":") + 1).trim();
+                    String newValue = String.valueOf(entry.getUnsavedValue());
+                    if (!oldValue.equals(newValue) && entry.requiresRestart()) requiresRestart = true;
+                } else if (entry.requiresRestart()) requiresRestart = true;
+                entry.save();
+                newLines.add(newLine);
+            }
         }
 
         writer.write(String.join("\n", newLines));

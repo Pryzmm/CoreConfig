@@ -1,9 +1,8 @@
 package com.pryzmm.coreconfig.ui.objects;
 
-import com.pryzmm.coreconfigapi.entry.MainEntry;
-import com.pryzmm.coreconfigapi.entry.FloatEntry;
-import com.pryzmm.coreconfigapi.entry.IntegerEntry;
-import com.pryzmm.coreconfigapi.entry.StringEntry;
+import com.pryzmm.coreconfig.ui.CoreConfigScreen;
+import com.pryzmm.coreconfigapi.component.ImageComponent;
+import com.pryzmm.coreconfigapi.entry.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
@@ -16,15 +15,25 @@ import java.util.List;
 
 public class CCTooltip {
 
-    public static void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, MainEntry entry, CCContainer container) {
+    public static void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, CCEntry entry, CCContainer container) {
         Minecraft minecraft = Minecraft.getInstance();
+        MutableComponent descriptor = Component.empty();
+        int imageWidth = 0;
+        int imageHeight = 0;
+        ImageComponent image = null;
 
-        if (entry.descriptor() == null && entry.image() == null) return;
+        if (entry instanceof MainEntry mainEntry) {
 
-        int imageWidth = entry.image() != null ? entry.image().width() : 0;
-        int imageHeight = entry.image() != null ? entry.image().height() : 0;
+            if (CoreConfigScreen.activePopup != null) return;
+            if (mainEntry.descriptor() == null && mainEntry.image() == null) return;
 
-        MutableComponent descriptor = entry.descriptor() != null ? entry.descriptor().copy() : Component.empty();
+            image = mainEntry.image();
+            imageWidth = image != null ? image.width() : 0;
+            imageHeight = image != null ? image.height() : 0;
+
+            descriptor = mainEntry.descriptor() != null ? mainEntry.descriptor().copy() : Component.empty();
+
+        }
 
         switch (entry) {
             case IntegerEntry integerEntry -> {
@@ -49,6 +58,17 @@ public class CCTooltip {
                     descriptor.append("\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.not_float"));
                 }
             }
+            case DoubleEntry doubleEntry -> {
+                try {
+                    double value = Double.parseDouble(String.valueOf(doubleEntry.getUnsavedValue()));
+                    if (value < doubleEntry.minimum())
+                        descriptor.append("\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min", value, doubleEntry.minimum()));
+                    if (value > doubleEntry.maximum())
+                        descriptor.append("\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max", value, doubleEntry.maximum()));
+                } catch (Exception ignored) {
+                    descriptor.append("\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.not_double"));
+                }
+            }
             case StringEntry stringEntry -> {
                 try {
                     String value = stringEntry.getUnsavedValue();
@@ -69,6 +89,8 @@ public class CCTooltip {
             if (width > maxTextWidth[0]) maxTextWidth[0] = width;
         });
 
+        if (maxTextWidth[0] == 0 && image == null) return;
+
         int tooltipWidth = Math.max(imageWidth, maxTextWidth[0]) + 24;
         List<FormattedCharSequence> sequences = minecraft.font.split(descriptor, tooltipWidth - 24);
         int tooltipHeight = imageHeight + (sequences.size() * (minecraft.font.lineHeight + 2)) + 24;
@@ -85,9 +107,9 @@ public class CCTooltip {
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, TooltipRenderUtil.BACKGROUND_SPRITE, tooltipX, tooltipY, tooltipWidth, tooltipHeight, 0xFFFFFFFF);
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, TooltipRenderUtil.FRAME_SPRITE, tooltipX, tooltipY, tooltipWidth, tooltipHeight, 0xFFFFFFFF);
 
-        if (entry.image() != null) graphics.blit(
+        if (image != null) graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            entry.image().identifier(),
+            image.identifier(),
             tooltipX + 12, tooltipY + 12,
             0, 0,
             imageWidth, imageHeight,

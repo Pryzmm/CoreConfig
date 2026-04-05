@@ -2,8 +2,8 @@ package com.pryzmm.coreconfig.ui.option;
 
 import com.pryzmm.coreconfig.client.CoreconfigClient;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
-import com.pryzmm.coreconfigapi.entry.FloatEntry;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
+import com.pryzmm.coreconfigapi.entry.DoubleEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -17,16 +17,16 @@ import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
-public class CCButtonFloat extends AbstractWidget {
+public class CCButtonDouble extends AbstractWidget {
 
     private final CCContainer container;
     private final Identifier valuePath;
     private final Integer color;
     private final int hoverColor;
-    private final FloatEntry entry;
+    private final DoubleEntry entry;
     private final EditBox editBox;
 
-    public CCButtonFloat(FloatEntry entry, int width, int height, Identifier valuePath, CCContainer assignedContainer, int hoverColor, Integer color) {
+    public CCButtonDouble(DoubleEntry entry, int width, int height, Identifier valuePath, CCContainer assignedContainer, int hoverColor, Integer color) {
         this.container = assignedContainer;
         this.valuePath = valuePath;
         this.hoverColor = hoverColor;
@@ -51,8 +51,8 @@ public class CCButtonFloat extends AbstractWidget {
 
 
         boolean canParse = false;
-        float value = 0;
-        try { value = Float.parseFloat(editBox.getValue()); canParse = true; } catch (Exception ignored) {}
+        double value = 0;
+        try { value = Double.parseDouble(editBox.getValue()); canParse = true; } catch (Exception ignored) {}
 
         if (color != null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, color);
         if (this.isHovered) {
@@ -76,9 +76,9 @@ public class CCButtonFloat extends AbstractWidget {
 
     }
 
-    private static boolean equals(Float value, Object unsavedValue) {
+    private static boolean equals(Double value, Object unsavedValue) {
         try {
-            float finalValue = Float.parseFloat(unsavedValue.toString());
+            double finalValue = Double.parseDouble(unsavedValue.toString());
             return value == finalValue;
         } catch (Exception ignored) {
             return false;
