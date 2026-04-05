@@ -16,9 +16,10 @@ public class FloatEntry implements MainEntry {
     private Identifier identifier;
     private Integer hoverColor;
     private boolean requiresRestart;
-    private float minimum = Float.MIN_VALUE;
-    private float maximum = Float.MAX_VALUE;
-    private int priority = 0;
+    private float minimum;
+    private float maximum;
+    private int priority;
+    private DividerEntry divider;
 
     private FloatEntry() {}
 
@@ -30,6 +31,7 @@ public class FloatEntry implements MainEntry {
     public int priority() { return priority; }
     public Float minimum() { return minimum; }
     public Float maximum() { return maximum; }
+    public DividerEntry divider() { return divider; }
 
     public Object getUnsavedValue() { return newValue != null ? newValue : value; }
     public Float getDefaultValue() { return defaultValue; }
@@ -63,6 +65,7 @@ public class FloatEntry implements MainEntry {
         private float minimum = Float.MIN_VALUE;
         private float maximum = Float.MAX_VALUE;
         private int priority = 0;
+        private DividerEntry divider = null;
 
         public Builder(Identifier identifier, Float defaultValue) {
             this.defaultValue = defaultValue == null ? 0 : defaultValue;
@@ -75,6 +78,7 @@ public class FloatEntry implements MainEntry {
         public Builder minimum(float minimum) { this.minimum = minimum; return this; }
         public Builder maximum(float maximum) { this.maximum = maximum; return this; }
         public Builder priority(int priority) { this.priority = priority; return this; }
+        public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder image(Identifier identifier, int width, int height) { this.image = new ImageComponent(identifier, width, height); return this; }
 
         public FloatEntry build() {
@@ -89,6 +93,7 @@ public class FloatEntry implements MainEntry {
             entry.priority = priority;
             entry.defaultValue = defaultValue;
             entry.image = image;
+            entry.divider = divider;
 
             Float configValue = CCFile.getInstance().getConfigValue(identifier, Float.class);
             if (configValue != null) entry.value = configValue;

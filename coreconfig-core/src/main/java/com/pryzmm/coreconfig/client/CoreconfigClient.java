@@ -2,6 +2,7 @@ package com.pryzmm.coreconfig.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.pryzmm.coreconfig.CoreConfigConstants;
+import com.pryzmm.coreconfigapi.entry.CCEntry;
 import com.pryzmm.coreconfigapi.entry.MainEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.fabricmc.api.ClientModInitializer;
@@ -15,7 +16,7 @@ public class CoreconfigClient implements ClientModInitializer {
 
     public static KeyMapping OPEN_CONFIG;
 
-    public static MainEntry hoveredEntry = null;
+    public static CCEntry hoveredEntry = null;
 
     @Override
     public void onInitializeClient() {

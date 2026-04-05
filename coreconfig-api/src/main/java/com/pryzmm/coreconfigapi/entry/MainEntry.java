@@ -4,7 +4,7 @@ import com.pryzmm.coreconfigapi.component.ImageComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
-public interface MainEntry {
+public interface MainEntry extends CCEntry {
 
     Identifier identifier();
     void save();
@@ -17,5 +17,6 @@ public interface MainEntry {
     Component descriptor();
     void refreshValue();
     ImageComponent image();
+    DividerEntry divider();
 
 }

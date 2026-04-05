@@ -1,6 +1,7 @@
 package com.pryzmm.coreconfig.ui.option;
 
 import com.pryzmm.coreconfig.client.CoreconfigClient;
+import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfigapi.entry.IntegerEntry;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import net.minecraft.client.Minecraft;
@@ -55,7 +56,7 @@ public class CCButtonInteger extends AbstractWidget {
 
         if (color != null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, color);
         if (this.isHovered) {
-            graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
+            if (CoreConfigScreen.activePopup == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
             if (CoreconfigClient.hoveredEntry != entry) CoreconfigClient.hoveredEntry = entry;
         } else {
             if (color == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x55000000);
