@@ -71,5 +71,5 @@ Your mod icon is automatically used if it's found in `assets/<MODID>/icon.png` o
 # Support
 You can support the development of this mod and future releases by becoming a sponsor on GitHub or supporting my Ko-Fi!
 
-<a href="https://ko-fi.com/Pryzmm"><img alt="github-sponsor" src="https://raw.githubusercontent.com/intergrav/devins-badges/refs/heads/v3/assets/cozy/donate/ghsponsors-singular_64h.png"></a>
-<a href="https://github.com/sponsors/Pryzmm"><img alt="kofi-sponsor" src="https://raw.githubusercontent.com/intergrav/devins-badges/refs/heads/v3/assets/cozy/donate/kofi-singular-alt_64h.png"></a>
+<a href="https://github.com/sponsors/Pryzmm"><img alt="github-sponsor" src="https://raw.githubusercontent.com/intergrav/devins-badges/refs/heads/v3/assets/cozy/donate/ghsponsors-singular_64h.png"></a>
+<a href="https://ko-fi.com/Pryzmm"><img alt="kofi-sponsor" src="https://raw.githubusercontent.com/intergrav/devins-badges/refs/heads/v3/assets/cozy/donate/kofi-singular-alt_64h.png"></a>
