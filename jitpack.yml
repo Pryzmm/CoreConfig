@@ -3,5 +3,6 @@ jdk:
 
 jitpack:
   modules:
-    - coreconfig-api
-    - coreconfig-core
+    - api
+    - core
+    - fabric

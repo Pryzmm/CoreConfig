@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "coreconfig",
+  "version": "${version}",
+
+  "name": "coreconfig",
+  "description": "Easy to use configuration API for mods",
+  "authors": [],
+  "contact": {},
+
+  "license": "All-Rights-Reserved",
+  "icon": "assets/coreconfig/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.pryzmm.coreconfig.client.CoreConfigFabricClient"
+    ],
+    "main": [
+      "com.pryzmm.coreconfig.CoreConfigFabric"
+    ]
+  },
+
+
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "coreconfig_common": "*"
+  }
+}
