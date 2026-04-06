@@ -4,6 +4,7 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.config.Config;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
+import com.pryzmm.coreconfig.util.Identifier;
 import com.pryzmm.coreconfigapi.entry.BooleanEntry;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import net.minecraft.client.Minecraft;
@@ -13,25 +14,24 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class CCButtonBoolean extends AbstractWidget {
 
     private final CCContainer container;
-    private final Identifier valuePath;
+    private final String translation;
     private final Integer color;
     private final int hoverColor;
     private final BooleanEntry entry;
 
-    Identifier boolTrueImage = Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/boolean_true.png");
-    Identifier boolFalseImage = Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/boolean_false.png");
-    Identifier boolTrueImageSwitch = Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/boolean_true_switch.png");
-    Identifier boolFalseImageSwitch = Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/boolean_false_switch.png");
+    String boolTrueImage = "textures/ui/boolean_true.png";
+    String boolFalseImage = "textures/ui/boolean_false.png";
+    String boolTrueImageSwitch = "textures/ui/boolean_true_switch.png";
+    String boolFalseImageSwitch = "textures/ui/boolean_false_switch.png";
 
-    public CCButtonBoolean(BooleanEntry entry, int width, int height, Identifier valuePath, CCContainer assignedContainer, int hoverColor, Integer color) {
+    public CCButtonBoolean(BooleanEntry entry, int width, int height, String translation, CCContainer assignedContainer, int hoverColor, Integer color) {
         this.container = assignedContainer;
-        this.valuePath = valuePath;
+        this.translation = translation;
         this.hoverColor = hoverColor;
         this.entry = entry;
         this.color = color;
@@ -54,7 +54,7 @@ public class CCButtonBoolean extends AbstractWidget {
 
         graphics.text(
             Minecraft.getInstance().font,
-            Component.translatable(this.valuePath.getPath()).withStyle(style -> style.withItalic(entry.getValue() != entry.getUnsavedValue())),
+            Component.translatable(this.translation).withStyle(style -> style.withItalic(entry.getValue() != entry.getUnsavedValue())),
             this.getX() + 5,
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             0xFFFFFFFF,
@@ -62,7 +62,7 @@ public class CCButtonBoolean extends AbstractWidget {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            !Config.booleanUseSwitchTexture.getValue() ? (entry.getUnsavedValue() ? boolTrueImage : boolFalseImage) : (entry.getUnsavedValue() ? boolTrueImageSwitch : boolFalseImageSwitch),
+            Identifier.get(CoreConfigConstants.MOD_ID, !Config.booleanUseSwitchTexture.getValue() ? (entry.getUnsavedValue() ? boolTrueImage : boolFalseImage) : (entry.getUnsavedValue() ? boolTrueImageSwitch : boolFalseImageSwitch)),
             this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
             this.getY(),
             0, 0,

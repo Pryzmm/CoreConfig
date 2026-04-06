@@ -13,22 +13,21 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 public class CCButtonString extends AbstractWidget {
 
     private final CCContainer container;
-    private final Identifier valuePath;
+    private final String translation;
     private final Integer color;
     private final int hoverColor;
     private final StringEntry entry;
     private final EditBox editBox;
 
-    public CCButtonString(StringEntry entry, int width, int height, Identifier valuePath, CCContainer assignedContainer, int hoverColor, Integer color) {
+    public CCButtonString(StringEntry entry, int width, int height, String translation, CCContainer assignedContainer, int hoverColor, Integer color) {
         this.container = assignedContainer;
-        this.valuePath = valuePath;
+        this.translation = translation;
         this.hoverColor = hoverColor;
         this.entry = entry;
         this.color = color;
@@ -60,7 +59,7 @@ public class CCButtonString extends AbstractWidget {
 
         graphics.text(
             Minecraft.getInstance().font,
-            Component.translatable(this.valuePath.getPath()).withStyle(style -> style.withItalic(!entry.getValue().equals(entry.getUnsavedValue()))),
+            Component.translatable(this.translation).withStyle(style -> style.withItalic(!entry.getValue().equals(entry.getUnsavedValue()))),
             this.getX() + 5,
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             (editBox.getValue().length() < entry.minimumLength() || editBox.getValue().length() > entry.maximumLength()) ? 0xFFFF0044 : 0xFFFFFFFF,

@@ -4,6 +4,7 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
+import com.pryzmm.coreconfig.util.Identifier;
 import com.pryzmm.coreconfigapi.entry.WebsiteEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -12,7 +13,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.NotNull;
 import java.awt.*;
@@ -20,14 +20,14 @@ import java.awt.*;
 public class CCButtonWebsite extends AbstractWidget {
 
     private final CCContainer container;
-    private final Identifier valuePath;
+    private final String translation;
     private final Integer color;
     private final int hoverColor;
     private final WebsiteEntry entry;
 
-    public CCButtonWebsite(WebsiteEntry entry, int width, int height, Identifier valuePath, CCContainer assignedContainer, int hoverColor, Integer color) {
+    public CCButtonWebsite(WebsiteEntry entry, int width, int height, String translation, CCContainer assignedContainer, int hoverColor, Integer color) {
         this.container = assignedContainer;
-        this.valuePath = valuePath;
+        this.translation = translation;
         this.hoverColor = hoverColor;
         this.entry = entry;
         this.color = color;
@@ -50,7 +50,7 @@ public class CCButtonWebsite extends AbstractWidget {
 
         graphics.text(
             Minecraft.getInstance().font,
-            Component.translatable(this.valuePath.getPath()),
+            Component.translatable(this.translation),
             this.getX() + 5,
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             0xFFFFFFFF,
@@ -58,7 +58,7 @@ public class CCButtonWebsite extends AbstractWidget {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/goto_website.png"),
+            Identifier.get(CoreConfigConstants.MOD_ID, "textures/ui/goto_website.png"),
             this.getX() + width - 16,
             this.getY() + 4,
             0, 0,

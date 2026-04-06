@@ -4,6 +4,7 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
+import com.pryzmm.coreconfig.util.Identifier;
 import com.pryzmm.coreconfigapi.entry.ColorEntry;
 import com.pryzmm.coreconfigapi.screen.ConfigScreen;
 import net.minecraft.client.Minecraft;
@@ -15,20 +16,19 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class CCButtonColor extends AbstractWidget {
 
     private final CCContainer container;
-    private final Identifier valuePath;
+    private final String translation;
     private final Integer color;
     private final int hoverColor;
     private final ColorEntry entry;
 
-    public CCButtonColor(ColorEntry entry, int width, int height, Identifier valuePath, CCContainer assignedContainer, int hoverColor, Integer color) {
+    public CCButtonColor(ColorEntry entry, int width, int height, String translation, CCContainer assignedContainer, int hoverColor, Integer color) {
         this.container = assignedContainer;
-        this.valuePath = valuePath;
+        this.translation = translation;
         this.hoverColor = hoverColor;
         this.entry = entry;
         this.color = color;
@@ -51,7 +51,7 @@ public class CCButtonColor extends AbstractWidget {
 
         graphics.text(
             Minecraft.getInstance().font,
-            Component.translatable(this.valuePath.getPath()).withStyle(style -> style.withItalic(!equals(entry.getValue(), entry.getUnsavedValue()))),
+            Component.translatable(this.translation).withStyle(style -> style.withItalic(!equals(entry.getValue(), entry.getUnsavedValue()))),
             this.getX() + 5,
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             0xFFFFFFFF,
@@ -62,7 +62,7 @@ public class CCButtonColor extends AbstractWidget {
 
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_background.png"),
+            Identifier.get(CoreConfigConstants.MOD_ID, "textures/ui/color_background.png"),
             this.getX() + width - 18,
             this.getY() + 2,
             0, 0,

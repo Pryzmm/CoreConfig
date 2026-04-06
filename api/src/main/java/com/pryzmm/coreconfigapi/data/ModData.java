@@ -1,5 +1,3 @@
 package com.pryzmm.coreconfigapi.data;
 
-import net.minecraft.resources.Identifier;
-
-public record ModData(Identifier modLogo, Identifier modBanner, Integer backgroundColor, Integer buttonColor) {}
+public record ModData(String modID, String nameTranslation, String bannerPath, Integer backgroundColor, Integer buttonColor) {}

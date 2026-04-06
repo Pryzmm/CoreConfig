@@ -7,17 +7,16 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class CCDivider extends AbstractWidget {
 
-    private final Identifier valuePath;
+    private final String translation;
     private final Integer color;
     private final DividerEntry entry;
 
-    public CCDivider(DividerEntry entry, int width, int height, Identifier valuePath, Integer color) {
-        this.valuePath = valuePath;
+    public CCDivider(DividerEntry entry, int width, int height, String translation, Integer color) {
+        this.translation = translation;
         this.entry = entry;
         this.color = color;
         super(0, 0, width - 4, height, Component.empty());
@@ -29,12 +28,12 @@ public class CCDivider extends AbstractWidget {
         if (this.isHovered && HoveredEntry.value != entry) HoveredEntry.value = entry;
         else if (HoveredEntry.value == entry) HoveredEntry.value = null;
 
-        int textWidth = Minecraft.getInstance().font.width(Component.translatable(this.valuePath.getPath()));
+        int textWidth = Minecraft.getInstance().font.width(Component.translatable(this.translation));
         int bottomPadding = (this.height - 20) / 2;
 
         graphics.text(
             Minecraft.getInstance().font,
-            Component.translatable(this.valuePath.getPath()),
+            Component.translatable(this.translation),
             this.getX() + (this.width / 2) - (textWidth / 2),
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2) + bottomPadding,
             color,

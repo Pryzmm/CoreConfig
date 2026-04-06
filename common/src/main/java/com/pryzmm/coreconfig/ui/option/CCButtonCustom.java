@@ -10,20 +10,19 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class CCButtonCustom extends AbstractWidget {
 
     private final CCContainer container;
-    private final Identifier valuePath;
+    private final String translation;
     private final Integer color;
     private final int hoverColor;
     private final CustomEntry entry;
 
-    public CCButtonCustom(CustomEntry entry, int width, int height, Identifier valuePath, CCContainer assignedContainer, int hoverColor, Integer color) {
+    public CCButtonCustom(CustomEntry entry, int width, int height, String translation, CCContainer assignedContainer, int hoverColor, Integer color) {
         this.container = assignedContainer;
-        this.valuePath = valuePath;
+        this.translation = translation;
         this.hoverColor = hoverColor;
         this.entry = entry;
         this.color = color;
@@ -44,11 +43,11 @@ public class CCButtonCustom extends AbstractWidget {
             if (HoveredEntry.value == entry) HoveredEntry.value = null;
         }
 
-        int textWidth = Minecraft.getInstance().font.width(Component.translatable(this.valuePath.getPath()));
+        int textWidth = Minecraft.getInstance().font.width(Component.translatable(this.translation));
 
         graphics.text(
             Minecraft.getInstance().font,
-            Component.translatable(this.valuePath.getPath()),
+            Component.translatable(this.translation),
             this.getX() + (this.width / 2) - (textWidth / 2),
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             0xFFFFFFFF,
