@@ -5,7 +5,6 @@ import com.pryzmm.coreconfigapi.data.CCEntries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.NotNull;
 
 public class CustomEntry implements MainEntry {
 
