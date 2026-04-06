@@ -4,36 +4,36 @@ import com.pryzmm.coreconfigapi.Constants;
 import com.pryzmm.coreconfigapi.data.CCFile;
 import com.pryzmm.coreconfigapi.entry.CCEntry;
 import com.pryzmm.coreconfigapi.entry.MainEntry;
+import com.pryzmm.coreconfigapi.entry.WebsiteEntry;
 import com.pryzmm.coreconfigapi.screen.ConfigScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.Identifier;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CCFileHandler extends CCFile {
 
-    private static File getConfigFile(Identifier identifier) {
-        return new File("coreconfig/" + identifier.getNamespace() + ".yml");
+    private static File getConfigFile(String modName) {
+        return new File("coreconfig/" + modName + ".yml");
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void updateConfigFile(Identifier identifier) {
+    public static void updateConfigFile(String modName) {
         boolean requiresRestart = false;
-        File configFile = getConfigFile(identifier);
+        File configFile = getConfigFile(modName);
         if (!configFile.exists()) {
-            Constants.LOGGER.info("Creating new config file for " + identifier.getNamespace());
+            Constants.LOGGER.info("Creating new config file for " + modName);
             configFile.getParentFile().mkdirs();
             try { configFile.createNewFile(); } catch (Exception e) {
-                Constants.LOGGER.severe("Failed to create config file for " + identifier.getNamespace() + ": " + e.getMessage());
+                Constants.LOGGER.severe("Failed to create config file for " + modName + ": " + e.getMessage());
                 return;
             }
         }
         try {
-            boolean needsRestart = saveConfig(identifier, configFile);
+            boolean needsRestart = saveConfig(modName, configFile);
             if (needsRestart) requiresRestart = true;
         } catch (Exception e) {
-            Constants.LOGGER.severe("Failed to save config file for " + identifier.getNamespace() + ": " + e.getMessage());
+            Constants.LOGGER.severe("Failed to save config file for " + modName + ": " + e.getMessage());
         }
         if (requiresRestart && Minecraft.getInstance().screen instanceof ConfigScreen screen) screen.sendRestartPopup();
     }
@@ -42,7 +42,7 @@ public class CCFileHandler extends CCFile {
      * @return Whether a restart is required to apply the changes in the config file
      * @throws Exception If an error occurs while saving the config file
      */
-    private static boolean saveConfig(Identifier identifier, File configFile) throws Exception {
+    private static boolean saveConfig(String modName, File configFile) throws Exception {
         boolean requiresRestart = false;
         List<String> existingLines;
         try (BufferedReader reader = new BufferedReader(new FileReader(configFile))) {
@@ -50,9 +50,9 @@ public class CCFileHandler extends CCFile {
         }
         BufferedWriter writer = new BufferedWriter(new FileWriter(configFile));
         List<String> newLines = new ArrayList<>();
-        for (CCEntry e : EntryHolder.get(identifier.getNamespace())) {
-            if (e instanceof MainEntry entry) {
-                String key = entry.identifier().getPath() + ":";
+        for (CCEntry e : EntryHolder.get(modName)) {
+            if (e instanceof MainEntry entry && !(e instanceof WebsiteEntry)) {
+                String key = entry.translation() + ":";
                 String newLine = key + entry.getUnsavedValue();
                 String oldLine = existingLines.stream()
                     .filter(l -> l.startsWith(key))
@@ -75,12 +75,12 @@ public class CCFileHandler extends CCFile {
     }
 
     @Override
-    public <T> T getConfigValue(Identifier identifier, Class<T> clazz) {
-        File configFile = getConfigFile(identifier);
+    public <T> T getConfigValue(String modName, String translation, Class<T> clazz) {
+        File configFile = getConfigFile(modName);
         if (!configFile.exists()) return null;
         try (BufferedReader reader = new BufferedReader(new FileReader(configFile))) {
             String line = reader.lines()
-                .filter(l -> l.startsWith(identifier.getPath() + ":"))
+                .filter(l -> l.startsWith(translation + ":"))
                 .findFirst()
                 .orElse(null);
             if (line == null) return null;
@@ -97,9 +97,9 @@ public class CCFileHandler extends CCFile {
             }
             return clazz.cast(value);
         } catch (NumberFormatException e) {
-            Constants.LOGGER.severe("Failed to parse config value for " + identifier + " as " + clazz.getSimpleName() + ": " + e.getMessage());
+            Constants.LOGGER.severe("Failed to parse config value for " + translation + " as " + clazz.getSimpleName() + ": " + e.getMessage());
         } catch (Exception e) {
-            Constants.LOGGER.severe("Failed to read config file for " + identifier.getNamespace() + ": " + e.getMessage());
+            Constants.LOGGER.severe("Failed to read config file for " + modName + ": " + e.getMessage());
         }
         return null;
     }

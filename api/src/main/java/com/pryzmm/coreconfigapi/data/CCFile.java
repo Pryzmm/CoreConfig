@@ -1,12 +1,10 @@
 package com.pryzmm.coreconfigapi.data;
 
-import net.minecraft.resources.Identifier;
-
 public abstract class CCFile {
 
     private static CCFile instance = new CCFile() {
         @Override
-        public <T> T getConfigValue(Identifier identifier, Class<T> clazz) {
+        public <T> T getConfigValue(String modName, String translation, Class<T> clazz) {
             return null;
         }
     };
@@ -19,5 +17,5 @@ public abstract class CCFile {
         return instance;
     }
 
-    public abstract <T> T getConfigValue(Identifier identifier, Class<T> clazz);
+    public abstract <T> T getConfigValue(String modName, String translation, Class<T> clazz);
 }

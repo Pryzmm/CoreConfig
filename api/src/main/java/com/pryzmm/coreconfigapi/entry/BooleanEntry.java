@@ -4,7 +4,6 @@ import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.CCFile;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 
 public class BooleanEntry implements MainEntry {
 
@@ -13,7 +12,8 @@ public class BooleanEntry implements MainEntry {
     private Boolean newValue = null;
     private Component descriptor;
     private ImageComponent image;
-    private Identifier identifier;
+    private String translation;
+    private String modID;
     private Integer hoverColor;
     private boolean requiresRestart;
     private int priority;
@@ -23,7 +23,8 @@ public class BooleanEntry implements MainEntry {
 
     public Component descriptor() { return descriptor; }
     public boolean requiresRestart() { return requiresRestart; }
-    public Identifier identifier() { return identifier; }
+    public String translation() { return translation; }
+    public String modID() { return modID; }
     public Integer hoverColor() { return hoverColor; }
     public int priority() { return priority; }
     public ImageComponent image() { return image; }
@@ -46,7 +47,8 @@ public class BooleanEntry implements MainEntry {
 
     public static class Builder {
         private final boolean defaultValue;
-        private final Identifier identifier;
+        private final String translation;
+        private final String modID;
         private Component descriptor = Component.empty();
         private ImageComponent image = null;
         private boolean requiresRestart = false;
@@ -54,9 +56,10 @@ public class BooleanEntry implements MainEntry {
         private int priority = 0;
         private DividerEntry divider = null;
 
-        public Builder(Identifier identifier, boolean defaultValue) {
+        public Builder(String modID, String translation, boolean defaultValue) {
             this.defaultValue = defaultValue;
-            this.identifier = identifier;
+            this.translation = translation;
+            this.modID = modID;
         }
 
         public Builder descriptor(Component descriptor) { this.descriptor = descriptor; return this; }
@@ -64,12 +67,13 @@ public class BooleanEntry implements MainEntry {
         public Builder hoverColor(int hoverColor) { this.hoverColor = hoverColor; return this; }
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
-        public Builder image(Identifier identifier, int width, int height) { this.image = new ImageComponent(identifier, width, height); return this; }
+        public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
 
         public BooleanEntry build() {
             BooleanEntry entry = new BooleanEntry();
             entry.value = defaultValue;
-            entry.identifier = identifier;
+            entry.modID = modID;
+            entry.translation = translation;
             entry.descriptor = descriptor;
             entry.image = image;
             entry.requiresRestart = requiresRestart;
@@ -78,10 +82,10 @@ public class BooleanEntry implements MainEntry {
             entry.defaultValue = defaultValue;
             entry.divider = divider;
 
-            Boolean configValue = CCFile.getInstance().getConfigValue(identifier, Boolean.class);
+            Boolean configValue = CCFile.getInstance().getConfigValue(modID, translation, Boolean.class);
             if (configValue != null) entry.value = configValue;
 
-            CCEntries.addEntry(entry.identifier.getNamespace(), entry);
+            CCEntries.addEntry(entry.modID(), entry);
             return entry;
         }
     }

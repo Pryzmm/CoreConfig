@@ -2,11 +2,11 @@ package com.pryzmm.coreconfigapi.entry;
 
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 
 public interface MainEntry extends CCEntry {
 
-    Identifier identifier();
+    String translation();
+    String modID();
     void save();
     Object getUnsavedValue();
     Object getDefaultValue();

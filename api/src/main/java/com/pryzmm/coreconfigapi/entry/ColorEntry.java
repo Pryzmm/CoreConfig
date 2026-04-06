@@ -4,7 +4,6 @@ import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.CCFile;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 
 public class ColorEntry implements MainEntry {
 
@@ -13,7 +12,8 @@ public class ColorEntry implements MainEntry {
     private Integer newValue = null;
     private Component descriptor;
     private ImageComponent image;
-    private Identifier identifier;
+    private String modID;
+    private String translation;
     private Integer hoverColor;
     private boolean requiresRestart;
     private int priority;
@@ -25,7 +25,8 @@ public class ColorEntry implements MainEntry {
     public Component descriptor() { return descriptor; }
     public ImageComponent image() { return image; }
     public boolean requiresRestart() { return requiresRestart; }
-    public Identifier identifier() { return identifier; }
+    public String modID() { return modID; }
+    public String translation() { return translation; }
     public Integer hoverColor() { return hoverColor; }
     public int priority() { return priority; }
     public DividerEntry divider() { return divider; }
@@ -54,8 +55,9 @@ public class ColorEntry implements MainEntry {
     }
 
     public static class Builder {
+        private final String modID;
+        private final String translation;
         private final Integer defaultValue;
-        private final Identifier identifier;
         private Component descriptor = Component.empty();
         private ImageComponent image = null;
         private boolean requiresRestart = false;
@@ -64,9 +66,10 @@ public class ColorEntry implements MainEntry {
         private DividerEntry divider = null;
         private boolean allowAlpha = false;
 
-        public Builder(Identifier identifier, Integer defaultValue) {
+        public Builder(String modID, String translation, Integer defaultValue) {
             this.defaultValue = defaultValue == null ? 0 : defaultValue;
-            this.identifier = identifier;
+            this.translation = translation;
+            this.modID = modID;
         }
 
         public Builder descriptor(Component descriptor) { this.descriptor = descriptor; return this; }
@@ -75,12 +78,13 @@ public class ColorEntry implements MainEntry {
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder allowAlpha(boolean allowAlpha) { this.allowAlpha = allowAlpha; return this; }
-        public Builder image(Identifier identifier, int width, int height) { this.image = new ImageComponent(identifier, width, height); return this; }
+        public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
 
         public ColorEntry build() {
             ColorEntry entry = new ColorEntry();
             entry.value = defaultValue;
-            entry.identifier = identifier;
+            entry.translation = translation;
+            entry.modID = modID;
             entry.descriptor = descriptor;
             entry.requiresRestart = requiresRestart;
             entry.hoverColor = hoverColor;
@@ -90,10 +94,10 @@ public class ColorEntry implements MainEntry {
             entry.divider = divider;
             entry.allowAlpha = allowAlpha;
 
-            Integer configValue = CCFile.getInstance().getConfigValue(identifier, Integer.class);
+            Integer configValue = CCFile.getInstance().getConfigValue(modID, translation, Integer.class);
             if (configValue != null) entry.value = configValue;
 
-            CCEntries.addEntry(entry.identifier.getNamespace(), entry);
+            CCEntries.addEntry(entry.modID(), entry);
             return entry;
         }
     }

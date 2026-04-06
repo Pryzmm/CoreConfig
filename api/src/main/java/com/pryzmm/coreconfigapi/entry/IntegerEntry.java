@@ -4,7 +4,6 @@ import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.CCFile;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 
 public class IntegerEntry implements MainEntry {
 
@@ -13,7 +12,8 @@ public class IntegerEntry implements MainEntry {
     private String newValue = null;
     private Component descriptor;
     private ImageComponent image;
-    private Identifier identifier;
+    private String translation;
+    private String modID;
     private Integer hoverColor;
     private boolean requiresRestart;
     private int minimum;
@@ -26,7 +26,8 @@ public class IntegerEntry implements MainEntry {
     public Component descriptor() { return descriptor; }
     public ImageComponent image() { return image; }
     public boolean requiresRestart() { return requiresRestart; }
-    public Identifier identifier() { return identifier; }
+    public String translation() { return translation; }
+    public String modID() { return modID; }
     public Integer hoverColor() { return hoverColor; }
     public int priority() { return priority; }
     public Integer minimum() { return minimum; }
@@ -57,7 +58,8 @@ public class IntegerEntry implements MainEntry {
 
     public static class Builder {
         private final Integer defaultValue;
-        private final Identifier identifier;
+        private final String translation;
+        private final String modID;
         private Component descriptor = Component.empty();
         private ImageComponent image = null;
         private boolean requiresRestart = false;
@@ -67,9 +69,10 @@ public class IntegerEntry implements MainEntry {
         private int priority = 0;
         private DividerEntry divider = null;
 
-        public Builder(Identifier identifier, Integer defaultValue) {
+        public Builder(String modID, String translation, Integer defaultValue) {
             this.defaultValue = defaultValue == null ? 0 : defaultValue;
-            this.identifier = identifier;
+            this.translation = translation;
+            this.modID = modID;
         }
 
         public Builder descriptor(Component descriptor) { this.descriptor = descriptor; return this; }
@@ -79,12 +82,13 @@ public class IntegerEntry implements MainEntry {
         public Builder maximum(int maximum) { this.maximum = maximum; return this; }
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
-        public Builder image(Identifier identifier, int width, int height) { this.image = new ImageComponent(identifier, width, height); return this; }
+        public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
 
         public IntegerEntry build() {
             IntegerEntry entry = new IntegerEntry();
             entry.value = defaultValue;
-            entry.identifier = identifier;
+            entry.translation = translation;
+            entry.modID = modID;
             entry.descriptor = descriptor;
             entry.requiresRestart = requiresRestart;
             entry.hoverColor = hoverColor;
@@ -95,10 +99,10 @@ public class IntegerEntry implements MainEntry {
             entry.image = image;
             entry.divider = divider;
 
-            Integer configValue = CCFile.getInstance().getConfigValue(identifier, Integer.class);
+            Integer configValue = CCFile.getInstance().getConfigValue(modID, translation, Integer.class);
             if (configValue != null) entry.value = configValue;
 
-            CCEntries.addEntry(entry.identifier.getNamespace(), entry);
+            CCEntries.addEntry(entry.modID(), entry);
             return entry;
         }
     }

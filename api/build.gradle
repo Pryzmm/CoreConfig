@@ -10,13 +10,15 @@ base {
     archivesName = "api"
 }
 
+// Mojang ships Java 25 to end users in 26.1+, so your mod should target Java 25.
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
 repositories {
     // your existing repos
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 }
 
 loom {
@@ -31,9 +33,6 @@ processResources {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 25
-}
 
 java {
     withSourcesJar()

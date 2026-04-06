@@ -6,6 +6,7 @@ import com.pryzmm.coreconfig.data.EntryHolder;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.option.*;
 import com.pryzmm.coreconfig.ui.popup.ColorPopup;
+import com.pryzmm.coreconfig.util.Identifier;
 import com.pryzmm.coreconfigapi.entry.*;
 import com.pryzmm.coreconfigapi.data.ModData;
 import com.pryzmm.coreconfigapi.data.ModHolder;
@@ -22,7 +23,6 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,12 +65,14 @@ public class CoreConfigScreen extends Screen implements ConfigScreen {
 
         CCContainer modListContainer = new CCContainer(this.minecraft, 5, 25, 200, minecraft.screen.height - 62);
         List<AbstractWidget> modListWidgets = new ArrayList<>();
-        ModHolder.getRegisteredMods(true).forEach((identifier) -> modListWidgets.add(new CCListMod(this, 200, 30, Identifier.fromNamespaceAndPath(identifier.getNamespace(), identifier.getPath()), modListContainer, 0x551A1A1A)));
+        ModHolder.getRegisteredMods(true).forEach((modID) -> {
+            ModData modData = ModHolder.getModData(modID);
+            modListWidgets.add(new CCListMod(this, 200, 30, modID, modData.nameTranslation(), modListContainer, 0x551A1A1A));
+        });
         modListContainer.populate(modListWidgets);
         containers.add(modListContainer);
 
-        Identifier identifier = ModHolder.getModByNamespace(activeModID);
-        CCHeader configHeader = new CCHeader(this.minecraft, 210, 5, minecraft.screen.width - 215, 19, Component.translatable("ui.coreconfig.config_list", Component.translatable(identifier.getPath())), data.backgroundColor());
+        CCHeader configHeader = new CCHeader(this.minecraft, 210, 5, minecraft.screen.width - 215, 19, Component.translatable("ui.coreconfig.config_list", Component.translatable(data.nameTranslation())), data.backgroundColor());
         containers.add(configHeader);
 
         configContainer = new CCContainer(this.minecraft, 210, 25, minecraft.screen.width - 215, minecraft.screen.height - 30, data.backgroundColor());
@@ -78,15 +80,15 @@ public class CoreConfigScreen extends Screen implements ConfigScreen {
         try {
             for (CCEntry entry : EntryHolder.get(activeModID)) {
                 switch (entry) {
-                    case BooleanEntry booleanEntry -> configWidgets.add(new CCButtonBoolean(booleanEntry, configContainer.getWidth(), 20, booleanEntry.identifier(), configContainer, booleanEntry.hoverColor() != null ? booleanEntry.hoverColor() : 0x55000000, data.buttonColor()));
-                    case StringEntry  stringEntry  -> configWidgets.add(new CCButtonString(stringEntry,   configContainer.getWidth(), 20, stringEntry.identifier(),  configContainer, stringEntry.hoverColor()  != null ? stringEntry.hoverColor()  : 0x55000000, data.buttonColor()));
-                    case IntegerEntry integerEntry -> configWidgets.add(new CCButtonInteger(integerEntry, configContainer.getWidth(), 20, integerEntry.identifier(), configContainer, integerEntry.hoverColor() != null ? integerEntry.hoverColor() : 0x55000000, data.buttonColor()));
-                    case FloatEntry   floatEntry   -> configWidgets.add(new CCButtonFloat(floatEntry,     configContainer.getWidth(), 20, floatEntry.identifier(),   configContainer, floatEntry.hoverColor()   != null ? floatEntry.hoverColor()   : 0x55000000, data.buttonColor()));
-                    case DoubleEntry  doubleEntry  -> configWidgets.add(new CCButtonDouble(doubleEntry,   configContainer.getWidth(), 20, doubleEntry.identifier(),  configContainer, doubleEntry.hoverColor()  != null ? doubleEntry.hoverColor()  : 0x55000000, data.buttonColor()));
-                    case ColorEntry   colorEntry   -> configWidgets.add(new CCButtonColor(colorEntry,     configContainer.getWidth(), 20, colorEntry.identifier(),   configContainer, colorEntry.hoverColor()   != null ? colorEntry.hoverColor()   : 0x55000000, data.buttonColor()));
-                    case WebsiteEntry websiteEntry -> configWidgets.add(new CCButtonWebsite(websiteEntry, configContainer.getWidth(), 20, websiteEntry.identifier(), configContainer, websiteEntry.hoverColor() != null ? websiteEntry.hoverColor() : 0x55000000, data.buttonColor()));
-                    case CustomEntry  customEntry  -> configWidgets.add(new CCButtonCustom(customEntry,   configContainer.getWidth(), 20, customEntry.identifier(),  configContainer, customEntry.hoverColor()  != null ? customEntry.hoverColor()  : 0x55000000, data.buttonColor()));
-                    case DividerEntry dividerEntry -> configWidgets.add(new CCDivider(dividerEntry, configContainer.getWidth(), configWidgets.isEmpty() ? 20 : 30, dividerEntry.identifier(), dividerEntry.textColor()));
+                    case BooleanEntry booleanEntry -> configWidgets.add(new CCButtonBoolean(booleanEntry, configContainer.getWidth(), 20, booleanEntry.translation(), configContainer, booleanEntry.hoverColor() != null ? booleanEntry.hoverColor() : 0x55000000, data.buttonColor()));
+                    case StringEntry  stringEntry  -> configWidgets.add(new CCButtonString(stringEntry,   configContainer.getWidth(), 20, stringEntry.translation(),   configContainer, stringEntry.hoverColor()  != null ? stringEntry.hoverColor()  : 0x55000000, data.buttonColor()));
+                    case IntegerEntry integerEntry -> configWidgets.add(new CCButtonInteger(integerEntry, configContainer.getWidth(), 20, integerEntry.translation(), configContainer, integerEntry.hoverColor() != null ? integerEntry.hoverColor() : 0x55000000, data.buttonColor()));
+                    case FloatEntry   floatEntry   -> configWidgets.add(new CCButtonFloat(floatEntry,     configContainer.getWidth(), 20, floatEntry.translation(),     configContainer, floatEntry.hoverColor()   != null ? floatEntry.hoverColor()   : 0x55000000, data.buttonColor()));
+                    case DoubleEntry  doubleEntry  -> configWidgets.add(new CCButtonDouble(doubleEntry,   configContainer.getWidth(), 20, doubleEntry.translation(),   configContainer, doubleEntry.hoverColor()  != null ? doubleEntry.hoverColor()  : 0x55000000, data.buttonColor()));
+                    case ColorEntry   colorEntry   -> configWidgets.add(new CCButtonColor(colorEntry,     configContainer.getWidth(), 20, colorEntry.translation(),     configContainer, colorEntry.hoverColor()   != null ? colorEntry.hoverColor()   : 0x55000000, data.buttonColor()));
+                    case WebsiteEntry websiteEntry -> configWidgets.add(new CCButtonWebsite(websiteEntry, configContainer.getWidth(), 20, websiteEntry.translation(), configContainer, websiteEntry.hoverColor() != null ? websiteEntry.hoverColor() : 0x55000000, data.buttonColor()));
+                    case CustomEntry  customEntry  -> configWidgets.add(new CCButtonCustom(customEntry,   configContainer.getWidth(), 20, customEntry.translation(),   configContainer, customEntry.hoverColor()  != null ? customEntry.hoverColor()  : 0x55000000, data.buttonColor()));
+                    case DividerEntry dividerEntry -> configWidgets.add(new CCDivider(dividerEntry, configContainer.getWidth(), configWidgets.isEmpty() ? 20 : 30, dividerEntry.translation(), dividerEntry.textColor()));
                     case null, default -> CoreConfigConstants.LOGGER.warning("Unsupported config entry type: " + (entry == null ? "null" : entry.getClass()));
                 }
             }

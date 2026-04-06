@@ -1,18 +1,19 @@
 package com.pryzmm.coreconfigapi.entry;
 
 import com.pryzmm.coreconfigapi.data.CCEntries;
-import net.minecraft.resources.Identifier;
 
 public class DividerEntry implements CategoryEntry {
 
     private boolean value;
-    private Identifier identifier;
+    private String translation;
+    private String modID;
     private Integer textColor;
     private int priority;
 
     private DividerEntry() {}
 
-    public Identifier identifier() { return identifier; }
+    public String translation() { return translation; }
+    public String modID() { return modID; }
     public Integer textColor() { return textColor; }
     public int priority() { return priority; }
 
@@ -20,12 +21,14 @@ public class DividerEntry implements CategoryEntry {
     public void setValue(boolean value) { this.value = value; }
 
     public static class Builder {
-        private final Identifier identifier;
+        private final String translation;
+        private final String modID;
         private Integer textColor = null;
         private int priority = 0;
 
-        public Builder(Identifier identifier) {
-            this.identifier = identifier;
+        public Builder(String modID, String translation) {
+            this.translation = translation;
+            this.modID = modID;
         }
 
         public Builder textColor(int textColor) { this.textColor = textColor; return this; }
@@ -33,11 +36,12 @@ public class DividerEntry implements CategoryEntry {
 
         public DividerEntry build() {
             DividerEntry entry = new DividerEntry();
-            entry.identifier = identifier;
+            entry.modID = modID;
+            entry.translation = translation;
             entry.textColor = textColor;
             entry.priority = priority;
 
-            CCEntries.addEntry(entry.identifier.getNamespace(), entry);
+            CCEntries.addEntry(entry.modID(), entry);
             return entry;
         }
     }
