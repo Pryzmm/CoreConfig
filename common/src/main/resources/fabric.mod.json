@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "id": "coreconfig_common",
+  "version": "1.0.0",
+  "name": "CoreConfig Common",
+  "environment": "*"
+}

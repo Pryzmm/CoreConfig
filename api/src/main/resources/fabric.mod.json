@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "coreconfigapi",
+  "version": "${version}",
+  "name": "CoreConfig API",
+  "description": "Compatibility API for CoreConfig",
+  "accessWidener": "coreconfig.classtweaker",
+  "authors": ["pryzmm"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {}
+}

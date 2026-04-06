@@ -1,14 +1,17 @@
 pluginManagement {
+    plugins {
+        id "dev.architectury.loom" version "1.14-SNAPSHOT"
+    }
     repositories {
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
+        maven { url "https://maven.fabricmc.net/" }
+        maven { url "https://maven.neoforged.net/releases" }
+        maven { url "https://maven.architectury.dev/" }
         gradlePluginPortal()
     }
 }
 
 rootProject.name = "coreconfig"
 
-include("coreconfig-api")
-include("coreconfig-core")
+include("api")
+include("common")
+include("fabric")
