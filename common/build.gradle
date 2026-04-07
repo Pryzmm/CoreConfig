@@ -2,9 +2,6 @@ plugins {
     id "net.fabricmc.fabric-loom" version "1.16-SNAPSHOT"
 }
 
-// Mojang ships Java 25 to end users in 26.1+, so your mod should target Java 25.
-java.toolchain.languageVersion = JavaLanguageVersion.of(25)
-
 loom {
     enableTransitiveAccessWideners = true
 }
