@@ -3,6 +3,8 @@ package com.pryzmm.coreconfig.ui.option;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
+import com.pryzmm.coreconfig.util.Server;
+import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.CustomEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -62,6 +64,6 @@ public class CCButtonCustom extends AbstractWidget {
     @Override
     public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
         super.onClick(event, doubleClick);
-        entry.getValue().run();
+        if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) entry.getValue().run();
     }
 }

@@ -2,7 +2,9 @@ package com.pryzmm.coreconfig.ui.objects;
 
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.util.Identifier;
+import com.pryzmm.coreconfig.util.Server;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
+import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -15,11 +17,19 @@ import java.util.List;
 
 public class CCTooltip {
 
+    private static Long firstRenderTime = null;
+    private static Integer frame = 0;
+
     public static void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, CCEntry entry, CCContainer container) {
+        if (entry == null) {
+            frame = 0;
+            return;
+        }
+        if (firstRenderTime == null) firstRenderTime = System.currentTimeMillis();
         Minecraft minecraft = Minecraft.getInstance();
         MutableComponent descriptor = Component.empty();
         int imageWidth = 0;
-        int imageHeight = 0;
+        int frameHeight = 0;
         ImageComponent image = null;
 
         if (entry instanceof MainEntry mainEntry) {
@@ -28,8 +38,8 @@ public class CCTooltip {
             if (mainEntry.descriptor() == null && mainEntry.image() == null) return;
 
             image = mainEntry.image();
-            imageWidth = image != null ? image.width() : 0;
-            imageHeight = image != null ? image.height() : 0;
+            imageWidth = image != null ? image.imageWidth() : 0;
+            frameHeight = image != null ? image.frameHeight() : 0;
 
             descriptor = mainEntry.descriptor() != null ? mainEntry.descriptor().copy() : Component.empty();
 
@@ -83,6 +93,10 @@ public class CCTooltip {
             default -> {}
         }
 
+        if (entry instanceof MainEntry mainEntry && mainEntry.type() == ConfigType.SERVER && !Server.isHostingServer()) {
+            descriptor.append("\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.server_side"));
+        }
+
         final int[] maxTextWidth = {0};
         minecraft.font.split(descriptor, 170).forEach(sequence -> {
             int width = minecraft.font.width(sequence);
@@ -93,7 +107,7 @@ public class CCTooltip {
 
         int tooltipWidth = Math.max(imageWidth, maxTextWidth[0]) + 24;
         List<FormattedCharSequence> sequences = minecraft.font.split(descriptor, tooltipWidth - 24);
-        int tooltipHeight = imageHeight + (sequences.size() * (minecraft.font.lineHeight + 2)) + 24;
+        int tooltipHeight = frameHeight + (sequences.size() * (minecraft.font.lineHeight + 2)) + 24;
 
         int tooltipX = mouseX;
         int tooltipY = mouseY;
@@ -107,16 +121,26 @@ public class CCTooltip {
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, TooltipRenderUtil.BACKGROUND_SPRITE, tooltipX, tooltipY, tooltipWidth, tooltipHeight, 0xFFFFFFFF);
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, TooltipRenderUtil.FRAME_SPRITE, tooltipX, tooltipY, tooltipWidth, tooltipHeight, 0xFFFFFFFF);
 
-        if (image != null) graphics.blit(
-            RenderPipelines.GUI_TEXTURED,
-            Identifier.get(image.modID(), image.path()),
-            tooltipX + 12, tooltipY + 12,
-            0, 0,
-            imageWidth, imageHeight,
-            imageWidth, imageHeight
-        );
+        if (image != null) {
+            if (image.animationTime() >= 0) {
+                int maxFrames = (image.imageHeight() / image.frameHeight());
+                if (System.currentTimeMillis() - firstRenderTime >= 50L * image.animationTime()) {
+                    frame++;
+                    if (frame >= maxFrames) frame = 0;
+                    firstRenderTime = System.currentTimeMillis();
+                }
+            }
+            graphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                Identifier.get(image.modID(), image.path()),
+                tooltipX + 12, tooltipY + 12,
+                0, frame * image.frameHeight(),
+                image.imageWidth(), image.frameHeight(),
+                image.imageWidth(), image.imageHeight()
+            );
+        }
 
-        int textY = tooltipY + imageHeight + 14;
+        int textY = tooltipY + frameHeight + 14;
         for (FormattedCharSequence sequence : sequences) {
             graphics.text(
                 minecraft.font, sequence,

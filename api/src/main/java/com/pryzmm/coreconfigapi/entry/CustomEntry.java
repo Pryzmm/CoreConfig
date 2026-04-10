@@ -2,6 +2,7 @@ package com.pryzmm.coreconfigapi.entry;
 
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
+import com.pryzmm.coreconfigapi.data.ConfigType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -15,6 +16,7 @@ public class CustomEntry implements MainEntry {
     private Integer hoverColor;
     private int priority;
     private DividerEntry divider;
+    private ConfigType type;
 
     private CustomEntry() {}
 
@@ -26,6 +28,7 @@ public class CustomEntry implements MainEntry {
     public Integer hoverColor() { return hoverColor; }
     public int priority() { return priority; }
     public DividerEntry divider() { return divider; }
+    public ConfigType type() { return type; }
 
     public Runnable getUnsavedValue() { return runnable; }
     public Runnable getDefaultValue() { return runnable; }
@@ -44,6 +47,7 @@ public class CustomEntry implements MainEntry {
         private Integer hoverColor = null;
         private int priority = 0;
         private DividerEntry divider = null;
+        private ConfigType type = ConfigType.CLIENT;
 
         public Builder(String modID, String translation) {
             this.modID = modID;
@@ -56,6 +60,8 @@ public class CustomEntry implements MainEntry {
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
+        public Builder image(String path, int width, int height, int frameHeight, int ticks) { this.image = new ImageComponent(this.modID, path, width, height, frameHeight, ticks); return this; }
+        public Builder type(ConfigType type) { this.type = type; return this; }
 
         public CustomEntry build() {
             CustomEntry entry = new CustomEntry();
@@ -67,6 +73,7 @@ public class CustomEntry implements MainEntry {
             entry.hoverColor = hoverColor;
             entry.priority = priority;
             entry.divider = divider;
+            entry.type = type;
 
             CCEntries.addEntry(entry.modID(), entry);
             return entry;

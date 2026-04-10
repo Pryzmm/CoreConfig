@@ -3,7 +3,7 @@
   "id": "coreconfig",
   "version": "${version}",
 
-  "name": "coreconfig",
+  "name": "CoreConfig",
   "description": "Easy to use configuration API for mods",
   "authors": [],
   "contact": {},
@@ -18,6 +18,9 @@
     ],
     "main": [
       "com.pryzmm.coreconfig.CoreConfigFabric"
+    ],
+    "modmenu": [
+      "com.pryzmm.coreconfig.CoreConfigFabricModMenu"
     ]
   },
 

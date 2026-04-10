@@ -2,6 +2,7 @@ package com.pryzmm.coreconfigapi.entry;
 
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
+import com.pryzmm.coreconfigapi.data.ConfigType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,7 @@ public class WebsiteEntry implements MainEntry {
     public Integer hoverColor() { return hoverColor; }
     public int priority() { return priority; }
     public DividerEntry divider() { return divider; }
+    public ConfigType type() { return ConfigType.CLIENT; }
 
     public String getUnsavedValue() { return value; }
     public String getDefaultValue() { return value; }
@@ -57,6 +59,7 @@ public class WebsiteEntry implements MainEntry {
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
+        public Builder image(String path, int width, int height, int frameHeight, int ticks) { this.image = new ImageComponent(this.modID, path, width, height, frameHeight, ticks); return this; }
 
         public WebsiteEntry build() {
             WebsiteEntry entry = new WebsiteEntry();

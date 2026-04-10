@@ -5,6 +5,8 @@ import com.pryzmm.coreconfig.config.Config;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.util.Identifier;
+import com.pryzmm.coreconfig.util.Server;
+import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.BooleanEntry;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import net.minecraft.client.Minecraft;
@@ -70,6 +72,19 @@ public class CCButtonBoolean extends AbstractWidget {
             19, 19
         );
 
+        if (entry.type() == ConfigType.SERVER && !Server.isHostingServer()) {
+            graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x44FF0011);
+            graphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                Identifier.get(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
+                this.getY(),
+                0, 0,
+                19, 19,
+                19, 19
+            );
+        }
+
     }
 
     @Override
@@ -78,6 +93,6 @@ public class CCButtonBoolean extends AbstractWidget {
     @Override
     public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
         super.onClick(event, doubleClick);
-        entry.change(!entry.getUnsavedValue());
+        if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) entry.change(!entry.getUnsavedValue());
     }
 }

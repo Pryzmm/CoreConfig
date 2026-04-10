@@ -1,8 +1,11 @@
 package com.pryzmm.coreconfigapi.entry;
 
+import com.pryzmm.coreconfigapi.Constants;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.CCFile;
+import com.pryzmm.coreconfigapi.data.ConfigType;
+import com.pryzmm.coreconfigapi.data.ConfigValidity;
 import net.minecraft.network.chat.Component;
 
 public class DoubleEntry implements MainEntry {
@@ -20,6 +23,7 @@ public class DoubleEntry implements MainEntry {
     private double maximum;
     private int priority;
     private DividerEntry divider;
+    private ConfigType type;
 
     private DoubleEntry() {}
 
@@ -33,6 +37,7 @@ public class DoubleEntry implements MainEntry {
     public Double minimum() { return minimum; }
     public Double maximum() { return maximum; }
     public DividerEntry divider() { return divider; }
+    public ConfigType type() { return type; }
 
     public Object getUnsavedValue() { return newValue != null ? newValue : value; }
     public Double getDefaultValue() { return defaultValue; }
@@ -68,6 +73,7 @@ public class DoubleEntry implements MainEntry {
         private double maximum = Double.MAX_VALUE;
         private int priority = 0;
         private DividerEntry divider = null;
+        private ConfigType type = ConfigType.CLIENT;
 
         public Builder(String modID, String translation, Double defaultValue) {
             this.defaultValue = defaultValue == null ? 0 : defaultValue;
@@ -83,6 +89,8 @@ public class DoubleEntry implements MainEntry {
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
+        public Builder image(String path, int width, int height, int frameHeight, int ticks) { this.image = new ImageComponent(this.modID, path, width, height, frameHeight, ticks); return this; }
+        public Builder type(ConfigType type) { this.type = type; return this; }
 
         public DoubleEntry build() {
             DoubleEntry entry = new DoubleEntry();
@@ -97,9 +105,18 @@ public class DoubleEntry implements MainEntry {
             entry.defaultValue = defaultValue;
             entry.image = image;
             entry.divider = divider;
+            entry.type = type;
 
             Double configValue = CCFile.getInstance().getConfigValue(modID, translation, Double.class);
-            if (configValue != null) entry.value = configValue;
+
+            if (!ConfigValidity.validateDoubleConfig(String.valueOf(defaultValue), entry.minimum, entry.maximum)) {
+                Constants.LOGGER.warn("Default value for {}:{} is out of bounds. This may have unintended consequences.", modID, translation);
+            }
+
+            boolean validated = ConfigValidity.validateDoubleConfig(configValue != null ? String.valueOf(configValue) : String.valueOf(defaultValue), entry.minimum, entry.maximum);
+
+            if (configValue != null && validated) entry.value = configValue;
+            else if (!validated) Constants.LOGGER.error("Failed to validate config value for {}:{}. Using default value: {}", modID, translation, defaultValue);
 
             CCEntries.addEntry(entry.modID(), entry);
             return entry;

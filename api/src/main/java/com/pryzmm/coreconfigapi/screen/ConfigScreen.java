@@ -1,10 +1,7 @@
 package com.pryzmm.coreconfigapi.screen;
 
-import com.pryzmm.coreconfigapi.entry.ColorEntry;
+public class ConfigScreen {
 
-public interface ConfigScreen {
-
-    void sendRestartPopup();
-    void sendColorPopup(ColorEntry entry);
+    public void open(String modID) {}
 
 }

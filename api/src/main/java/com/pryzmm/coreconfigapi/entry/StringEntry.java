@@ -3,6 +3,7 @@ package com.pryzmm.coreconfigapi.entry;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.CCFile;
+import com.pryzmm.coreconfigapi.data.ConfigType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -21,6 +22,7 @@ public class StringEntry implements MainEntry {
     private int maximumLength;
     private int priority;
     private DividerEntry divider;
+    private ConfigType type;
 
     private StringEntry() {}
 
@@ -34,6 +36,7 @@ public class StringEntry implements MainEntry {
     public Integer minimumLength() { return minimumLength; }
     public Integer maximumLength() { return maximumLength; }
     public DividerEntry divider() { return divider; }
+    public ConfigType type() { return type; }
 
     public String getUnsavedValue() { return newValue != null ? newValue : value; }
     public String getDefaultValue() { return defaultValue; }
@@ -62,6 +65,7 @@ public class StringEntry implements MainEntry {
         private int maximumLength = Integer.MAX_VALUE;
         private int priority = 0;
         private DividerEntry divider = null;
+        private ConfigType type = ConfigType.CLIENT;
 
         public Builder(String modID, String translation, String defaultValue) {
             this.defaultValue = defaultValue == null ? "" : defaultValue;
@@ -77,6 +81,8 @@ public class StringEntry implements MainEntry {
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
+        public Builder image(String path, int width, int height, int frameHeight, int ticks) { this.image = new ImageComponent(this.modID, path, width, height, frameHeight, ticks); return this; }
+        public Builder type(ConfigType type) { this.type = type; return this; }
 
         public StringEntry build() {
             StringEntry entry = new StringEntry();
@@ -92,6 +98,7 @@ public class StringEntry implements MainEntry {
             entry.priority = priority;
             entry.defaultValue = defaultValue;
             entry.divider = divider;
+            entry.type = type;
 
             String configValue = CCFile.getInstance().getConfigValue(modID, translation, String.class);
             if (configValue != null) entry.value = configValue;

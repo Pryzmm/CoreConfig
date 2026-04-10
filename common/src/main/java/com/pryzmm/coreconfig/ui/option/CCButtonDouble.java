@@ -3,6 +3,8 @@ package com.pryzmm.coreconfig.ui.option;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
+import com.pryzmm.coreconfig.util.Server;
+import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.DoubleEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -90,11 +92,11 @@ public class CCButtonDouble extends AbstractWidget {
     @Override
     public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
         super.onClick(event, doubleClick);
-        entry.change(entry.getUnsavedValue());
+        if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) entry.change(entry.getUnsavedValue());
     }
 
     public void updateFocus(MouseButtonEvent event) {
-        editBox.setFocused(editBox.areCoordinatesInRectangle(event.x(), event.y()));
+        if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) editBox.setFocused(editBox.areCoordinatesInRectangle(event.x(), event.y()));
     }
 
     @Override
