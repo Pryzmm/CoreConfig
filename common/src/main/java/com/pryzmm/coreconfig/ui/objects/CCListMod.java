@@ -25,8 +25,8 @@ public class CCListMod extends AbstractWidget {
     final CoreConfigScreen screen;
 
     List<String> resourceLocations = List.of(
-        "missing.png",
-        "textures/missing.png"
+        "icon.png",
+        "textures/icon.png"
     );
 
     /**
@@ -40,11 +40,19 @@ public class CCListMod extends AbstractWidget {
         this.screen = screen;
         super(0, 0, width - 4, height, Component.empty());
 
-        for (String location : resourceLocations) {
-            if (Minecraft.getInstance().getResourceManager().getResource(Identifier.get(modID, location)).isPresent()) {
-                this.imagePath = location;
-                return;
+        ModData data = ModHolder.getModData(modID);
+        if (data.overrideIconPath() == null) {
+            for (String location : resourceLocations) {
+                if (Minecraft.getInstance().getResourceManager().getResource(Identifier.get(modID, location)).isPresent()) {
+                    this.imagePath = location;
+                    return;
+                }
             }
+            this.imagePath = "textures/ui/icon/missing.png";
+            return;
+        } else if (Minecraft.getInstance().getResourceManager().getResource(Identifier.get(modID, data.overrideIconPath())).isPresent()) {
+            this.imagePath = data.overrideIconPath();
+            return;
         }
         this.imagePath = "textures/ui/icon/missing.png";
     }

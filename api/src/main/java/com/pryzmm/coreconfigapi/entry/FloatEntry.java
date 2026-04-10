@@ -1,8 +1,11 @@
 package com.pryzmm.coreconfigapi.entry;
 
+import com.pryzmm.coreconfigapi.Constants;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.CCFile;
+import com.pryzmm.coreconfigapi.data.ConfigType;
+import com.pryzmm.coreconfigapi.data.ConfigValidity;
 import net.minecraft.network.chat.Component;
 
 public class FloatEntry implements MainEntry {
@@ -20,6 +23,7 @@ public class FloatEntry implements MainEntry {
     private float maximum;
     private int priority;
     private DividerEntry divider;
+    private ConfigType type;
 
     private FloatEntry() {}
 
@@ -33,6 +37,7 @@ public class FloatEntry implements MainEntry {
     public Float minimum() { return minimum; }
     public Float maximum() { return maximum; }
     public DividerEntry divider() { return divider; }
+    public ConfigType type() { return type; }
 
     public Object getUnsavedValue() { return newValue != null ? newValue : value; }
     public Float getDefaultValue() { return defaultValue; }
@@ -68,6 +73,7 @@ public class FloatEntry implements MainEntry {
         private float maximum = Float.MAX_VALUE;
         private int priority = 0;
         private DividerEntry divider = null;
+        private ConfigType type = ConfigType.CLIENT;
 
         public Builder(String modID, String translation, Float defaultValue) {
             this.defaultValue = defaultValue == null ? 0 : defaultValue;
@@ -83,6 +89,8 @@ public class FloatEntry implements MainEntry {
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
+        public Builder image(String path, int width, int height, int frameHeight, int ticks) { this.image = new ImageComponent(this.modID, path, width, height, frameHeight, ticks); return this; }
+        public Builder type(ConfigType type) { this.type = type; return this; }
 
         public FloatEntry build() {
             FloatEntry entry = new FloatEntry();
@@ -98,9 +106,18 @@ public class FloatEntry implements MainEntry {
             entry.defaultValue = defaultValue;
             entry.image = image;
             entry.divider = divider;
+            entry.type = type;
 
             Float configValue = CCFile.getInstance().getConfigValue(modID, translation, Float.class);
-            if (configValue != null) entry.value = configValue;
+
+            if (!ConfigValidity.validateFloatConfig(String.valueOf(defaultValue), entry.minimum, entry.maximum)) {
+                Constants.LOGGER.warn("Default value for {}:{} is out of bounds. This may have unintended consequences.", modID, translation);
+            }
+
+            boolean validated = ConfigValidity.validateFloatConfig(configValue != null ? String.valueOf(configValue) : String.valueOf(defaultValue), entry.minimum, entry.maximum);
+
+            if (configValue != null && validated) entry.value = configValue;
+            else if (!validated) Constants.LOGGER.error("Failed to validate config value for {}:{}. Using default value: {}", modID, translation, defaultValue);
 
             CCEntries.addEntry(modID, entry);
             return entry;

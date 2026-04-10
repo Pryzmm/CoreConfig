@@ -73,8 +73,8 @@ public class EntryHolder {
         if (CCEntries.configEntries.containsKey(modID)) {
             for (CCEntry e : CCEntries.configEntries.get(modID)) {
                 if (e instanceof MainEntry entry) {
-                         if (entry.getValue() instanceof Boolean && !Objects.equals(entry.getValue(),                                entry.getUnsavedValue()  )) return true;
-                    else if (entry.getValue() instanceof String  && !Objects.equals(entry.getValue(),                                entry.getUnsavedValue()  )) return true;
+                         if (entry.getValue() instanceof Boolean && !Objects.equals(entry.getValue(),                                entry.getUnsavedValue()))   return true;
+                    else if (entry.getValue() instanceof String  && !Objects.equals(entry.getValue(),                                entry.getUnsavedValue()))   return true;
                     else if (entry.getValue() instanceof Float   && !Objects.equals(entry.getValue(),   Float.valueOf(String.valueOf(entry.getUnsavedValue())))) return true;
                     else if (entry.getValue() instanceof Integer && !Objects.equals(entry.getValue(), Integer.valueOf(String.valueOf(entry.getUnsavedValue())))) return true;
                     else if (entry.getValue() instanceof Double  && !Objects.equals(entry.getValue(),  Double.valueOf(String.valueOf(entry.getUnsavedValue())))) return true;

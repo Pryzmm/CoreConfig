@@ -1,0 +1,69 @@
+package com.pryzmm.coreconfig.network;
+
+import com.pryzmm.coreconfig.data.EntryHolder;
+import com.pryzmm.coreconfig.services.Services;
+import com.pryzmm.coreconfig.util.HostManager;
+import com.pryzmm.coreconfigapi.data.ModHolder;
+import com.pryzmm.coreconfigapi.entry.*;
+import net.minecraft.server.level.ServerPlayer;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+public class ServerPacketCommon {
+
+    public static void pushPackets(ServerPlayer player) {
+        HostManager.setHostUUID(player.getUUID());
+        if (player.getUUID().equals(HostManager.getHostUUID())) {
+            String AlphaNumericString = "abcdefghijklmnopqrstuvxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder sb = new StringBuilder(64);
+            for (int i = 0; i < 64; i++) {
+                int index = (int)(AlphaNumericString.length() * Math.random());
+                sb.append(AlphaNumericString.charAt(index));
+            }
+            HostManager.setHostKey(sb.toString());
+            Services.NETWORK.sendToPlayer(player, new ServerHostPayload(HostManager.getHostUUID(), sb.toString()));
+        }
+        else Services.NETWORK.sendToPlayer(player, new ServerHostPayload(HostManager.getHostUUID(), "NotHost"));
+        for (String modID : ModHolder.getRegisteredMods(false)) {
+            ServerSyncConfigPayload payload = getSyncConfigPayload(modID);
+            Services.NETWORK.sendToPlayer(player, payload);
+        }
+    }
+
+    public static ServerSyncConfigPayload getSyncConfigPayload(String modID) {
+        Collection<CCEntry> entries = EntryHolder.get(modID);
+        Map<String, Object> values = new HashMap<>();
+        for (CCEntry e : entries.stream().filter(v -> v instanceof MainEntry).toList()) {
+            switch (e) {
+                case BooleanEntry booleanEntry -> {
+                    Boolean val = booleanEntry.getValue();
+                    if (val != null) values.put(booleanEntry.translation(), val);
+                }
+                case StringEntry stringEntry -> {
+                    String val = stringEntry.getValue();
+                    if (val != null) values.put(stringEntry.translation(), val);
+                }
+                case IntegerEntry integerEntry -> {
+                    Integer val = integerEntry.getValue();
+                    if (val != null) values.put(integerEntry.translation(), val);
+                }
+                case DoubleEntry doubleEntry -> {
+                    Double val = doubleEntry.getValue();
+                    if (val != null) values.put(doubleEntry.translation(), val);
+                }
+                case FloatEntry floatEntry -> {
+                    Float val = floatEntry.getValue();
+                    if (val != null) values.put(floatEntry.translation(), val);
+                }
+                case ColorEntry colorEntry -> {
+                    Integer val = colorEntry.getValue();
+                    if (val != null) values.put(colorEntry.translation(), val);
+                }
+                default -> {}
+            }
+        }
+        return new ServerSyncConfigPayload(modID, HostManager.getHostKey(), values);
+    }
+
+}

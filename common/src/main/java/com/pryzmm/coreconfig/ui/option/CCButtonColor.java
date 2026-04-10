@@ -5,8 +5,10 @@ import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import com.pryzmm.coreconfig.util.Identifier;
+import com.pryzmm.coreconfig.util.Server;
+import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.ColorEntry;
-import com.pryzmm.coreconfigapi.screen.ConfigScreen;
+import com.pryzmm.coreconfigapi.screen.IConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -90,7 +92,7 @@ public class CCButtonColor extends AbstractWidget {
     @Override
     public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
         super.onClick(event, doubleClick);
-        if (Minecraft.getInstance().screen instanceof ConfigScreen screen) screen.sendColorPopup(entry);
+        if (Minecraft.getInstance().screen instanceof IConfigScreen screen && (entry.type() != ConfigType.SERVER || Server.isHostingServer())) screen.sendColorPopup(entry);
     }
 
     @Override

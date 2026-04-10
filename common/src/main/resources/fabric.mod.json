@@ -3,5 +3,13 @@
   "id": "coreconfig_common",
   "version": "1.0.0",
   "name": "CoreConfig Common",
-  "environment": "*"
+  "description": "Common code for CoreConfig",
+  "authors": ["pryzmm"],
+  "environment": "*",
+  "icon": "assets/coreconfig/icon.png",
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ]
+    }
+  }
 }

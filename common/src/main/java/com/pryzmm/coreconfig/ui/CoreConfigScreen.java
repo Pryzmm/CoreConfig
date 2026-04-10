@@ -6,7 +6,6 @@ import com.pryzmm.coreconfig.data.EntryHolder;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.option.*;
 import com.pryzmm.coreconfig.ui.popup.ColorPopup;
-import com.pryzmm.coreconfig.util.Identifier;
 import com.pryzmm.coreconfigapi.entry.*;
 import com.pryzmm.coreconfigapi.data.ModData;
 import com.pryzmm.coreconfigapi.data.ModHolder;
@@ -14,7 +13,7 @@ import com.pryzmm.coreconfig.ui.objects.*;
 import com.pryzmm.coreconfig.ui.popup.AbstractPopup;
 import com.pryzmm.coreconfig.ui.popup.ExitWithoutSavingPopup;
 import com.pryzmm.coreconfig.ui.popup.RestartPopup;
-import com.pryzmm.coreconfigapi.screen.ConfigScreen;
+import com.pryzmm.coreconfigapi.screen.IConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -27,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoreConfigScreen extends Screen implements ConfigScreen {
+public class CoreConfigScreen extends Screen implements IConfigScreen {
 
     private final List<CCElement> containers = new ArrayList<>();
     private String activeModID;
@@ -52,7 +51,13 @@ public class CoreConfigScreen extends Screen implements ConfigScreen {
         this.containers.clear();
         this.clearWidgets();
 
-        ModData data = ModHolder.getModData(activeModID);
+        ModData data;
+        if (activeModID == null || activeModID.isEmpty()) activeModID = CoreConfigConstants.MOD_ID;
+        else if (!ModHolder.getRegisteredMods(false).contains(activeModID)) {
+            CoreConfigConstants.LOGGER.warn("Tried to open config screen for mod ID '{}' but it was not found in the registered mods list. Defaulting to CoreConfig config screen.", activeModID);
+            activeModID = CoreConfigConstants.MOD_ID;
+        }
+        data = ModHolder.getModData(activeModID);
 
         CCButton saveButton = new CCButton(5, minecraft.screen.height - 35, 99, 30, Component.translatable("ui.coreconfig.save"), 0x551A3A1A, true, () -> ModHolder.getRegisteredMods(true).forEach(CCFileHandler::updateConfigFile));
         exitButton = new CCButton(106, minecraft.screen.height - 35, 99, 30, Component.translatable("ui.coreconfig.exit"), 0x553A1A1A, false, () -> {
@@ -89,7 +94,7 @@ public class CoreConfigScreen extends Screen implements ConfigScreen {
                     case WebsiteEntry websiteEntry -> configWidgets.add(new CCButtonWebsite(websiteEntry, configContainer.getWidth(), 20, websiteEntry.translation(), configContainer, websiteEntry.hoverColor() != null ? websiteEntry.hoverColor() : 0x55000000, data.buttonColor()));
                     case CustomEntry  customEntry  -> configWidgets.add(new CCButtonCustom(customEntry,   configContainer.getWidth(), 20, customEntry.translation(),   configContainer, customEntry.hoverColor()  != null ? customEntry.hoverColor()  : 0x55000000, data.buttonColor()));
                     case DividerEntry dividerEntry -> configWidgets.add(new CCDivider(dividerEntry, configContainer.getWidth(), configWidgets.isEmpty() ? 20 : 30, dividerEntry.translation(), dividerEntry.textColor()));
-                    case null, default -> CoreConfigConstants.LOGGER.warning("Unsupported config entry type: " + (entry == null ? "null" : entry.getClass()));
+                    case null, default -> CoreConfigConstants.LOGGER.warn("Unsupported config entry type: {}", entry == null ? "null" : entry.getClass());
                 }
             }
         } catch (Exception ignored) {}
@@ -188,10 +193,8 @@ public class CoreConfigScreen extends Screen implements ConfigScreen {
             );
         });
         super.extractRenderState(graphics, mouseX, mouseY, a);
-        if (HoveredEntry.value != null) {
-            graphics.nextStratum();
-            CCTooltip.render(graphics, mouseX, mouseY, HoveredEntry.value, configContainer);
-        }
+        graphics.nextStratum();
+        CCTooltip.render(graphics, mouseX, mouseY, HoveredEntry.value, configContainer);
     }
 
 }

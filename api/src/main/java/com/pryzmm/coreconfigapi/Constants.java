@@ -1,9 +1,10 @@
 package com.pryzmm.coreconfigapi;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Constants {
 
-    public static final Logger LOGGER = Logger.getLogger("CoreConfig-API");
+    public static final Logger LOGGER = LoggerFactory.getLogger("coreconfig");
 
 }

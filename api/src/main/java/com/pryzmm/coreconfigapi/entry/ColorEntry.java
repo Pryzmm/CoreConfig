@@ -1,8 +1,11 @@
 package com.pryzmm.coreconfigapi.entry;
 
+import com.pryzmm.coreconfigapi.Constants;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.CCFile;
+import com.pryzmm.coreconfigapi.data.ConfigType;
+import com.pryzmm.coreconfigapi.data.ConfigValidity;
 import net.minecraft.network.chat.Component;
 
 public class ColorEntry implements MainEntry {
@@ -19,6 +22,7 @@ public class ColorEntry implements MainEntry {
     private int priority;
     private boolean allowAlpha;
     private DividerEntry divider;
+    private ConfigType type;
 
     private ColorEntry() {}
 
@@ -30,6 +34,7 @@ public class ColorEntry implements MainEntry {
     public Integer hoverColor() { return hoverColor; }
     public int priority() { return priority; }
     public DividerEntry divider() { return divider; }
+    public ConfigType type() { return type; }
     public boolean allowAlpha() { return allowAlpha; }
 
     public Object getUnsavedValue() { return newValue != null ? newValue : value; }
@@ -65,6 +70,7 @@ public class ColorEntry implements MainEntry {
         private int priority = 0;
         private DividerEntry divider = null;
         private boolean allowAlpha = false;
+        private ConfigType type = ConfigType.CLIENT;
 
         public Builder(String modID, String translation, Integer defaultValue) {
             this.defaultValue = defaultValue == null ? 0 : defaultValue;
@@ -79,6 +85,8 @@ public class ColorEntry implements MainEntry {
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder allowAlpha(boolean allowAlpha) { this.allowAlpha = allowAlpha; return this; }
         public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
+        public Builder image(String path, int width, int height, int frameHeight, int ticks) { this.image = new ImageComponent(this.modID, path, width, height, frameHeight, ticks); return this; }
+        public Builder type(ConfigType type) { this.type = type; return this; }
 
         public ColorEntry build() {
             ColorEntry entry = new ColorEntry();
@@ -93,9 +101,14 @@ public class ColorEntry implements MainEntry {
             entry.image = image;
             entry.divider = divider;
             entry.allowAlpha = allowAlpha;
+            entry.type = type;
 
             Integer configValue = CCFile.getInstance().getConfigValue(modID, translation, Integer.class);
-            if (configValue != null) entry.value = configValue;
+
+            boolean validated = ConfigValidity.validateColorConfig(configValue != null ? configValue.toString() : String.valueOf(defaultValue));
+
+            if (configValue != null && validated) entry.value = configValue;
+            else if (!validated) Constants.LOGGER.error("Failed to validate config value for {}:{}. Using default value: {}", modID, translation, defaultValue);
 
             CCEntries.addEntry(entry.modID(), entry);
             return entry;

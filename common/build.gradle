@@ -6,6 +6,10 @@ loom {
     enableTransitiveAccessWideners = true
 }
 
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     implementation project(":api")

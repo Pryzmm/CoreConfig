@@ -8,5 +8,11 @@
   "authors": ["pryzmm"],
   "license": "MIT",
   "environment": "*",
-  "entrypoints": {}
+  "icon": "assets/coreconfigapi/icon.png",
+  "entrypoints": {},
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ]
+    }
+  }
 }

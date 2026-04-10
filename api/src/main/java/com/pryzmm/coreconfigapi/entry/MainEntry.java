@@ -1,6 +1,7 @@
 package com.pryzmm.coreconfigapi.entry;
 
 import com.pryzmm.coreconfigapi.component.ImageComponent;
+import com.pryzmm.coreconfigapi.data.ConfigType;
 import net.minecraft.network.chat.Component;
 
 public interface MainEntry extends CCEntry {
@@ -18,5 +19,6 @@ public interface MainEntry extends CCEntry {
     void refreshValue();
     ImageComponent image();
     DividerEntry divider();
+    ConfigType type();
 
 }

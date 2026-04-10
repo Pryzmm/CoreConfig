@@ -1,8 +1,11 @@
 package com.pryzmm.coreconfigapi.entry;
 
+import com.pryzmm.coreconfigapi.Constants;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.CCFile;
+import com.pryzmm.coreconfigapi.data.ConfigType;
+import com.pryzmm.coreconfigapi.data.ConfigValidity;
 import net.minecraft.network.chat.Component;
 
 public class BooleanEntry implements MainEntry {
@@ -18,6 +21,7 @@ public class BooleanEntry implements MainEntry {
     private boolean requiresRestart;
     private int priority;
     private DividerEntry divider;
+    private ConfigType type;
 
     private BooleanEntry() {}
 
@@ -29,6 +33,7 @@ public class BooleanEntry implements MainEntry {
     public int priority() { return priority; }
     public ImageComponent image() { return image; }
     public DividerEntry divider() { return divider; }
+    public ConfigType type() { return type; }
 
     public Boolean getUnsavedValue() { return newValue != null ? newValue : value; }
     public Boolean getDefaultValue() { return defaultValue; }
@@ -55,6 +60,7 @@ public class BooleanEntry implements MainEntry {
         private Integer hoverColor = null;
         private int priority = 0;
         private DividerEntry divider = null;
+        private ConfigType type = ConfigType.CLIENT;
 
         public Builder(String modID, String translation, boolean defaultValue) {
             this.defaultValue = defaultValue;
@@ -68,6 +74,8 @@ public class BooleanEntry implements MainEntry {
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
+        public Builder image(String path, int width, int height, int frameHeight, int ticks) { this.image = new ImageComponent(this.modID, path, width, height, frameHeight, ticks); return this; }
+        public Builder type(ConfigType type) { this.type = type; return this; }
 
         public BooleanEntry build() {
             BooleanEntry entry = new BooleanEntry();
@@ -81,9 +89,14 @@ public class BooleanEntry implements MainEntry {
             entry.priority = priority;
             entry.defaultValue = defaultValue;
             entry.divider = divider;
+            entry.type = type;
 
             Boolean configValue = CCFile.getInstance().getConfigValue(modID, translation, Boolean.class);
-            if (configValue != null) entry.value = configValue;
+
+            boolean validated = ConfigValidity.validateBooleanConfig(configValue != null ? configValue.toString() : String.valueOf(defaultValue));
+
+            if (configValue != null && validated) entry.value = configValue;
+            else if (!validated) Constants.LOGGER.error("Failed to validate config value for {}:{}. Using default value: {}", modID, translation, defaultValue);
 
             CCEntries.addEntry(entry.modID(), entry);
             return entry;
