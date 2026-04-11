@@ -3,13 +3,17 @@ package com.pryzmm.coreconfigapi.entry;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.ConfigType;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 
+
+/**
+ * A configuration option for CoreConfig, dedicated towards running custom code when the button is clicked. Use the {@link Builder} to create a new CustomEntry for use in mods.
+ * <p>
+ * Visit <a href="https://github.com/Pryzmm/CoreConfig/wiki/Entries#customentry">the wiki page</a> to view more detailed documentation regarding this entry and its builder methods.
+ */
 public class CustomEntry implements MainEntry {
 
     private Runnable runnable;
-    private MutableComponent descriptor;
+    private Object descriptor;
     private ImageComponent image;
     private String translation;
     private String modID;
@@ -20,7 +24,7 @@ public class CustomEntry implements MainEntry {
 
     private CustomEntry() {}
 
-    public MutableComponent descriptor() { return descriptor; }
+    public Object descriptor() { return descriptor; }
     public ImageComponent image() { return image; }
     public boolean requiresRestart() { return false; }
     public String translation() { return translation; }
@@ -45,7 +49,7 @@ public class CustomEntry implements MainEntry {
         private final String modID;
         private final String translation;
         private Runnable runnable;
-        private MutableComponent descriptor = Component.empty();
+        private Object descriptor;
         private ImageComponent image = null;
         private Integer hoverColor = null;
         private int priority = 0;
@@ -58,7 +62,7 @@ public class CustomEntry implements MainEntry {
         }
 
         public Builder runnable(Runnable runnable) { this.runnable = runnable; return this; }
-        public Builder descriptor(MutableComponent descriptor) { this.descriptor = descriptor; return this; }
+        public Builder descriptor(Object descriptor) { this.descriptor = descriptor; return this; }
         public Builder hoverColor(int hoverColor) { this.hoverColor = hoverColor; return this; }
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }

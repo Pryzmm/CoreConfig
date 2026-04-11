@@ -5,7 +5,7 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.config.Config;
 import com.pryzmm.coreconfig.network.ServerPacketCommon;
 import com.pryzmm.coreconfig.services.Services;
-import com.pryzmm.coreconfig.util.HostManager;
+import com.pryzmm.coreconfig.network.HostManager;
 import com.pryzmm.coreconfigapi.registrar.ConfigRegistrar;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;

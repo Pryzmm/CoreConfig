@@ -2,8 +2,12 @@ package com.pryzmm.coreconfigapi.entry;
 
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.ConfigType;
-import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.ApiStatus;
 
+/**
+ * An interface to attach all main entries together
+ */
+@ApiStatus.Internal
 public interface MainEntry extends CCEntry {
 
     String translation();
@@ -17,7 +21,7 @@ public interface MainEntry extends CCEntry {
     int priority();
     boolean requiresRestart();
     Integer hoverColor();
-    Component descriptor();
+    Object descriptor();
     void refreshValue();
     ImageComponent image();
     DividerEntry divider();

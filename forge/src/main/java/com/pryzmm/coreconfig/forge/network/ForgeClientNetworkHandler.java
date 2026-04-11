@@ -3,7 +3,7 @@ package com.pryzmm.coreconfig.forge.network;
 import com.pryzmm.coreconfig.network.CommonClientNetworkHandler;
 import com.pryzmm.coreconfig.network.ServerHostPayload;
 import com.pryzmm.coreconfig.network.ServerSyncConfigPayload;
-import com.pryzmm.coreconfig.util.HostManager;
+import com.pryzmm.coreconfig.network.HostManager;
 
 public class ForgeClientNetworkHandler implements ForgeNetworkHelper.ClientHandler {
 

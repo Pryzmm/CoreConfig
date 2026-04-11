@@ -2,6 +2,11 @@ package com.pryzmm.coreconfigapi.entry;
 
 import com.pryzmm.coreconfigapi.data.CCEntries;
 
+/**
+ * A configuration option for CoreConfig, dedicated towards creating dividers for sorting configuration options. Use the {@link Builder} to create a new DividerEntry for use in mods.
+ * <p>
+ * Visit <a href="https://github.com/Pryzmm/CoreConfig/wiki/Entries#dividerentry">the wiki page</a> to view more detailed documentation regarding this entry and its builder methods.
+ */
 public class DividerEntry implements CategoryEntry {
 
     private boolean value;

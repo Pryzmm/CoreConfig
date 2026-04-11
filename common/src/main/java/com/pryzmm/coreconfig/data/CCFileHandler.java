@@ -3,7 +3,7 @@ package com.pryzmm.coreconfig.data;
 import com.pryzmm.coreconfig.network.ServerPacketCommon;
 import com.pryzmm.coreconfig.network.ServerSyncConfigPayload;
 import com.pryzmm.coreconfig.services.Services;
-import com.pryzmm.coreconfig.util.Server;
+import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.Constants;
 import com.pryzmm.coreconfigapi.data.CCFile;
 import com.pryzmm.coreconfigapi.entry.CCEntry;

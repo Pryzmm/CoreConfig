@@ -3,6 +3,8 @@
   "config.coreconfig.coreconfig": "Core Config",
   "config.coreconfig.switch_texture": "Switch Boolean Textures To Switches",
   "config.coreconfig.switch_texture.desc": "Use a switch texture for boolean options instead of a checkmark. This is purely visual and has no effect on functionality.",
+  "config.coreconfig.locked_option": "Locked Option Color",
+  "config.coreconfig.locked_option.desc": "Changes the color of locked options",
   "config.coreconfig.report_issues": "Report Issues",
   "config.coreconfig.divider_visual": "Visuals",
 

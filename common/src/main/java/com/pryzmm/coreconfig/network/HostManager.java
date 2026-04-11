@@ -1,4 +1,4 @@
-package com.pryzmm.coreconfig.util;
+package com.pryzmm.coreconfig.network;
 
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;

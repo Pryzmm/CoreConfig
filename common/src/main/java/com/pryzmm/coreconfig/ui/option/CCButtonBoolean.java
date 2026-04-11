@@ -5,7 +5,7 @@ import com.pryzmm.coreconfig.config.Config;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.util.Identifier;
-import com.pryzmm.coreconfig.util.Server;
+import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.BooleanEntry;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
@@ -64,7 +64,7 @@ public class CCButtonBoolean extends AbstractWidget {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            Identifier.get(CoreConfigConstants.MOD_ID, !Config.booleanUseSwitchTexture.getValue() ? (entry.getUnsavedValue() ? boolTrueImage : boolFalseImage) : (entry.getUnsavedValue() ? boolTrueImageSwitch : boolFalseImageSwitch)),
+            Identifier.get(CoreConfigConstants.MOD_ID, !Config.useSwitchTexture.getValue() ? (entry.getUnsavedValue() ? boolTrueImage : boolFalseImage) : (entry.getUnsavedValue() ? boolTrueImageSwitch : boolFalseImageSwitch)),
             this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
             this.getY(),
             0, 0,
@@ -73,7 +73,7 @@ public class CCButtonBoolean extends AbstractWidget {
         );
 
         if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
-            graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x44FF0011);
+            graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 Identifier.get(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),

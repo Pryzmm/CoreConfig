@@ -1,7 +1,5 @@
 package com.pryzmm.coreconfig.network;
 
-import com.pryzmm.coreconfig.util.HostManager;
-
 public class NeoforgeClientNetworkHandler implements NeoforgeNetworkHelper.ClientHandler {
 
     @Override

@@ -2,9 +2,8 @@ package com.pryzmm.coreconfig.network;
 
 import com.pryzmm.coreconfig.data.EntryHolder;
 import com.pryzmm.coreconfig.services.Services;
-import com.pryzmm.coreconfig.util.HostManager;
+import com.pryzmm.coreconfig.util.ModHolderUtil;
 import com.pryzmm.coreconfigapi.data.ConfigType;
-import com.pryzmm.coreconfigapi.data.ModHolder;
 import com.pryzmm.coreconfigapi.entry.*;
 import net.minecraft.server.level.ServerPlayer;
 import java.util.Collection;
@@ -26,7 +25,7 @@ public class ServerPacketCommon {
             Services.NETWORK.sendToPlayer(player, new ServerHostPayload(HostManager.getHostUUID(), sb.toString()));
         }
         else Services.NETWORK.sendToPlayer(player, new ServerHostPayload(HostManager.getHostUUID(), "NotHost"));
-        for (String modID : ModHolder.getRegisteredMods(false)) {
+        for (String modID : ModHolderUtil.getRegisteredMods(false)) {
             ServerSyncConfigPayload payload = getSyncConfigPayload(modID);
             Services.NETWORK.sendToPlayer(player, payload);
         }
