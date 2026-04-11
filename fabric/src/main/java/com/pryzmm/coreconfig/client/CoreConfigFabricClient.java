@@ -5,7 +5,7 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.services.Services;
 import com.pryzmm.coreconfig.ui.CoreConfig;
 import com.pryzmm.coreconfig.network.HostManager;
-import com.pryzmm.coreconfig.util.Identifier;
+import net.minecraft.resources.Identifier;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
@@ -26,7 +26,7 @@ public class CoreConfigFabricClient implements ClientModInitializer {
             "key.coreconfig.open_config",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_INSERT,
-            new KeyMapping.Category(Identifier.get("coreconfig", "coreconfig"))
+            new KeyMapping.Category(Identifier.fromNamespaceAndPath("coreconfig", "coreconfig"))
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

@@ -6,7 +6,7 @@ import com.pryzmm.coreconfig.services.Services;
 import com.pryzmm.coreconfig.ui.CoreConfig;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.network.HostManager;
-import com.pryzmm.coreconfig.util.Identifier;
+import net.minecraft.resources.Identifier;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigScreenHandler;
@@ -44,7 +44,7 @@ public class CoreConfigForgeClient {
                     "key.coreconfig.open_config",
                     InputConstants.Type.KEYSYM,
                     GLFW.GLFW_KEY_INSERT,
-                    new KeyMapping.Category(Identifier.get("coreconfig", "coreconfig"))
+                    new KeyMapping.Category(Identifier.fromNamespaceAndPath("coreconfig", "coreconfig"))
             );
             event.register(OPEN_CONFIG);
         }

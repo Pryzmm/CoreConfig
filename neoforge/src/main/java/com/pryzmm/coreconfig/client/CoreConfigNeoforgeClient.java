@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.ui.CoreConfig;
 import com.pryzmm.coreconfig.network.HostManager;
-import com.pryzmm.coreconfig.util.Identifier;
+import net.minecraft.resources.Identifier;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -30,7 +30,7 @@ public class CoreConfigNeoforgeClient {
                 "key.coreconfig.open_config",
                 InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_INSERT,
-                new KeyMapping.Category(Identifier.get("coreconfig", "coreconfig"))
+                new KeyMapping.Category(Identifier.fromNamespaceAndPath("coreconfig", "coreconfig"))
             );
             event.register(OPEN_CONFIG);
         }
