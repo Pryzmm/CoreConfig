@@ -34,6 +34,7 @@ public class CoreConfigNeoforge {
 
         @SubscribeEvent()
         public static void onClientSetup(FMLClientSetupEvent event) {
+            CoreConfigCommon.initFirst();
 
             ConfigRegistrar.register(
                 CoreConfigConstants.MOD_ID,
@@ -60,6 +61,7 @@ public class CoreConfigNeoforge {
 
         @SubscribeEvent()
         public static void onServerSetup(FMLDedicatedServerSetupEvent event) {
+            CoreConfigCommon.initFirst();
             CoreConfigCommon.init();
             Services.NETWORK.registerServerHandlers();
         }

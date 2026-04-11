@@ -41,7 +41,13 @@ public class DoubleEntry implements MainEntry {
 
     public Object getUnsavedValue() { return newValue != null ? newValue : value; }
     public Double getDefaultValue() { return defaultValue; }
-    public Double getValue() { return value; }
+    public Double getValue() {
+        return getServerValue() != null ? getServerValue() : value;
+    }
+    public Double getClientValue() { return value; }
+    public Double getServerValue() {
+        return CCFile.getInstance().getServerValue(modID, translation, Double.class);
+    }
     public void setValue(Double value) { this.value = value; }
 
     public void refreshValue() { this.newValue = String.valueOf(value); }

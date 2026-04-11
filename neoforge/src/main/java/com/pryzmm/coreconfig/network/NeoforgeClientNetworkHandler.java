@@ -1,6 +1,5 @@
 package com.pryzmm.coreconfig.network;
 
-import com.pryzmm.coreconfig.data.CCFileHandler;
 import com.pryzmm.coreconfig.util.HostManager;
 
 public class NeoforgeClientNetworkHandler implements NeoforgeNetworkHelper.ClientHandler {
@@ -12,8 +11,7 @@ public class NeoforgeClientNetworkHandler implements NeoforgeNetworkHelper.Clien
 
     @Override
     public void handleServerSyncConfig(ServerSyncConfigPayload payload) {
-        System.out.println("Received config sync payload for mod " + payload.modID() + " with values: " + payload.values());
-        CCFileHandler.saveServerSideConfig(payload.modID(), payload.values());
+        CommonClientNetworkHandler.receiveServerConfigPayload(payload);
     }
 
 }

@@ -1,8 +1,10 @@
 package com.pryzmm.coreconfig.ui.option;
 
+import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
+import com.pryzmm.coreconfig.util.Identifier;
 import com.pryzmm.coreconfig.util.Server;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.CustomEntry;
@@ -11,6 +13,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,6 +59,19 @@ public class CCButtonCustom extends AbstractWidget {
             true
         );
 
+        if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
+            graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x44FF0011);
+            graphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                Identifier.get(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
+                this.getY(),
+                0, 0,
+                19, 19,
+                19, 19
+            );
+        }
+
     }
 
     @Override
@@ -64,6 +80,6 @@ public class CCButtonCustom extends AbstractWidget {
     @Override
     public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
         super.onClick(event, doubleClick);
-        if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) entry.getValue().run();
+        if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) entry.getClientValue().run();
     }
 }

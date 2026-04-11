@@ -10,15 +10,13 @@ import com.pryzmm.coreconfigapi.entry.CCEntry;
 import com.pryzmm.coreconfigapi.entry.CustomEntry;
 import com.pryzmm.coreconfigapi.entry.MainEntry;
 import com.pryzmm.coreconfigapi.entry.WebsiteEntry;
+import com.pryzmm.coreconfigapi.registrar.ConfigRegistrar;
 import com.pryzmm.coreconfigapi.screen.IConfigScreen;
 import net.minecraft.client.Minecraft;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class CCFileHandler extends CCFile {
+public class CCFileHandler extends CCFile implements ConfigRegistrar {
 
     private static File getConfigFile(String modName) {
         return new File("coreconfig/" + modName + ".yml");
@@ -64,43 +62,32 @@ public class CCFileHandler extends CCFile {
             try { configFile.createNewFile(); }
             catch (Exception e) { Constants.LOGGER.error("Failed to create server config file for {}: {}", modName, e.getMessage()); }
         }
-        try { saveConfig(modName, configFile, values); }
-        catch (Exception e) { Constants.LOGGER.error("Failed to save server config file for {}: {}", modName, e.getMessage()); }
+        Map<String, Object> configMap = CCFileHandler.serverConfigs.get(modName);
+        if (configMap == null) configMap = new HashMap<>();
+        configMap.putAll(values);
+        CCFileHandler.serverConfigs.put(modName, configMap);
     }
 
-    /**
-     * @return Whether a restart is required to apply the changes in the config file
-     * @throws Exception If an error occurs while saving the config file
-     */
+
     private static boolean saveConfig(String modName, File configFile) throws Exception {
-        return saveConfig(modName, configFile, null);
-    }
-    private static boolean saveConfig(String modName, File configFile, Map<String, Object> serverValues) throws Exception {
         boolean requiresRestart = false;
         List<String> existingLines;
         try (BufferedReader reader = new BufferedReader(new FileReader(configFile))) {
             existingLines = reader.lines().toList();
         }
         List<String> newLines = new ArrayList<>();
-        Collection<CCEntry> entries;
-        if (serverValues == null) entries = EntryHolder.get(modName);
-        else entries = EntryHolder.get(modName).stream()
-                .filter(e -> e instanceof MainEntry)
-                .map(e -> (MainEntry) e)
-                .filter(e -> serverValues.containsKey(e.translation()))
-                .map(e -> (CCEntry) e)
-                .toList();
+        Collection<CCEntry> entries = EntryHolder.get(modName);
         for (CCEntry e : entries) {
             if (e instanceof MainEntry entry && !(e instanceof WebsiteEntry) && !(e instanceof CustomEntry)) {
                 String key = entry.translation() + ":";
-                String newLine = key + (serverValues != null ? serverValues.get(entry.translation()) : entry.getUnsavedValue());
+                String newLine = key + entry.getUnsavedValue();
                 String oldLine = existingLines.stream()
                     .filter(l -> l.startsWith(key))
                     .findFirst()
                     .orElse(null);
                 if (oldLine != null) {
                     String oldValue = oldLine.substring(oldLine.indexOf(":") + 1).trim();
-                    String newValue = String.valueOf(serverValues != null ? serverValues.get(entry.translation()) : entry.getUnsavedValue());
+                    String newValue = String.valueOf(entry.getUnsavedValue());
                     if (!oldValue.equals(newValue) && entry.requiresRestart()) requiresRestart = true;
                 } else if (entry.requiresRestart()) requiresRestart = true;
                 entry.save();
@@ -143,6 +130,16 @@ public class CCFileHandler extends CCFile {
             Constants.LOGGER.error("Failed to read config file for {}: {}", modName, e.getMessage());
         }
         return null;
+    }
+
+    public static Map<String, Map<String, Object>> serverConfigs = new HashMap<>();
+
+    @Override
+    public <T> T getServerValue(String modName, String translation, Class<T> clazz) {
+        Map<String, Object> config = serverConfigs.get(modName);
+        if (config == null) return null; // assume its client sided
+        //noinspection unchecked
+        return (T) config.get(translation);
     }
 
 }

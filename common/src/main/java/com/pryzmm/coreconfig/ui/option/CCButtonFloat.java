@@ -1,7 +1,9 @@
 package com.pryzmm.coreconfig.ui.option;
 
+import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
+import com.pryzmm.coreconfig.util.Identifier;
 import com.pryzmm.coreconfig.util.Server;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.FloatEntry;
@@ -14,6 +16,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
@@ -66,7 +69,7 @@ public class CCButtonFloat extends AbstractWidget {
 
         graphics.text(
             Minecraft.getInstance().font,
-            Component.translatable(this.translation).withStyle(style -> style.withItalic(!equals(entry.getValue(), entry.getUnsavedValue()))),
+            Component.translatable(this.translation).withStyle(style -> style.withItalic(!equals(entry.getClientValue(), entry.getUnsavedValue()))),
             this.getX() + 5,
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             (!canParse || value < entry.minimum() || value > entry.maximum()) ? 0xFFFF0044 : 0xFFFFFFFF,
@@ -74,6 +77,19 @@ public class CCButtonFloat extends AbstractWidget {
         );
 
         editBox.extractRenderState(graphics, mouseX, mouseY, a);
+
+        if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
+            graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x44FF0011);
+            graphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                Identifier.get(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
+                this.getY(),
+                0, 0,
+                19, 19,
+                19, 19
+            );
+        }
 
     }
 

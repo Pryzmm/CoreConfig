@@ -53,7 +53,7 @@ public class CCButtonColor extends AbstractWidget {
 
         graphics.text(
             Minecraft.getInstance().font,
-            Component.translatable(this.translation).withStyle(style -> style.withItalic(!equals(entry.getValue(), entry.getUnsavedValue()))),
+            Component.translatable(this.translation).withStyle(style -> style.withItalic(!equals(entry.getClientValue(), entry.getUnsavedValue()))),
             this.getX() + 5,
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             0xFFFFFFFF,
@@ -74,6 +74,19 @@ public class CCButtonColor extends AbstractWidget {
         graphics.fill(this.getX() + width - 18, this.getY() + 2, this.getX() + width - 2, this.getY() + 18,
             entry.allowAlpha() ? (int) entry.getUnsavedValue() : (int) entry.getUnsavedValue() | 0xFF000000
         );
+
+        if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
+            graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x44FF0011);
+            graphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                Identifier.get(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
+                this.getY(),
+                0, 0,
+                19, 19,
+                19, 19
+            );
+        }
 
     }
 

@@ -33,6 +33,9 @@ public class CustomEntry implements MainEntry {
     public Runnable getUnsavedValue() { return runnable; }
     public Runnable getDefaultValue() { return runnable; }
     public Runnable getValue() { return runnable; }
+    public Runnable getClientValue() { return runnable; }
+    public Runnable getServerValue() { return runnable; }
+
     public void setValue(Runnable runnable) { this.runnable = runnable; }
 
     public void refreshValue() {}

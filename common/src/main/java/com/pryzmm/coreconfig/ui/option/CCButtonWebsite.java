@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.NotNull;
-import java.awt.*;
 
 public class CCButtonWebsite extends AbstractWidget {
 
@@ -74,8 +73,8 @@ public class CCButtonWebsite extends AbstractWidget {
     @Override
     public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
         super.onClick(event, doubleClick);
-        if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-            Util.getPlatform().openUri(entry.getValue());
+        if (entry.getClientValue() != null && !entry.getClientValue().isEmpty()) {
+            Util.getPlatform().openUri(entry.getClientValue());
         }
     }
 }

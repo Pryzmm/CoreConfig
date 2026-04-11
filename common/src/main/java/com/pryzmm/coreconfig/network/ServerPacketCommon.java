@@ -3,6 +3,7 @@ package com.pryzmm.coreconfig.network;
 import com.pryzmm.coreconfig.data.EntryHolder;
 import com.pryzmm.coreconfig.services.Services;
 import com.pryzmm.coreconfig.util.HostManager;
+import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.data.ModHolder;
 import com.pryzmm.coreconfigapi.entry.*;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,32 +33,37 @@ public class ServerPacketCommon {
     }
 
     public static ServerSyncConfigPayload getSyncConfigPayload(String modID) {
-        Collection<CCEntry> entries = EntryHolder.get(modID);
+        Collection<CCEntry> entries = EntryHolder.get(modID).stream()
+            .filter(v -> v instanceof MainEntry)
+            .map(v -> (MainEntry) v)
+            .filter(v -> v.type() != ConfigType.CLIENT)
+            .map(v -> (CCEntry) v)
+            .toList();
         Map<String, Object> values = new HashMap<>();
-        for (CCEntry e : entries.stream().filter(v -> v instanceof MainEntry).toList()) {
+        for (CCEntry e : entries) {
             switch (e) {
                 case BooleanEntry booleanEntry -> {
-                    Boolean val = booleanEntry.getValue();
+                    Boolean val = booleanEntry.getClientValue();
                     if (val != null) values.put(booleanEntry.translation(), val);
                 }
                 case StringEntry stringEntry -> {
-                    String val = stringEntry.getValue();
+                    String val = stringEntry.getClientValue();
                     if (val != null) values.put(stringEntry.translation(), val);
                 }
                 case IntegerEntry integerEntry -> {
-                    Integer val = integerEntry.getValue();
+                    Integer val = integerEntry.getClientValue();
                     if (val != null) values.put(integerEntry.translation(), val);
                 }
                 case DoubleEntry doubleEntry -> {
-                    Double val = doubleEntry.getValue();
+                    Double val = doubleEntry.getClientValue();
                     if (val != null) values.put(doubleEntry.translation(), val);
                 }
                 case FloatEntry floatEntry -> {
-                    Float val = floatEntry.getValue();
+                    Float val = floatEntry.getClientValue();
                     if (val != null) values.put(floatEntry.translation(), val);
                 }
                 case ColorEntry colorEntry -> {
-                    Integer val = colorEntry.getValue();
+                    Integer val = colorEntry.getClientValue();
                     if (val != null) values.put(colorEntry.translation(), val);
                 }
                 default -> {}

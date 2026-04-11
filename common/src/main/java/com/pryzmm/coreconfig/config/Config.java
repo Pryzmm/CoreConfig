@@ -1,10 +1,10 @@
 package com.pryzmm.coreconfig.config;
 
 import com.pryzmm.coreconfig.CoreConfigConstants;
-import com.pryzmm.coreconfig.util.HostManager;
-import com.pryzmm.coreconfigapi.Constants;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
 public class Config {
@@ -26,7 +26,7 @@ public class Config {
         .hoverColor(0x551A1A1A)
         .priority(2)
         .divider(visualsDivider)
-        .type(ConfigType.SERVER)
+        .type(ConfigType.COMMON)
         .build();
 
     public static DividerEntry debugDivider = new DividerEntry.Builder(CoreConfigConstants.MOD_ID, "config.coreconfig.divider_debug")
@@ -34,14 +34,16 @@ public class Config {
         .textColor(0xFFFFFFFF)
         .build();
 
-    public static CustomEntry debugHost = new CustomEntry.Builder(CoreConfigConstants.MOD_ID, "config.coreconfig.debug_print_host")
-        .runnable(() -> Constants.LOGGER.info("Current host of server (if server exists): {}", HostManager.getHostUUID()))
+    public static IntegerEntry debugInt = new IntegerEntry.Builder(CoreConfigConstants.MOD_ID, "config.coreconfig.debug_print_host", 0)
         .priority(3)
         .divider(debugDivider)
         .build();
 
-    public static CustomEntry debugOverrideHost = new CustomEntry.Builder(CoreConfigConstants.MOD_ID, "config.coreconfig.debug_override_host")
-        .runnable(() -> Constants.LOGGER.info("Current key: {}", HostManager.getHostKey()))
+    public static CustomEntry debugOverrideHost = new CustomEntry.Builder(CoreConfigConstants.MOD_ID, "config.coreconfig.debug_print_thing")
+        .runnable(() -> {
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player != null) player.sendSystemMessage(Component.literal("Current value: " + debugInt.getValue()));
+        })
         .priority(2)
         .divider(debugDivider)
         .build();
