@@ -4,7 +4,7 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
-import com.pryzmm.coreconfig.util.Identifier;
+import net.minecraft.resources.Identifier;
 import com.pryzmm.coreconfigapi.entry.WebsiteEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -57,7 +57,7 @@ public class CCButtonWebsite extends AbstractWidget {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            Identifier.get(CoreConfigConstants.MOD_ID, "textures/ui/goto_website.png"),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/goto_website.png"),
             this.getX() + width - 16,
             this.getY() + 4,
             0, 0,

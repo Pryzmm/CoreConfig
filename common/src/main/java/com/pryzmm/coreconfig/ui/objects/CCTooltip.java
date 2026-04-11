@@ -1,7 +1,7 @@
 package com.pryzmm.coreconfig.ui.objects;
 
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
-import com.pryzmm.coreconfig.util.Identifier;
+import net.minecraft.resources.Identifier;
 import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.ConfigType;
@@ -137,7 +137,7 @@ public class CCTooltip {
             }
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
-                Identifier.get(image.modID(), image.path()),
+                Identifier.fromNamespaceAndPath(image.modID(), image.path()),
                 tooltipX + 12, tooltipY + 12,
                 0, frame * image.frameHeight(),
                 image.imageWidth(), image.frameHeight(),

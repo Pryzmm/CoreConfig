@@ -4,7 +4,7 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.config.Config;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
-import com.pryzmm.coreconfig.util.Identifier;
+import net.minecraft.resources.Identifier;
 import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.IntegerEntry;
@@ -83,7 +83,7 @@ public class CCButtonInteger extends AbstractWidget {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
-                Identifier.get(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
                 this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
                 this.getY(),
                 0, 0,

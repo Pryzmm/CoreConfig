@@ -1,6 +1,6 @@
 package com.pryzmm.coreconfig.network;
 
-import com.pryzmm.coreconfig.util.Identifier;
+import net.minecraft.resources.Identifier;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public record ServerSyncConfigPayload(String modID, String hostKey, Map<String, Object> values) implements CustomPacketPayload {
 
-    public static final Type<@NotNull ServerSyncConfigPayload> ID = new Type<>(Identifier.get("coreconfig", "server_sync_config"));
+    public static final Type<@NotNull ServerSyncConfigPayload> ID = new Type<>(Identifier.fromNamespaceAndPath("coreconfig", "server_sync_config"));
 
     public static final StreamCodec<@NotNull RegistryFriendlyByteBuf, @NotNull ServerSyncConfigPayload> CODEC = CustomPacketPayload.codec(ServerSyncConfigPayload::write, ServerSyncConfigPayload::read);
 

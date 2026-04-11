@@ -1,6 +1,6 @@
 package com.pryzmm.coreconfig.ui.objects;
 
-import com.pryzmm.coreconfig.util.Identifier;
+import net.minecraft.resources.Identifier;
 import com.pryzmm.coreconfig.util.ModHolderUtil;
 import com.pryzmm.coreconfigapi.data.ModData;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
@@ -43,14 +43,14 @@ public class CCListMod extends AbstractWidget {
         ModData data = ModHolderUtil.getModData(modID);
         if (data.overrideIconPath() == null) {
             for (String location : resourceLocations) {
-                if (Minecraft.getInstance().getResourceManager().getResource(Identifier.get(modID, location)).isPresent()) {
+                if (Minecraft.getInstance().getResourceManager().getResource(Identifier.fromNamespaceAndPath(modID, location)).isPresent()) {
                     this.imagePath = location;
                     return;
                 }
             }
             this.imagePath = "textures/ui/icon/missing.png";
             return;
-        } else if (Minecraft.getInstance().getResourceManager().getResource(Identifier.get(modID, data.overrideIconPath())).isPresent()) {
+        } else if (Minecraft.getInstance().getResourceManager().getResource(Identifier.fromNamespaceAndPath(modID, data.overrideIconPath())).isPresent()) {
             this.imagePath = data.overrideIconPath();
             return;
         }
@@ -64,7 +64,7 @@ public class CCListMod extends AbstractWidget {
         if (container.scrollable()) width = this.width - 6;
 
         ModData data = ModHolderUtil.getModData(modID);
-        if (data.bannerPath() != null) graphics.blit(RenderPipelines.GUI_TEXTURED, com.pryzmm.coreconfig.util.Identifier.get(data.modID(), data.bannerPath()), this.getX(), this.getY(), 0, 0, width, this.height, 200, 30, 200, 30);
+        if (data.bannerPath() != null) graphics.blit(RenderPipelines.GUI_TEXTURED, net.minecraft.resources.Identifier.fromNamespaceAndPath(data.modID(), data.bannerPath()), this.getX(), this.getY(), 0, 0, width, this.height, 200, 30, 200, 30);
         if (this.isHovered && CoreConfigScreen.activePopup == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
         else if (data.bannerPath() == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x55000000);
 
@@ -78,7 +78,7 @@ public class CCListMod extends AbstractWidget {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            Identifier.get(modID, imagePath),
+            Identifier.fromNamespaceAndPath(modID, imagePath),
             this.getX() + 1,
             this.getY() + 1,
             0, 0,
