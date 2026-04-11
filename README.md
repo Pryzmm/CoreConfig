@@ -21,7 +21,7 @@ It also has some perks for players using the CoreConfig mod:
 To use this in your own mod, you can add Jitpack as a repository, then implement my API directly into the mod. This makes having the configuration mod *optional* and players will not have to download CoreConfig alongside your mod. Below is how to implement it with gradle or maven.
 
 > [!NOTE]
-> If players do not have the CoreConfig mod installed, supplies default values will **ALWAYS** be used.
+> If players do not have the CoreConfig mod installed, supplied default values will **ALWAYS** be used.
 
 ```gradle
 repositories {
@@ -52,21 +52,6 @@ dependencies {
     </dependency>
 </dependencies>
 ```
-
-Once implemented, you need to register your mod into the API. Luckily, this only requires one line! Wherever your mod starts to initialize, you can use this method:
-```java
-// Simple Registration (Just gets the mod into the API)
-ConfigRegistrar.register(Identifier modNameIdentifier);
-// Full Registration (For more customization)
-ConfigRegistrar.register(Identifier modNameIdentifier, @Nullable Identifier modBannerIdentifier, @Nullable Integer backgroundColor, @Nullable Integer buttonColor);
-
-// modNameIdentifier: Not Null; serves as a way to register your mod but also allows to translate your mod name into the sidebar.
-// modBannerIdentifier: Nullable; allows a texture to be used as a background for your mod in the sidebar. (Scaled to 200x30)
-// backgroundColor: Nullable; an ARGB color used for the right-side containers of your mod
-// buttonColor: Nullable; an ARGB color used for the right-side buttons of your mod
-```
-
-Your mod icon is automatically used if it's found in `assets/<MODID>/icon.png` or `assets/<MODID>/textures/icon.png`, otherwise, a default missing texture will be used.
 
 # Support
 You can support the development of this mod and future releases by becoming a sponsor on GitHub or supporting my Ko-Fi!
