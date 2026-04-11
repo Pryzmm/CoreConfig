@@ -1,7 +1,6 @@
 package com.pryzmm.coreconfig.network;
 
 import com.pryzmm.coreconfig.services.Services;
-import com.pryzmm.coreconfig.util.HostManager;
 import com.pryzmm.coreconfigapi.Constants;
 
 public class NeoforgeServerNetworkHandler implements NeoforgeNetworkHelper.ServerHandler {

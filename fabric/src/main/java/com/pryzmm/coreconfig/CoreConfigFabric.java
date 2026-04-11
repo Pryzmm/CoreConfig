@@ -3,7 +3,7 @@ package com.pryzmm.coreconfig;
 import com.pryzmm.coreconfig.config.Config;
 import com.pryzmm.coreconfig.network.ServerPacketCommon;
 import com.pryzmm.coreconfig.services.Services;
-import com.pryzmm.coreconfig.util.HostManager;
+import com.pryzmm.coreconfig.network.HostManager;
 import com.pryzmm.coreconfigapi.registrar.ConfigRegistrar;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;

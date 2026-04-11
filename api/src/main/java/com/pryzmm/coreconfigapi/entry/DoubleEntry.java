@@ -6,14 +6,18 @@ import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.CCFile;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.data.ConfigValidity;
-import net.minecraft.network.chat.Component;
 
+/**
+ * A configuration option for CoreConfig, dedicated towards doubles. Use the {@link Builder} to create a new DoubleEntry for use in mods.
+ * <p>
+ * Visit <a href="https://github.com/Pryzmm/CoreConfig/wiki/Entries#doubleentry">the wiki page</a> to view more detailed documentation regarding this entry and its builder methods.
+ */
 public class DoubleEntry implements MainEntry {
 
     private Double value;
     private Double defaultValue;
     private String newValue = null;
-    private Component descriptor;
+    private Object descriptor;
     private ImageComponent image;
     private String modID;
     private String translation;
@@ -27,7 +31,7 @@ public class DoubleEntry implements MainEntry {
 
     private DoubleEntry() {}
 
-    public Component descriptor() { return descriptor; }
+    public Object descriptor() { return descriptor; }
     public ImageComponent image() { return image; }
     public boolean requiresRestart() { return requiresRestart; }
     public String modID() { return modID; }
@@ -71,7 +75,7 @@ public class DoubleEntry implements MainEntry {
         private final Double defaultValue;
         private final String modID;
         private final String translation;
-        private Component descriptor = Component.empty();
+        private Object descriptor;
         private ImageComponent image = null;
         private boolean requiresRestart = false;
         private Integer hoverColor = null;
@@ -87,7 +91,7 @@ public class DoubleEntry implements MainEntry {
             this.modID = modID;
         }
 
-        public Builder descriptor(Component descriptor) { this.descriptor = descriptor; return this; }
+        public Builder descriptor(Object descriptor) { this.descriptor = descriptor; return this; }
         public Builder requiresRestart(boolean requiresRestart) { this.requiresRestart = requiresRestart; return this; }
         public Builder hoverColor(int hoverColor) { this.hoverColor = hoverColor; return this; }
         public Builder minimum(float minimum) { this.minimum = minimum; return this; }

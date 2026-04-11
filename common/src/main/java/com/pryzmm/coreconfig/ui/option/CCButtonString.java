@@ -1,10 +1,11 @@
 package com.pryzmm.coreconfig.ui.option;
 
 import com.pryzmm.coreconfig.CoreConfigConstants;
+import com.pryzmm.coreconfig.config.Config;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.util.Identifier;
-import com.pryzmm.coreconfig.util.Server;
+import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.StringEntry;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
@@ -74,7 +75,7 @@ public class CCButtonString extends AbstractWidget {
         editBox.extractRenderState(graphics, mouseX, mouseY, a);
 
         if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
-            graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x44FF0011);
+            graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 Identifier.get(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),

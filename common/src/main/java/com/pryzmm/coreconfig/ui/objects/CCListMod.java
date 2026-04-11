@@ -1,8 +1,8 @@
 package com.pryzmm.coreconfig.ui.objects;
 
 import com.pryzmm.coreconfig.util.Identifier;
+import com.pryzmm.coreconfig.util.ModHolderUtil;
 import com.pryzmm.coreconfigapi.data.ModData;
-import com.pryzmm.coreconfigapi.data.ModHolder;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -40,7 +40,7 @@ public class CCListMod extends AbstractWidget {
         this.screen = screen;
         super(0, 0, width - 4, height, Component.empty());
 
-        ModData data = ModHolder.getModData(modID);
+        ModData data = ModHolderUtil.getModData(modID);
         if (data.overrideIconPath() == null) {
             for (String location : resourceLocations) {
                 if (Minecraft.getInstance().getResourceManager().getResource(Identifier.get(modID, location)).isPresent()) {
@@ -63,7 +63,7 @@ public class CCListMod extends AbstractWidget {
         int width = this.width;
         if (container.scrollable()) width = this.width - 6;
 
-        ModData data = ModHolder.getModData(modID);
+        ModData data = ModHolderUtil.getModData(modID);
         if (data.bannerPath() != null) graphics.blit(RenderPipelines.GUI_TEXTURED, com.pryzmm.coreconfig.util.Identifier.get(data.modID(), data.bannerPath()), this.getX(), this.getY(), 0, 0, width, this.height, 200, 30, 200, 30);
         if (this.isHovered && CoreConfigScreen.activePopup == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
         else if (data.bannerPath() == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x55000000);

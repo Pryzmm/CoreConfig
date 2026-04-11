@@ -2,7 +2,7 @@ package com.pryzmm.coreconfig.ui.objects;
 
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.util.Identifier;
-import com.pryzmm.coreconfig.util.Server;
+import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.*;
@@ -41,7 +41,8 @@ public class CCTooltip {
             imageWidth = image != null ? image.imageWidth() : 0;
             frameHeight = image != null ? image.frameHeight() : 0;
 
-            descriptor = mainEntry.descriptor() != null ? mainEntry.descriptor().copy() : Component.empty();
+            Component component = (Component) mainEntry.descriptor();
+            descriptor = component != null ? component.copy() : Component.empty();
 
         }
 

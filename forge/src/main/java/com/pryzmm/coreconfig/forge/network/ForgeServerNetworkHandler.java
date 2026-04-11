@@ -2,7 +2,7 @@ package com.pryzmm.coreconfig.forge.network;
 
 import com.pryzmm.coreconfig.network.ServerSyncConfigPayload;
 import com.pryzmm.coreconfig.services.Services;
-import com.pryzmm.coreconfig.util.HostManager;
+import com.pryzmm.coreconfig.network.HostManager;
 import com.pryzmm.coreconfigapi.Constants;
 import net.minecraft.server.level.ServerPlayer;
 

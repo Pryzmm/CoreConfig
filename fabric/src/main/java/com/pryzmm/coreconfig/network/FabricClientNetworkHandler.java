@@ -1,6 +1,5 @@
 package com.pryzmm.coreconfig.network;
 
-import com.pryzmm.coreconfig.util.HostManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -17,9 +16,7 @@ final class FabricClientNetworkHandler {
         );
         ClientPlayNetworking.registerGlobalReceiver(
             ServerSyncConfigPayload.ID,
-            (payload, context) -> {
-                CommonClientNetworkHandler.receiveServerConfigPayload(payload);
-            }
+            (payload, context) -> CommonClientNetworkHandler.receiveServerConfigPayload(payload)
         );
     }
 

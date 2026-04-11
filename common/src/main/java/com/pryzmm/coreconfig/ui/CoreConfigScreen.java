@@ -6,9 +6,9 @@ import com.pryzmm.coreconfig.data.EntryHolder;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.option.*;
 import com.pryzmm.coreconfig.ui.popup.ColorPopup;
+import com.pryzmm.coreconfig.util.ModHolderUtil;
 import com.pryzmm.coreconfigapi.entry.*;
 import com.pryzmm.coreconfigapi.data.ModData;
-import com.pryzmm.coreconfigapi.data.ModHolder;
 import com.pryzmm.coreconfig.ui.objects.*;
 import com.pryzmm.coreconfig.ui.popup.AbstractPopup;
 import com.pryzmm.coreconfig.ui.popup.ExitWithoutSavingPopup;
@@ -53,13 +53,13 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
 
         ModData data;
         if (activeModID == null || activeModID.isEmpty()) activeModID = CoreConfigConstants.MOD_ID;
-        else if (!ModHolder.getRegisteredMods(false).contains(activeModID)) {
+        else if (!ModHolderUtil.getRegisteredMods(false).contains(activeModID)) {
             CoreConfigConstants.LOGGER.warn("Tried to open config screen for mod ID '{}' but it was not found in the registered mods list. Defaulting to CoreConfig config screen.", activeModID);
             activeModID = CoreConfigConstants.MOD_ID;
         }
-        data = ModHolder.getModData(activeModID);
+        data = ModHolderUtil.getModData(activeModID);
 
-        CCButton saveButton = new CCButton(5, minecraft.screen.height - 35, 99, 30, Component.translatable("ui.coreconfig.save"), 0x551A3A1A, true, () -> ModHolder.getRegisteredMods(true).forEach(CCFileHandler::updateConfigFile));
+        CCButton saveButton = new CCButton(5, minecraft.screen.height - 35, 99, 30, Component.translatable("ui.coreconfig.save"), 0x551A3A1A, true, () -> ModHolderUtil.getRegisteredMods(true).forEach(CCFileHandler::updateConfigFile));
         exitButton = new CCButton(106, minecraft.screen.height - 35, 99, 30, Component.translatable("ui.coreconfig.exit"), 0x553A1A1A, false, () -> {
             if (EntryHolder.containsAnyUpdatedConfigs()) sendExitWithoutSavingPopup();
             else minecraft.setScreen(null);
@@ -70,8 +70,8 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
 
         CCContainer modListContainer = new CCContainer(this.minecraft, 5, 25, 200, minecraft.screen.height - 62);
         List<AbstractWidget> modListWidgets = new ArrayList<>();
-        ModHolder.getRegisteredMods(true).forEach((modID) -> {
-            ModData modData = ModHolder.getModData(modID);
+        ModHolderUtil.getRegisteredMods(true).forEach((modID) -> {
+            ModData modData = ModHolderUtil.getModData(modID);
             modListWidgets.add(new CCListMod(this, 200, 30, modID, modData.nameTranslation(), modListContainer, 0x551A1A1A));
         });
         modListContainer.populate(modListWidgets);

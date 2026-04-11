@@ -3,14 +3,17 @@ package com.pryzmm.coreconfigapi.entry;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.CCEntries;
 import com.pryzmm.coreconfigapi.data.ConfigType;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A configuration option for CoreConfig, dedicated towards displaying website buttons. Use the {@link Builder} to create a new WebsiteEntry for use in mods.
+ * <p>
+ * Visit <a href="https://github.com/Pryzmm/CoreConfig/wiki/Entries#websiteentry">the wiki page</a> to view more detailed documentation regarding this entry and its builder methods.
+ */
 public class WebsiteEntry implements MainEntry {
 
     private String value;
-    private MutableComponent descriptor;
+    private Object descriptor;
     private ImageComponent image;
     private String translation;
     private String modID;
@@ -20,7 +23,7 @@ public class WebsiteEntry implements MainEntry {
 
     private WebsiteEntry() {}
 
-    public MutableComponent descriptor() { return descriptor; }
+    public Object descriptor() { return descriptor; }
     public ImageComponent image() { return image; }
     public boolean requiresRestart() { return false; }
     public String translation() { return translation; }
@@ -50,7 +53,7 @@ public class WebsiteEntry implements MainEntry {
         private final String website;
         private final String translation;
         private final String modID;
-        private MutableComponent descriptor = Component.empty();
+        private Object descriptor;
         private ImageComponent image = null;
         private Integer hoverColor = null;
         private int priority = 0;
@@ -62,7 +65,7 @@ public class WebsiteEntry implements MainEntry {
             this.modID = modID;
         }
 
-        public Builder descriptor(MutableComponent descriptor) { this.descriptor = descriptor; return this; }
+        public Builder descriptor(Object descriptor) { this.descriptor = descriptor; return this; }
         public Builder hoverColor(int hoverColor) { this.hoverColor = hoverColor; return this; }
         public Builder priority(int priority) { this.priority = priority; return this; }
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
