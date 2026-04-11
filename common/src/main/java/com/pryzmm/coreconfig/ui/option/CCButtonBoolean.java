@@ -56,7 +56,7 @@ public class CCButtonBoolean extends AbstractWidget {
 
         graphics.text(
             Minecraft.getInstance().font,
-            Component.translatable(this.translation).withStyle(style -> style.withItalic(entry.getValue() != entry.getUnsavedValue())),
+            Component.translatable(this.translation).withStyle(style -> style.withItalic(entry.getClientValue() != entry.getUnsavedValue())),
             this.getX() + 5,
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             0xFFFFFFFF,
@@ -72,7 +72,7 @@ public class CCButtonBoolean extends AbstractWidget {
             19, 19
         );
 
-        if (entry.type() == ConfigType.SERVER && !Server.isHostingServer()) {
+        if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x44FF0011);
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,

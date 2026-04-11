@@ -32,7 +32,15 @@ public class WebsiteEntry implements MainEntry {
 
     public String getUnsavedValue() { return value; }
     public String getDefaultValue() { return value; }
-    public String getValue() { return value; }
+    public String getValue() {
+        return value;
+    }
+    public String getClientValue() {
+        return value;
+    }
+    public String getServerValue() {
+        return value;
+    }
     public void setValue(String value) { this.value = value; }
 
     public void refreshValue() {}

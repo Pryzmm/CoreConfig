@@ -7,6 +7,11 @@ public abstract class CCFile {
         public <T> T getConfigValue(String modName, String translation, Class<T> clazz) {
             return null;
         }
+
+        @Override
+        public <T> T getServerValue(String modName, String translation, Class<T> clazz) {
+            return null;
+        }
     };
 
     public static void setInstance(CCFile file) {
@@ -18,4 +23,6 @@ public abstract class CCFile {
     }
 
     public abstract <T> T getConfigValue(String modName, String translation, Class<T> clazz);
+
+    public abstract <T> T getServerValue(String modName, String translation, Class<T> clazz);
 }

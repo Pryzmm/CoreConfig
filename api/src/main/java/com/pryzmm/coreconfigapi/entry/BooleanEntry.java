@@ -37,7 +37,13 @@ public class BooleanEntry implements MainEntry {
 
     public Boolean getUnsavedValue() { return newValue != null ? newValue : value; }
     public Boolean getDefaultValue() { return defaultValue; }
-    public Boolean getValue() { return value; }
+    public Boolean getValue() {
+        return getServerValue() != null ? getServerValue() : value;
+    }
+    public Boolean getClientValue() { return value; }
+    public Boolean getServerValue() {
+        return CCFile.getInstance().getServerValue(modID, translation, Boolean.class);
+    }
     public void setValue(boolean value) { this.value = value; }
 
     public void refreshValue() { this.newValue = value; }

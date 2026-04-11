@@ -24,6 +24,7 @@ public class CoreConfigForge {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            CoreConfigCommon.initFirst();
 
             ConfigRegistrar.register(
                 CoreConfigConstants.MOD_ID,

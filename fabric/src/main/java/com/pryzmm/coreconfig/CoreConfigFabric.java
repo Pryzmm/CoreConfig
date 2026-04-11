@@ -13,6 +13,7 @@ public class CoreConfigFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        CoreConfigCommon.initFirst();
 
         ConfigRegistrar.register(
             CoreConfigConstants.MOD_ID,

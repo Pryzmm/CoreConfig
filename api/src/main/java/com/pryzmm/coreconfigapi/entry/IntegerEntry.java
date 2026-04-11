@@ -41,7 +41,15 @@ public class IntegerEntry implements MainEntry {
 
     public Object getUnsavedValue() { return newValue != null ? newValue : value; }
     public Integer getDefaultValue() { return defaultValue; }
-    public Integer getValue() { return value; }
+    public Integer getValue() {
+        return getServerValue() != null ? getServerValue() : value;
+    }
+    public Integer getClientValue() {
+        return value;
+    }
+    public Integer getServerValue() {
+        return CCFile.getInstance().getServerValue(modID, translation, Integer.class);
+    }
     public void setValue(Integer value) { this.value = value; }
 
     public void refreshValue() { this.newValue = String.valueOf(value); }

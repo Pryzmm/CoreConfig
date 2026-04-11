@@ -40,7 +40,15 @@ public class StringEntry implements MainEntry {
 
     public String getUnsavedValue() { return newValue != null ? newValue : value; }
     public String getDefaultValue() { return defaultValue; }
-    public String getValue() { return value; }
+    public String getValue() {
+        return getServerValue() != null ? getServerValue() : value;
+    }
+    public String getClientValue() {
+        return value;
+    }
+    public String getServerValue() {
+        return CCFile.getInstance().getServerValue(modID, translation, String.class);
+    }
     public void setValue(String value) { this.value = value; }
 
     public void refreshValue() { this.newValue = value; }

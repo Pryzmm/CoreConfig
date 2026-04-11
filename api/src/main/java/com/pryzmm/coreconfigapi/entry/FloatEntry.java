@@ -41,7 +41,13 @@ public class FloatEntry implements MainEntry {
 
     public Object getUnsavedValue() { return newValue != null ? newValue : value; }
     public Float getDefaultValue() { return defaultValue; }
-    public Float getValue() { return value; }
+    public Float getValue() {
+        return getServerValue() != null ? getServerValue() : value;
+    }
+    public Float getClientValue() { return value; }
+    public Float getServerValue() {
+        return CCFile.getInstance().getServerValue(modID, translation, Float.class);
+    }
     public void setValue(Float value) { this.value = value; }
 
     public void refreshValue() { this.newValue = String.valueOf(value); }

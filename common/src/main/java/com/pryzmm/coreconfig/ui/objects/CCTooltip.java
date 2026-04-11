@@ -93,8 +93,12 @@ public class CCTooltip {
             default -> {}
         }
 
-        if (entry instanceof MainEntry mainEntry && mainEntry.type() == ConfigType.SERVER && !Server.isHostingServer()) {
-            descriptor.append("\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.server_side"));
+        if (entry instanceof MainEntry mainEntry) {
+            if (mainEntry.type() == ConfigType.SERVER && !Server.isHostingServer()) {
+                descriptor.append("\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.server_side"));
+            } else if (mainEntry.type() == ConfigType.COMMON && mainEntry.getServerValue() != null && !Server.isHostingServer()) {
+                descriptor.append("\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.server_side_common"));
+            }
         }
 
         final int[] maxTextWidth = {0};

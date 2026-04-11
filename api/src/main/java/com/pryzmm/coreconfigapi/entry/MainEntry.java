@@ -11,6 +11,8 @@ public interface MainEntry extends CCEntry {
     void save();
     Object getUnsavedValue();
     Object getDefaultValue();
+    Object getClientValue();
+    Object getServerValue();
     Object getValue();
     int priority();
     boolean requiresRestart();
