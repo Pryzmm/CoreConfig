@@ -38,6 +38,12 @@ neoForge {
     }
 }
 
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from project(':common').sourceSets.main.output
+    from project(':api').sourceSets.main.output
+}
+
 dependencies {
     implementation(project(path: ':api', configuration: 'neoforgeRuntime')) { transitive = false }
     implementation(project(path: ':common', configuration: 'neoforgeRuntime')) { transitive = false }

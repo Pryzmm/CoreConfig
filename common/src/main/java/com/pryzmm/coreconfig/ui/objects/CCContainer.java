@@ -120,7 +120,7 @@ public class CCContainer implements CCElement {
         @Override
         public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
             try {
-                if (this.visible && this.isFocused() && (boolean) SCROLLING_FIELD.get(this)) {
+                if (this.visible && this.isFocused() && SCROLLING_FIELD != null && (boolean) SCROLLING_FIELD.get(this)) {
                     if (pMouseY < (double)this.getY()) this.setScrollAmount(0.0F);
                     else if (pMouseY > (double)(this.getY() + this.height)) this.setScrollAmount(this.getMaxScrollAmount());
                     else {

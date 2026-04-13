@@ -6,12 +6,15 @@ import com.pryzmm.coreconfig.config.Config;
 import com.pryzmm.coreconfig.network.ServerPacketCommon;
 import com.pryzmm.coreconfig.services.Services;
 import com.pryzmm.coreconfig.network.HostManager;
+import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfigapi.registrar.ConfigRegistrar;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -24,6 +27,12 @@ public class CoreConfigForge {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+
+            ModLoadingContext.get().registerExtensionPoint(
+                ConfigScreenHandler.ConfigScreenFactory.class,
+                () -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, screen) -> new CoreConfigScreen(CoreConfigConstants.MOD_ID))
+            );
+
             CoreConfigCommon.initFirst();
 
             ConfigRegistrar.register(
