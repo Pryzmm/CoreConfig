@@ -1,6 +1,7 @@
 package com.pryzmm.coreconfig.network;
 
 import com.pryzmm.coreconfig.CoreConfigConstants;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ public class BufferHelper {
 
     public record Entry(String id, String path, Object value) {}
 
-    public static void writeEntries(RegistryFriendlyByteBuf buf, List<Entry> entries) {
+    public static void writeEntries(FriendlyByteBuf buf, List<Entry> entries) {
         buf.writeVarInt(entries.size());
 
         for (Entry entry : entries) {
@@ -39,7 +40,7 @@ public class BufferHelper {
         }
     }
 
-    public static List<Entry> readEntries(RegistryFriendlyByteBuf buf) {
+    public static List<Entry> readEntries(FriendlyByteBuf buf) {
         int size = buf.readVarInt();
         List<Entry> list = new ArrayList<>(size);
 

@@ -1,10 +1,10 @@
 plugins {
-    id "net.fabricmc.fabric-loom" version '1.16-SNAPSHOT' apply false
-    id 'maven-publish'
+    // see https://fabricmc.net/develop/ for new versions
+    id 'fabric-loom' version '1.7-SNAPSHOT' apply false
+    // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
+    id 'net.neoforged.moddev' version '2.0.141' apply false
 }
 
-allprojects {
-    group = 'com.github.Pryzmm.CoreConfig'
+subprojects {
+    plugins.withId('java') { java.toolchain.languageVersion = JavaLanguageVersion.of(21) }
 }
-
-tasks.withType(PublishToMavenLocal).configureEach { enabled = false }

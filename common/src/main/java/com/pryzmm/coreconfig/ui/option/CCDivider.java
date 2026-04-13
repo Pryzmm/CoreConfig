@@ -1,9 +1,10 @@
 package com.pryzmm.coreconfig.ui.option;
 
 import com.pryzmm.coreconfig.data.HoveredEntry;
+import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import com.pryzmm.coreconfigapi.entry.DividerEntry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -14,16 +15,18 @@ public class CCDivider extends AbstractWidget {
     private final String translation;
     private final Integer color;
     private final DividerEntry entry;
+    private final CCContainer container;
 
-    public CCDivider(DividerEntry entry, int width, int height, String translation, Integer color) {
+    public CCDivider(DividerEntry entry, int width, int height, String translation, CCContainer container, Integer color) {
+        super(0, 0, width - 4, height, Component.empty());
         this.translation = translation;
         this.entry = entry;
         this.color = color;
-        super(0, 0, width - 4, height, Component.empty());
+        this.container = container;
     }
 
     @Override
-    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
 
         if (this.isHovered && HoveredEntry.value != entry) HoveredEntry.value = entry;
         else if (HoveredEntry.value == entry) HoveredEntry.value = null;
@@ -31,10 +34,10 @@ public class CCDivider extends AbstractWidget {
         int textWidth = Minecraft.getInstance().font.width(Component.translatable(this.translation));
         int bottomPadding = (this.height - 20) / 2;
 
-        graphics.text(
+        graphics.drawString(
             Minecraft.getInstance().font,
             Component.translatable(this.translation),
-            this.getX() + (this.width / 2) - (textWidth / 2),
+            container.getX() + (this.width / 2) - (textWidth / 2),
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2) + bottomPadding,
             color,
             true
@@ -42,10 +45,10 @@ public class CCDivider extends AbstractWidget {
 
         // Divider lines
         if (textWidth == 0) {
-            graphics.fill(this.getX(), this.getY() + (this.height / 2) + bottomPadding, this.getX() + this.width, this.getY() + (this.height / 2) + bottomPadding + 1, color);
+            graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + this.width, this.getY() + (this.height / 2) + bottomPadding + 1, color);
         } else {
-            graphics.fill(this.getX(), this.getY() + (this.height / 2) + bottomPadding, this.getX() + (this.width / 2) - (textWidth / 2) - 5, this.getY() + (this.height / 2) + bottomPadding + 1, color);
-            graphics.fill(this.getX() + (this.width / 2) + (textWidth / 2) + 5, this.getY() + (this.height / 2) + bottomPadding, this.getX() + this.width, this.getY() + (this.height / 2) + bottomPadding + 1, color);
+            graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + (this.width / 2) - (textWidth / 2) - 5, this.getY() + (this.height / 2) + bottomPadding + 1, color);
+            graphics.fill(container.getX() + (this.width / 2) + (textWidth / 2) + 5, this.getY() + (this.height / 2) + bottomPadding, container.getX() + this.width + 3, this.getY() + (this.height / 2) + bottomPadding + 1, color);
         }
 
     }

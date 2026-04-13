@@ -1,16 +1,53 @@
 plugins {
-    id "net.fabricmc.fabric-loom" version "1.16-SNAPSHOT"
+    id 'multiloader-common'
+    id 'net.neoforged.moddev'
 }
 
-loom {
-    enableTransitiveAccessWideners = true
-}
-
-tasks.withType(Jar).configureEach {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+neoForge {
+    neoFormVersion = neo_form_version
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) accessTransformers.add(at.absolutePath)
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
-    implementation project(":api")
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+    compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+    compileOnly(project(":api")) { transitive = false }
+}
+
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+    commonResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+configurations {
+    neoforgeRuntime
+    forgeRuntime
+}
+
+tasks.register('neoforgeJar', Jar) {
+    from sourceSets.main.output
+    exclude 'fabric.mod.json'
+    archiveClassifier = 'neoforge'
+}
+
+tasks.register('forgeJar', Jar) {
+}
+
+artifacts {
+    neoforgeRuntime tasks.neoforgeJar
+    forgeRuntime tasks.forgeJar
+    commonJava sourceSets.main.java.sourceDirectories.singleFile
+    commonResources sourceSets.main.resources.sourceDirectories.singleFile
 }

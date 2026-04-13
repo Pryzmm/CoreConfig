@@ -1,17 +1,17 @@
 package com.pryzmm.coreconfig.ui.objects;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
-import net.minecraft.resources.Identifier;
+import net.minecraft.client.gui.GuiGraphics;
 import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class CCTooltip {
     private static Long firstRenderTime = null;
     private static Integer frame = 0;
 
-    public static void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, CCEntry entry, CCContainer container) {
+    public static void render(GuiGraphics graphics, int mouseX, int mouseY, CCEntry entry, CCContainer container) {
         if (entry == null) {
             frame = 0;
             return;
@@ -121,10 +121,21 @@ public class CCTooltip {
 
         boolean hadScissor;
         try { graphics.disableScissor(); hadScissor = true; } catch (IllegalStateException ignored) { hadScissor = false; }
-        graphics.nextStratum();
 
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, TooltipRenderUtil.BACKGROUND_SPRITE, tooltipX, tooltipY, tooltipWidth, tooltipHeight, 0xFFFFFFFF);
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, TooltipRenderUtil.FRAME_SPRITE, tooltipX, tooltipY, tooltipWidth, tooltipHeight, 0xFFFFFFFF);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        graphics.pose().pushPose();
+        graphics.pose().translate(0, 0, 400);
+
+        graphics.blitSprite(
+            ResourceLocation.fromNamespaceAndPath("coreconfig", "ui/tooltip/background"),
+            tooltipX, tooltipY, tooltipWidth, tooltipHeight
+        );
+
+        graphics.blitSprite(
+            ResourceLocation.fromNamespaceAndPath("coreconfig", "ui/tooltip/frame"),
+            tooltipX, tooltipY, tooltipWidth, tooltipHeight
+        );
 
         if (image != null) {
             if (image.animationTime() >= 0) {
@@ -136,8 +147,7 @@ public class CCTooltip {
                 }
             }
             graphics.blit(
-                RenderPipelines.GUI_TEXTURED,
-                Identifier.fromNamespaceAndPath(image.modID(), image.path()),
+                ResourceLocation.fromNamespaceAndPath(image.modID(), image.path()),
                 tooltipX + 12, tooltipY + 12,
                 0, frame * image.frameHeight(),
                 image.imageWidth(), image.frameHeight(),
@@ -147,7 +157,7 @@ public class CCTooltip {
 
         int textY = tooltipY + frameHeight + 14;
         for (FormattedCharSequence sequence : sequences) {
-            graphics.text(
+            graphics.drawString(
                 minecraft.font, sequence,
                 tooltipX + 12, textY,
                 0xFFFFFFFF,
@@ -155,6 +165,9 @@ public class CCTooltip {
             );
             textY += minecraft.font.lineHeight + 2;
         }
+
+        graphics.pose().popPose();
+        RenderSystem.disableBlend();
 
         if (hadScissor) graphics.enableScissor(
             container.getX(), container.getY(),

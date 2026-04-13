@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -30,7 +30,7 @@ public class CoreConfigForge {
                 CoreConfigConstants.MOD_ID,
                 "config.coreconfig.coreconfig",
                 "textures/config/banner.png",
-                "textures/config/icon.png",
+                "icon.png",
                 0x11CAF3FF,
                 0x3384BAFF
             );

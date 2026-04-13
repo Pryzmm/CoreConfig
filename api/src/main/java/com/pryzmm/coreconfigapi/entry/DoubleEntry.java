@@ -128,7 +128,7 @@ public class DoubleEntry implements MainEntry {
             if (configValue != null && validated) entry.value = configValue;
             else if (!validated) Constants.LOGGER.error("Failed to validate config value for {}:{}. Using default value: {}", modID, translation, defaultValue);
 
-            CCEntries.addEntry(entry.modID(), entry);
+            CCEntries.addEntry(modID, entry);
             return entry;
         }
     }

@@ -3,11 +3,10 @@ package com.pryzmm.coreconfig.ui.objects;
 import com.pryzmm.coreconfig.data.EntryHolder;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +21,7 @@ public class CCButton extends AbstractWidget implements CCElement {
     public int getY() { return y; }
     public int getWidth() { return width; }
     public int getHeight() { return height; }
+
     public Integer getColor() { return color; }
 
     public CCButton(int x, int y, int width, int height, Component text, int hoverColor, boolean isSaveButton, Runnable runnable) {
@@ -43,15 +43,19 @@ public class CCButton extends AbstractWidget implements CCElement {
         this.isInPopup = isInPopup;
     }
 
+    private boolean isHovered(double pMouseX, double pMouseY) {
+        return pMouseX >= this.getX() && pMouseY >= this.getY() && pMouseX < this.getX() + this.width && pMouseY < this.getY() + this.height;
+    }
+
     @Override
-    public void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
         graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x551A1A1A);
-        if (this.isHovered) {
+        if (this.isHovered(mouseX, mouseY)) {
             if (CoreConfigScreen.activePopup == null || isInPopup) graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, hoverColor);
             if (EntryHolder.containsAnyInvalidConfigs() && isSaveButton) setTooltip(Tooltip.create(Component.translatable("ui.coreconfig.cant_save")));
             else setTooltip(null);
         }
-        graphics.text(
+        graphics.drawString(
             Minecraft.getInstance().font,
             this.getMessage(),
             this.getX() + (this.width / 2) - (Minecraft.getInstance().font.width(this.getMessage()) / 2),
@@ -62,8 +66,8 @@ public class CCButton extends AbstractWidget implements CCElement {
     }
 
     @Override
-    public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
-        super.onClick(event, doubleClick);
+    public void onClick(double pMouseX, double pMouseY) {
+        super.onClick(pMouseX, pMouseY);
         if (isSaveButton && EntryHolder.containsAnyInvalidConfigs()) return;
         runnable.run();
     }

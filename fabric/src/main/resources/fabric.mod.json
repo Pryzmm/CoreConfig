@@ -10,6 +10,7 @@
 
   "license": "All-Rights-Reserved",
   "icon": "assets/coreconfig/icon.png",
+  "accessWidener": "coreconfig.accesswidener",
 
   "environment": "*",
   "entrypoints": {
@@ -26,9 +27,8 @@
 
 
   "depends": {
-    "fabricloader": ">=${loader_version}",
+    "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": "*",
-    "minecraft": "${minecraft_version}",
-    "coreconfig_common": "*"
+    "minecraft": "${minecraft_version}"
   }
 }

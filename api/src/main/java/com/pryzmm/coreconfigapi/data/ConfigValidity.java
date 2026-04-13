@@ -52,13 +52,13 @@ public class ConfigValidity {
     }
 
     /**
-     * Mainly for internal use, but returns true if a string can be parsed as an integer with a radix of 16
+     * Mainly for internal use, but returns true if a string can be parsed as a long and is within bounds of an integer for colors
      */
     public static boolean validateColorConfig(String value) {
         if (value == null) return false;
         try {
-            Integer.parseInt(value, 16);
-            return true;
+            long parsed = Long.parseLong(value);
+            return parsed >= Integer.MIN_VALUE && parsed <= 0xFFFFFFFFL;
         } catch (NumberFormatException e) {
             return false;
         }

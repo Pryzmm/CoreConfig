@@ -6,16 +6,15 @@ import com.pryzmm.coreconfig.services.Services;
 import com.pryzmm.coreconfig.ui.CoreConfig;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.network.HostManager;
-import net.minecraft.resources.Identifier;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.lwjgl.glfw.GLFW;
 
 @Mod("coreconfig")
@@ -23,19 +22,17 @@ public class CoreConfigForgeClient {
 
     public static KeyMapping OPEN_CONFIG;
 
-    public CoreConfigForgeClient(FMLJavaModLoadingContext context) {
-        context.registerExtensionPoint(
+    public CoreConfigForgeClient() {
+        ModLoadingContext.get().registerExtensionPoint(
             ConfigScreenHandler.ConfigScreenFactory.class,
-            () -> new ConfigScreenHandler.ConfigScreenFactory(
-                (minecraft, screen) -> new CoreConfigScreen(CoreConfigConstants.MOD_ID)
-            )
+            () -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, screen) -> new CoreConfigScreen(CoreConfigConstants.MOD_ID))
         );
 
         Services.NETWORK.registerClientHandlers();
         Services.NETWORK.registerServerHandlers();
     }
 
-    @Mod.EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModEvents {
 
         @SubscribeEvent
@@ -44,10 +41,14 @@ public class CoreConfigForgeClient {
                     "key.coreconfig.open_config",
                     InputConstants.Type.KEYSYM,
                     GLFW.GLFW_KEY_INSERT,
-                    new KeyMapping.Category(Identifier.fromNamespaceAndPath("coreconfig", "coreconfig"))
+                    "config.coreconfig.coreconfig"
             );
             event.register(OPEN_CONFIG);
         }
+    }
+
+    @Mod.EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class ClientForgeEvents {
 
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
@@ -60,8 +61,6 @@ public class CoreConfigForgeClient {
         public static void onPlayerQuit(PlayerEvent.PlayerLoggedOutEvent event) {
             HostManager.clear();
         }
-
-
     }
 
 }

@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "coreconfig:ui/tooltip/background"
+    },
+    {
+      "type": "single",
+      "resource": "coreconfig:ui/tooltip/frame"
+    }
+  ]
+}
