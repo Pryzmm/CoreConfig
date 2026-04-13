@@ -24,10 +24,11 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 public class CoreConfigNeoforge {
 
     public static IEventBus eventBus;
+    public static ModContainer modContainer;
 
     public CoreConfigNeoforge(IEventBus eventBus, ModContainer modContainer) {
         CoreConfigNeoforge.eventBus = eventBus;
-        modContainer.registerExtensionPoint(IConfigScreenFactory.class, (mc, screen) -> new CoreConfigScreen("coreconfig"));
+        CoreConfigNeoforge.modContainer = modContainer;
     }
 
     @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD) // Mod bus — FMLClientSetupEvent is IModBusEvent
@@ -36,6 +37,9 @@ public class CoreConfigNeoforge {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             CoreConfigCommon.initFirst();
+
+            modContainer.registerExtensionPoint(IConfigScreenFactory.class, (mc, screen) -> new CoreConfigScreen("coreconfig"));
+
             ConfigRegistrar.register(
                     CoreConfigConstants.MOD_ID,
                     "config.coreconfig.coreconfig",

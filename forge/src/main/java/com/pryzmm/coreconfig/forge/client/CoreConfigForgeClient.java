@@ -23,11 +23,6 @@ public class CoreConfigForgeClient {
     public static KeyMapping OPEN_CONFIG;
 
     public CoreConfigForgeClient() {
-        ModLoadingContext.get().registerExtensionPoint(
-            ConfigScreenHandler.ConfigScreenFactory.class,
-            () -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, screen) -> new CoreConfigScreen(CoreConfigConstants.MOD_ID))
-        );
-
         Services.NETWORK.registerClientHandlers();
         Services.NETWORK.registerServerHandlers();
     }

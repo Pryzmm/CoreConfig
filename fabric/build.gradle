@@ -41,6 +41,12 @@ dependencies {
     implementation(project(":api")) { transitive = false }
 }
 
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from project(':common').sourceSets.main.output
+    from project(':api').sourceSets.main.output
+}
+
 tasks.named('compileJava', JavaCompile) {
     dependsOn(configurations.commonJava)
     source(configurations.commonJava)
