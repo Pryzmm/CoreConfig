@@ -1,56 +1,26 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.16-SNAPSHOT'
-    id 'maven-publish'
+    id 'java'
 }
-
-version = project.mod_version
-group = project.maven_group
-
-base {
-    archivesName = "api"
-}
-
-// Mojang ships Java 25 to end users in 26.1+, so your mod should target Java 25.
-java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 repositories {
-    // your existing repos
+    mavenCentral()
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    compileOnly 'org.jetbrains:annotations:24.0.0'
+    compileOnly 'org.slf4j:slf4j-api:2.0.7'
 }
 
-loom {
-    accessWidenerPath = file("src/main/resources/coreconfig.classtweaker")
+configurations {
+    neoforgeRuntime
 }
 
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
+tasks.register('neoforgeJar', Jar) {
+    from sourceSets.main.output
+    exclude 'fabric.mod.json'
+    archiveClassifier = 'neoforge'
 }
 
-
-java {
-    withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_25
-    targetCompatibility = JavaVersion.VERSION_25
-}
-
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.base.archivesName.get()}" }
-    }
-}
-
-publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = "api"
-            from components.java
-        }
-    }
+artifacts {
+    neoforgeRuntime tasks.neoforgeJar
 }

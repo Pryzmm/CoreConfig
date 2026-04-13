@@ -4,18 +4,16 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.config.Config;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
-import net.minecraft.resources.Identifier;
 import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.BooleanEntry;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class CCButtonBoolean extends AbstractWidget {
@@ -32,21 +30,26 @@ public class CCButtonBoolean extends AbstractWidget {
     String boolFalseImageSwitch = "textures/ui/boolean_false_switch.png";
 
     public CCButtonBoolean(BooleanEntry entry, int width, int height, String translation, CCContainer assignedContainer, int hoverColor, Integer color) {
+        super(0, 0, width - 4, height, Component.empty());
         this.container = assignedContainer;
         this.translation = translation;
         this.hoverColor = hoverColor;
         this.entry = entry;
         this.color = color;
-        super(0, 0, width - 4, height, Component.empty());
+    }
+
+    private boolean isHovered(double pMouseX, double pMouseY) {
+        int width = container.scrollable() ? this.width - 6 : this.width;
+        return pMouseX >= this.getX() && pMouseY >= this.getY() && pMouseX < this.getX() + width && pMouseY < this.getY() + this.height;
     }
 
     @Override
-    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
         int width = this.width;
         if (container.scrollable()) width = this.width - 6;
 
         if (color != null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, color);
-        if (this.isHovered) {
+        if (isHovered(mouseX, mouseY)) {
             if (CoreConfigScreen.activePopup == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
             if (HoveredEntry.value != entry) HoveredEntry.value = entry;
         } else {
@@ -54,7 +57,7 @@ public class CCButtonBoolean extends AbstractWidget {
             if (HoveredEntry.value == entry) HoveredEntry.value = null;
         }
 
-        graphics.text(
+        graphics.drawString(
             Minecraft.getInstance().font,
             Component.translatable(this.translation).withStyle(style -> style.withItalic(entry.getClientValue() != entry.getUnsavedValue())),
             this.getX() + 5,
@@ -63,9 +66,8 @@ public class CCButtonBoolean extends AbstractWidget {
             true
         );
         graphics.blit(
-            RenderPipelines.GUI_TEXTURED,
-            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, !Config.useSwitchTexture.getValue() ? (entry.getUnsavedValue() ? boolTrueImage : boolFalseImage) : (entry.getUnsavedValue() ? boolTrueImageSwitch : boolFalseImageSwitch)),
-            this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
+            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, !Config.useSwitchTexture.getValue() ? (entry.getUnsavedValue() ? boolTrueImage : boolFalseImage) : (entry.getUnsavedValue() ? boolTrueImageSwitch : boolFalseImageSwitch)),
+            this.getX() + width - 20,
             this.getY(),
             0, 0,
             19, 19,
@@ -75,9 +77,8 @@ public class CCButtonBoolean extends AbstractWidget {
         if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
-                RenderPipelines.GUI_TEXTURED,
-                Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
-                this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
+                ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                this.getX() + this.width - 20,
                 this.getY(),
                 0, 0,
                 19, 19,
@@ -91,8 +92,8 @@ public class CCButtonBoolean extends AbstractWidget {
     protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {}
 
     @Override
-    public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
-        super.onClick(event, doubleClick);
+    public void onClick(double pMouseX, double pMouseY) {
+        super.onClick(pMouseX, pMouseY);
         if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) entry.change(!entry.getUnsavedValue());
     }
 }

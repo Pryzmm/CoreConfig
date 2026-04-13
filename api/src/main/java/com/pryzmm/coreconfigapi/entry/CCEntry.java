@@ -9,5 +9,6 @@ import org.jetbrains.annotations.ApiStatus;
 public interface CCEntry {
 
     int priority();
+    String translation();
 
 }

@@ -4,21 +4,17 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.config.Config;
 import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
-import net.minecraft.resources.Identifier;
 import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.FloatEntry;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
@@ -32,20 +28,29 @@ public class CCButtonFloat extends AbstractWidget {
     private final EditBox editBox;
 
     public CCButtonFloat(FloatEntry entry, int width, int height, String translation, CCContainer assignedContainer, int hoverColor, Integer color) {
+        super(0, 0, width - 4, height, Component.empty());
         this.container = assignedContainer;
         this.translation = translation;
         this.hoverColor = hoverColor;
         this.entry = entry;
         this.color = color;
-        super(0, 0, width - 4, height, Component.empty());
 
         editBox = new EditBox(Minecraft.getInstance().font, 0, 0, 200, 20, Component.empty());
         editBox.insertText(entry.getUnsavedValue().toString());
         editBox.setMaxLength(256);
     }
 
+    private boolean isHovered(double pMouseX, double pMouseY) {
+        int width = container.scrollable() ? this.width - 6 : this.width;
+        return pMouseX >= this.getX() && pMouseY >= this.getY() && pMouseX < this.getX() + width && pMouseY < this.getY() + this.height;
+    }
+
+    public boolean isEditBoxFocused() {
+        return editBox.isFocused();
+    }
+
     @Override
-    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
         int width = this.width;
         if (container.scrollable()) width = this.width - 6;
 
@@ -60,7 +65,7 @@ public class CCButtonFloat extends AbstractWidget {
         try { value = Float.parseFloat(editBox.getValue()); canParse = true; } catch (Exception ignored) {}
 
         if (color != null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, color);
-        if (this.isHovered) {
+        if (isHovered(mouseX, mouseY)) {
             if (CoreConfigScreen.activePopup == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
             if (HoveredEntry.value != entry) HoveredEntry.value = entry;
         } else {
@@ -68,7 +73,7 @@ public class CCButtonFloat extends AbstractWidget {
             if (HoveredEntry.value == entry) HoveredEntry.value = null;
         }
 
-        graphics.text(
+        graphics.drawString(
             Minecraft.getInstance().font,
             Component.translatable(this.translation).withStyle(style -> style.withItalic(!equals(entry.getClientValue(), entry.getUnsavedValue()))),
             this.getX() + 5,
@@ -77,13 +82,12 @@ public class CCButtonFloat extends AbstractWidget {
             true
         );
 
-        editBox.extractRenderState(graphics, mouseX, mouseY, a);
+        editBox.renderWidget(graphics, mouseX, mouseY, a);
 
         if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
-                RenderPipelines.GUI_TEXTURED,
-                Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
                 this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
                 this.getY(),
                 0, 0,
@@ -107,34 +111,35 @@ public class CCButtonFloat extends AbstractWidget {
     protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {}
 
     @Override
-    public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
-        super.onClick(event, doubleClick);
+    public void onClick(double pMouseX, double pMouseY) {
+        super.onClick(pMouseX, pMouseY);
         if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) entry.change(entry.getUnsavedValue());
     }
 
-    public void updateFocus(MouseButtonEvent event) {
-        if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) editBox.setFocused(editBox.areCoordinatesInRectangle(event.x(), event.y()));
+    public void updateFocus(double pMouseX, double pMouseY) {
+        if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) editBox.setFocused(editBox.isMouseOver(pMouseX, pMouseY));
     }
 
     @Override
-    public boolean keyPressed(@NotNull KeyEvent event) {
-        editBox.keyPressed(event);
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        editBox.keyPressed(keyCode, scanCode, modifiers);
         entry.change(editBox.getValue());
-        if (event.isEscape() || event.input() == GLFW.GLFW_KEY_ENTER) editBox.setFocused(false);
-        return super.keyPressed(event);
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER) editBox.setFocused(false);
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
-    public boolean keyReleased(@NotNull KeyEvent event) {
-        editBox.keyReleased(event);
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        editBox.keyReleased(keyCode, scanCode, modifiers);
         entry.change(editBox.getValue());
-        return super.keyReleased(event);
+        return super.keyReleased(keyCode, scanCode, modifiers);
     }
 
     @Override
-    public boolean charTyped(@NotNull CharacterEvent event) {
-        editBox.charTyped(event);
+    public boolean charTyped(char codePoint, int modifiers) {
+        editBox.charTyped(codePoint, modifiers);
         entry.change(editBox.getValue());
-        return super.charTyped(event);
+        return super.charTyped(codePoint, modifiers);
     }
+
 }

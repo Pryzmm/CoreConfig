@@ -4,8 +4,8 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.network.INetworkHelper;
 import com.pryzmm.coreconfig.network.ServerHostPayload;
 import com.pryzmm.coreconfig.network.ServerSyncConfigPayload;
-import net.minecraft.resources.Identifier;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
@@ -36,7 +36,7 @@ public class ForgeNetworkHelper implements INetworkHelper {
         }
         registered = true;
 
-        channel = ChannelBuilder.named(Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "network"))
+        channel = ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "network"))
             .networkProtocolVersion(1)
             .payloadChannel()
             .play()

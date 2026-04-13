@@ -20,52 +20,46 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 @Mod("coreconfig")
-@EventBusSubscriber(modid = "coreconfig")
+@EventBusSubscriber(modid = "coreconfig", bus = EventBusSubscriber.Bus.GAME) // Game bus for ServerStarting, PlayerLoggedIn
 public class CoreConfigNeoforge {
 
     public static IEventBus eventBus;
 
     public CoreConfigNeoforge(IEventBus eventBus, ModContainer modContainer) {
         CoreConfigNeoforge.eventBus = eventBus;
+        modContainer.registerExtensionPoint(IConfigScreenFactory.class, (mc, screen) -> new CoreConfigScreen("coreconfig"));
     }
 
-    @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT)
+    @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD) // Mod bus — FMLClientSetupEvent is IModBusEvent
     public static class ClientModEvents {
 
-        @SubscribeEvent()
+        @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             CoreConfigCommon.initFirst();
-
             ConfigRegistrar.register(
-                CoreConfigConstants.MOD_ID,
-                "config.coreconfig.coreconfig",
-                "textures/config/banner.png",
-                "textures/config/icon.png",
-                0x11CAF3FF,
-                0x3384BAFF
+                    CoreConfigConstants.MOD_ID,
+                    "config.coreconfig.coreconfig",
+                    "textures/config/banner.png",
+                    "icon.png",
+                    0x11CAF3FF,
+                    0x3384BAFF
             );
             Config.register();
             CoreConfigCommon.init();
-
             Services.NETWORK.registerClientHandlers();
             Services.NETWORK.registerServerHandlers();
-
-            event.getContainer().registerExtensionPoint(IConfigScreenFactory.class, (mc, screen) -> new CoreConfigScreen("coreconfig"));
-
         }
-
     }
 
-    @EventBusSubscriber(modid = "coreconfig", value = Dist.DEDICATED_SERVER)
+    @EventBusSubscriber(modid = "coreconfig", value = Dist.DEDICATED_SERVER, bus = EventBusSubscriber.Bus.MOD) // Mod bus — FMLDedicatedServerSetupEvent is IModBusEvent
     public static class ServerModEvents {
 
-        @SubscribeEvent()
+        @SubscribeEvent
         public static void onServerSetup(FMLDedicatedServerSetupEvent event) {
             CoreConfigCommon.initFirst();
             CoreConfigCommon.init();
             Services.NETWORK.registerServerHandlers();
         }
-
     }
 
     @SubscribeEvent
@@ -78,5 +72,4 @@ public class CoreConfigNeoforge {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         if (HostManager.server != null && HostManager.server.isSameThread()) ServerPacketCommon.pushPackets(player);
     }
-
 }

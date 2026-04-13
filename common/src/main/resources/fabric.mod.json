@@ -6,7 +6,6 @@
   "description": "Common code for CoreConfig",
   "authors": ["pryzmm"],
   "environment": "*",
-  "icon": "assets/coreconfig/icon.png",
   "custom": {
     "modmenu": {
       "badges": [ "library" ]

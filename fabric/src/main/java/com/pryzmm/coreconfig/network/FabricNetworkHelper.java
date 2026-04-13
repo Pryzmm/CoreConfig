@@ -11,15 +11,15 @@ public class FabricNetworkHelper implements INetworkHelper {
 
     @Override
     public void registerPayloads() {
-        PayloadTypeRegistry.clientboundPlay().register(
+        PayloadTypeRegistry.playS2C().register(
             ServerHostPayload.ID,
             ServerHostPayload.CODEC
         );
-        PayloadTypeRegistry.clientboundPlay().register(
+        PayloadTypeRegistry.playS2C().register(
             ServerSyncConfigPayload.ID,
             ServerSyncConfigPayload.CODEC
         );
-        PayloadTypeRegistry.serverboundPlay().register(
+        PayloadTypeRegistry.playC2S().register(
             ServerSyncConfigPayload.ID,
             ServerSyncConfigPayload.CODEC
         );

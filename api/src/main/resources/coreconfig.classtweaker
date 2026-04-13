@@ -1,9 +1,0 @@
-classTweaker v1 official
-
-transitive-accessible field net/minecraft/client/gui/components/ScrollableLayout container Lnet/minecraft/client/gui/components/ScrollableLayout$Container;
-transitive-accessible class net/minecraft/client/gui/components/ScrollableLayout$Container
-transitive-accessible method net/minecraft/client/gui/components/AbstractWidget areCoordinatesInRectangle (DD)Z
-transitive-accessible method net/minecraft/client/gui/screens/Screen addRenderableWidget (Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;
-transitive-accessible field net/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil BACKGROUND_SPRITE Lnet/minecraft/resources/Identifier;
-transitive-accessible field net/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil FRAME_SPRITE Lnet/minecraft/resources/Identifier;
-transitive-accessible field net/minecraft/client/gui/GuiGraphicsExtractor scissorStack Lnet/minecraft/client/gui/GuiGraphicsExtractor$ScissorStack;
