@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +63,7 @@ public class CCListMod extends AbstractWidget {
         if (container.scrollable()) width = this.width - 6;
 
         ModData data = ModHolderUtil.getModData(modID);
-        if (data.bannerPath() != null) graphics.blit(ResourceLocation.fromNamespaceAndPath(data.modID(), data.bannerPath()), this.getX(), this.getY(), 0, 0, width, height, width, height);
+        if (data.bannerPath() != null) graphics.blit(RenderType::guiTextured, ResourceLocation.fromNamespaceAndPath(data.modID(), data.bannerPath()), this.getX(), this.getY(), 0, 0, width, height, width, height);
         if (this.isHovered && CoreConfigScreen.activePopup == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
         else if (data.bannerPath() == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x55000000);
 
@@ -75,6 +76,7 @@ public class CCListMod extends AbstractWidget {
             true
         );
         graphics.blit(
+            RenderType::guiTextured,
             ResourceLocation.fromNamespaceAndPath(modID, imagePath),
             this.getX() + 1,
             this.getY() + 1,

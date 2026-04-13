@@ -9,6 +9,7 @@ import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -128,11 +129,13 @@ public class CCTooltip {
         graphics.pose().translate(0, 0, 400);
 
         graphics.blitSprite(
+            RenderType::guiTextured,
             ResourceLocation.fromNamespaceAndPath("coreconfig", "ui/tooltip/background"),
             tooltipX, tooltipY, tooltipWidth, tooltipHeight
         );
 
         graphics.blitSprite(
+            RenderType::guiTextured,
             ResourceLocation.fromNamespaceAndPath("coreconfig", "ui/tooltip/frame"),
             tooltipX, tooltipY, tooltipWidth, tooltipHeight
         );
@@ -147,6 +150,7 @@ public class CCTooltip {
                 }
             }
             graphics.blit(
+                RenderType::guiTextured,
                 ResourceLocation.fromNamespaceAndPath(image.modID(), image.path()),
                 tooltipX + 12, tooltipY + 12,
                 0, frame * image.frameHeight(),

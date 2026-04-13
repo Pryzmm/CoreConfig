@@ -7,6 +7,7 @@ import com.pryzmm.coreconfigapi.entry.ColorEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +52,7 @@ public class ColorPopup extends AbstractPopup {
         graphics.pose().translate(0, 0, 400);
 
         graphics.blit(
+            RenderType::guiTextured,
             ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_background.png"),
             this.getX() + 1,
             this.getY() + 1,
@@ -61,6 +63,7 @@ public class ColorPopup extends AbstractPopup {
         graphics.fill(this.getX() + 1, this.getY() + 1, this.getX() + this.getWidth() - 1, this.getY() + 14, entry.allowAlpha() ? (alphaColor << 24) | (redColor << 16) | (greenColor << 8) | blueColor : 0xFF000000 | (redColor << 16) | (greenColor << 8) | blueColor);
 
         graphics.blit(
+            RenderType::guiTextured,
             ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 2) - offsetThing, this.getY() + 17,
             1, 1,
@@ -68,6 +71,7 @@ public class ColorPopup extends AbstractPopup {
             128, 110
         );
         graphics.blit(
+            RenderType::guiTextured,
             ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 2) - offsetThing,
             this.getY() + 18 + (int) Math.round((1 - (redColor / 255.0)) * 107),
@@ -77,6 +81,7 @@ public class ColorPopup extends AbstractPopup {
         );
 
         graphics.blit(
+            RenderType::guiTextured,
             ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 4) - offsetThing, this.getY() + 17,
             27, 1,
@@ -84,6 +89,7 @@ public class ColorPopup extends AbstractPopup {
             128, 110
         );
         graphics.blit(
+            RenderType::guiTextured,
             ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 4) - offsetThing,
             this.getY() + 18 + (int) Math.round((1 - (greenColor / 255.0)) * 107),
@@ -93,6 +99,7 @@ public class ColorPopup extends AbstractPopup {
         );
 
         graphics.blit(
+            RenderType::guiTextured,
             ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 6) - offsetThing, this.getY() + 17,
             53, 1,
@@ -100,6 +107,7 @@ public class ColorPopup extends AbstractPopup {
             128, 110
         );
         graphics.blit(
+            RenderType::guiTextured,
             ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 6) - offsetThing,
             this.getY() + 18 + (int) Math.round((1 - (blueColor / 255.0)) * 107),
@@ -110,6 +118,7 @@ public class ColorPopup extends AbstractPopup {
 
         if (entry.allowAlpha()) {
             graphics.blit(
+                RenderType::guiTextured,
                 ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
                 this.getX() + (this.width / multiThing * 8) - offsetThing, this.getY() + 17,
                 79, 1,
@@ -117,6 +126,7 @@ public class ColorPopup extends AbstractPopup {
                 128, 110
             );
             graphics.blit(
+                RenderType::guiTextured,
                 ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
                 this.getX() + (this.width / multiThing * 8) - offsetThing,
                 this.getY() + 18 + (int) Math.round((1 - (alphaColor / 255.0)) * 107),

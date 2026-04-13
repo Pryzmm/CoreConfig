@@ -6,6 +6,7 @@ import net.minecraft.client.gui.components.AbstractScrollWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -111,7 +112,7 @@ public class CCContainer implements CCElement {
                 int j = this.getX() + this.width - 6;
                 int k = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.getMaxScrollAmount() + this.getY());
                 RenderSystem.enableBlend();
-                pGuiGraphics.blitSprite(SCROLLER_SPRITE, j, k, 6, i);
+                pGuiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_SPRITE, j, k, 6, i);
                 RenderSystem.disableBlend();
             }
 

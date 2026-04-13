@@ -20,7 +20,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 @Mod("coreconfig")
-@EventBusSubscriber(modid = "coreconfig", bus = EventBusSubscriber.Bus.GAME) // Game bus for ServerStarting, PlayerLoggedIn
+@EventBusSubscriber(modid = "coreconfig") // Game bus for ServerStarting, PlayerLoggedIn
 public class CoreConfigNeoforge {
 
     public static IEventBus eventBus;
@@ -31,7 +31,7 @@ public class CoreConfigNeoforge {
         CoreConfigNeoforge.modContainer = modContainer;
     }
 
-    @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD) // Mod bus — FMLClientSetupEvent is IModBusEvent
+    @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT)
     public static class ClientModEvents {
 
         @SubscribeEvent
@@ -53,10 +53,6 @@ public class CoreConfigNeoforge {
             Services.NETWORK.registerClientHandlers();
             Services.NETWORK.registerServerHandlers();
         }
-    }
-
-    @EventBusSubscriber(modid = "coreconfig", value = Dist.DEDICATED_SERVER, bus = EventBusSubscriber.Bus.MOD) // Mod bus — FMLDedicatedServerSetupEvent is IModBusEvent
-    public static class ServerModEvents {
 
         @SubscribeEvent
         public static void onServerSetup(FMLDedicatedServerSetupEvent event) {

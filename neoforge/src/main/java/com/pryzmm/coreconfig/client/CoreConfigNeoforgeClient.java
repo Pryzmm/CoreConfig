@@ -20,7 +20,7 @@ public class CoreConfigNeoforgeClient {
 
     public static KeyMapping OPEN_CONFIG;
 
-    @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT)
     public static class ClientModEvents {
 
         @SubscribeEvent
@@ -33,11 +33,6 @@ public class CoreConfigNeoforgeClient {
             );
             event.register(OPEN_CONFIG);
         }
-
-    }
-
-    @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
-    public static class ClientGameModEvents {
 
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
