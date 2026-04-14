@@ -103,9 +103,7 @@ public class CCContainer implements CCElement {
                 int i = getScrollbarHeight();
                 int j = this.getX() + this.width - 6;
                 int k = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.maxScrollAmount() + this.getY());
-                RenderSystem.enableBlend();
                 pGuiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_SPRITE, j, k, 6, i);
-                RenderSystem.disableBlend();
             }
 
         }
@@ -117,7 +115,7 @@ public class CCContainer implements CCElement {
                 else if (pMouseY > (double)(this.getY() + this.height)) this.setScrollAmount(this.maxScrollAmount());
                 else {
                     int i = getScrollbarHeight();
-                    double d0 = Math.max(1, this.maxScrollAmount() / (this.height - i));
+                    double d0 = Math.max(1, this.maxScrollAmount() / Math.max(this.height - i, 1));
                     this.setScrollAmount(this.scrollAmount() + pDragY * d0);
                 }
                 return true;

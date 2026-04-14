@@ -132,8 +132,6 @@ public class CCTooltip {
         boolean hadScissor;
         try { graphics.disableScissor(); hadScissor = true; } catch (IllegalStateException ignored) { hadScissor = false; }
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
         graphics.pose().pushPose();
         graphics.pose().translate(0, 0, 400);
 
@@ -180,7 +178,6 @@ public class CCTooltip {
         }
 
         graphics.pose().popPose();
-        RenderSystem.disableBlend();
 
         if (hadScissor) graphics.enableScissor(
                 container.getX(), container.getY(),
