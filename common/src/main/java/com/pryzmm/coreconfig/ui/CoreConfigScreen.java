@@ -91,8 +91,10 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
                     case IntegerEntry integerEntry -> configWidgets.add(new CCButtonInteger(integerEntry, configContainer.getWidth(), 20, integerEntry.translation(),  configContainer, integerEntry.hoverColor() != null ? integerEntry.hoverColor() : 0x55000000, data.buttonColor()));
                     case FloatEntry   floatEntry   -> configWidgets.add(new CCButtonFloat(floatEntry,     configContainer.getWidth(), 20, floatEntry.translation(),    configContainer, floatEntry.hoverColor()   != null ? floatEntry.hoverColor()   : 0x55000000, data.buttonColor()));
                     case DoubleEntry  doubleEntry  -> configWidgets.add(new CCButtonDouble(doubleEntry,   configContainer.getWidth(), 20, doubleEntry.translation(),   configContainer, doubleEntry.hoverColor()  != null ? doubleEntry.hoverColor()  : 0x55000000, data.buttonColor()));
+                    case LongEntry    longEntry    -> configWidgets.add(new CCButtonLong(longEntry,       configContainer.getWidth(), 20, longEntry.translation(),     configContainer, longEntry.hoverColor()    != null ? longEntry.hoverColor()    : 0x55000000, data.buttonColor()));
                     case ColorEntry   colorEntry   -> configWidgets.add(new CCButtonColor(colorEntry,     configContainer.getWidth(), 20, colorEntry.translation(),    configContainer, colorEntry.hoverColor()   != null ? colorEntry.hoverColor()   : 0x55000000, data.buttonColor()));
                     case WebsiteEntry websiteEntry -> configWidgets.add(new CCButtonWebsite(websiteEntry, configContainer.getWidth(), 20, websiteEntry.translation(),  configContainer, websiteEntry.hoverColor() != null ? websiteEntry.hoverColor() : 0x55000000, data.buttonColor()));
+                    case EnumEntry    enumEntry    -> configWidgets.add(new CCButtonEnum(enumEntry,       configContainer.getWidth(), 20, enumEntry.translation(),     configContainer, enumEntry.hoverColor()    != null ? enumEntry.hoverColor()    : 0x55000000, data.buttonColor()));
                     case CustomEntry  customEntry  -> configWidgets.add(new CCButtonCustom(customEntry,   configContainer.getWidth(), 20, customEntry.translation(),   configContainer, customEntry.hoverColor()  != null ? customEntry.hoverColor()  : 0x55000000, data.buttonColor()));
                     case DividerEntry dividerEntry -> configWidgets.add(new CCDivider(dividerEntry, configContainer.getWidth(), configWidgets.isEmpty() ? 20 : 30, dividerEntry.translation(), configContainer, dividerEntry.textColor()));
                     case null, default -> CoreConfigConstants.LOGGER.warn("Unsupported config entry type: {}", entry == null ? "null" : entry.getClass());
@@ -153,6 +155,7 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
             else if (widget instanceof CCButtonInteger integerWidget) integerWidget.updateFocus(pMouseX, mouseYOptions);
             else if (widget instanceof CCButtonFloat floatWidget) floatWidget.updateFocus(pMouseX, mouseYOptions);
             else if (widget instanceof CCButtonDouble doubleWidget) doubleWidget.updateFocus(pMouseX, mouseYOptions);
+            else if (widget instanceof CCButtonLong longWidget) longWidget.updateFocus(pMouseX, mouseYOptions);
             if (!(widget instanceof CCDivider)) widget.mouseClicked(pMouseX, mouseYOptions, button);
         }
         for (AbstractWidget widget : modListWidgets) widget.mouseClicked(pMouseX, mouseYModList, button);
@@ -167,10 +170,11 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
         }
         if (keyCode == InputConstants.KEY_ESCAPE) {
             boolean anyFocused = configWidgets.stream().anyMatch(w ->
-                (w instanceof CCButtonFloat f && f.isEditBoxFocused()) ||
-                (w instanceof CCButtonString s && s.isEditBoxFocused()) ||
-                (w instanceof CCButtonInteger i && i.isEditBoxFocused()) ||
-                (w instanceof CCButtonDouble d && d.isEditBoxFocused())
+                    (w instanceof CCButtonFloat f && f.isEditBoxFocused()) ||
+                            (w instanceof CCButtonString s && s.isEditBoxFocused()) ||
+                            (w instanceof CCButtonInteger i && i.isEditBoxFocused()) ||
+                            (w instanceof CCButtonDouble d && d.isEditBoxFocused()) ||
+                            (w instanceof CCButtonLong l && l.isEditBoxFocused())
             );
             if (!anyFocused) return exitButton.mouseClicked(exitButton.getX() + 1, exitButton.getY() + 1, 0);
         }
@@ -194,11 +198,11 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
     public void renderBackground(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
         super.renderBackground(graphics, mouseX, mouseY, a);
         containers.forEach(container -> graphics.fill(
-            container.getX(),
-            container.getY(),
-            container.getX() + container.getWidth(),
-            container.getY() + container.getHeight(),
-            container.getColor() != null ? container.getColor() : 0x551A1A1A
+                container.getX(),
+                container.getY(),
+                container.getX() + container.getWidth(),
+                container.getY() + container.getHeight(),
+                container.getColor() != null ? container.getColor() : 0x551A1A1A
         ));
     }
 

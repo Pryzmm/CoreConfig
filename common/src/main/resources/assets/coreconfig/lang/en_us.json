@@ -28,6 +28,7 @@
   "error.coreconfig.not_int": "§cValue must be an integer!",
   "error.coreconfig.not_float": "§cValue must be a float!",
   "error.coreconfig.not_double": "§cValue must be a double!",
+  "error.coreconfig.not_long": "§cValue must be a long!",
   "error.coreconfig.lower_than_min": "§cValue is lower than the minimum!\n§f(%s < %s)",
   "error.coreconfig.higher_than_max": "§cValue is higher than the maximum!\n§f(%s > %s)",
   "error.coreconfig.lower_than_min_string": "§cLength is smaller than the minimum size!\n§f(%s < %s)",
