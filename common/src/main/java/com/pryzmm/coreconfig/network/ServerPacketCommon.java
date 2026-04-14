@@ -61,9 +61,17 @@ public class ServerPacketCommon {
                     Float val = floatEntry.getClientValue();
                     if (val != null) values.put(floatEntry.translation(), val);
                 }
+                case LongEntry longEntry -> {
+                    Long val = longEntry.getClientValue();
+                    if (val != null) values.put(longEntry.translation(), val);
+                }
                 case ColorEntry colorEntry -> {
                     Integer val = colorEntry.getClientValue();
                     if (val != null) values.put(colorEntry.translation(), val);
+                }
+                case EnumEntry enumEntry -> {
+                    Enum<?> val = enumEntry.getClientValue();
+                    if (val != null) values.put(enumEntry.translation(), val.name());
                 }
                 default -> {}
             }
