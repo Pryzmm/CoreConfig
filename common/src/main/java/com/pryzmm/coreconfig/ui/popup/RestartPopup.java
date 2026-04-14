@@ -31,8 +31,8 @@ public class RestartPopup extends AbstractPopup {
         if (this.minecraft == null) return;
         Component title = Component.translatable("ui.coreconfig.restart_required");
 
-        graphics.pose().pushPose();
-        graphics.pose().translate(0, 0, 400);
+        graphics.pose().pushMatrix();
+        graphics.nextStratum();
 
         graphics.drawString(
             minecraft.font,
@@ -58,7 +58,7 @@ public class RestartPopup extends AbstractPopup {
             lineY += minecraft.font.lineHeight;
         }
         button.renderWidget(graphics, mouseX, mouseY, a);
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
     }
 
     @Override

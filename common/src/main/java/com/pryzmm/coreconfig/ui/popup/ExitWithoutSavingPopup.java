@@ -39,8 +39,8 @@ public class ExitWithoutSavingPopup extends AbstractPopup {
         if (this.minecraft == null) return;
         Component title = Component.translatable("ui.coreconfig.exit_without_saving");
 
-        graphics.pose().pushPose();
-        graphics.pose().translate(0, 0, 400);
+        graphics.pose().pushMatrix();
+        graphics.nextStratum();
 
         graphics.drawString(
             minecraft.font,
@@ -67,7 +67,7 @@ public class ExitWithoutSavingPopup extends AbstractPopup {
         }
         confirmButton.renderWidget(graphics, mouseX, mouseY, a);
         cancelButton.renderWidget(graphics, mouseX, mouseY, a);
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
     }
 
     @Override

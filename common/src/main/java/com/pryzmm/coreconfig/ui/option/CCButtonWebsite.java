@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +60,7 @@ public class CCButtonWebsite extends AbstractWidget {
             true
         );
         graphics.blit(
-            RenderType::guiTextured,
+            RenderPipelines.GUI_TEXTURED,
             ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/goto_website.png"),
             this.getX() + width - 16,
             this.getY() + 4,

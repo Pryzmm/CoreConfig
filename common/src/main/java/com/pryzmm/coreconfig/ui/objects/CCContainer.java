@@ -1,17 +1,15 @@
 package com.pryzmm.coreconfig.ui.objects;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractTextAreaWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -103,7 +101,7 @@ public class CCContainer implements CCElement {
                 int i = getScrollbarHeight();
                 int j = this.getX() + this.width - 6;
                 int k = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.maxScrollAmount() + this.getY());
-                pGuiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_SPRITE, j, k, 6, i);
+                pGuiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_SPRITE, j, k, 6, i);
             }
 
         }

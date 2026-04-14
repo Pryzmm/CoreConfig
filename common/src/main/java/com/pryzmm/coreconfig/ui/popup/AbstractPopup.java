@@ -22,13 +22,13 @@ public class AbstractPopup extends AbstractWidget {
 
     @Override
     protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
-        graphics.pose().pushPose();
-        graphics.pose().translate(0, 0, 400);
+        graphics.pose().pushMatrix();
+        graphics.nextStratum();
         graphics.fill(0, 0, screen.width, screen.height, 0x99443333);
         graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x88444444);
         graphics.fill(this.getX(), this.getY() + 14, this.getX() + this.getWidth(), this.getY() + 15, 0xFFFFFFFF);
         graphics.renderOutline(this.getX(), this.getY(), this.width, this.height, 0xCC666666);
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
     }
 
     @Override

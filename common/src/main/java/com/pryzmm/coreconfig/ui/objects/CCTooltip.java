@@ -1,6 +1,5 @@
 package com.pryzmm.coreconfig.ui.objects;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import com.pryzmm.coreconfig.network.Server;
@@ -8,7 +7,7 @@ import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -132,17 +131,17 @@ public class CCTooltip {
         boolean hadScissor;
         try { graphics.disableScissor(); hadScissor = true; } catch (IllegalStateException ignored) { hadScissor = false; }
 
-        graphics.pose().pushPose();
-        graphics.pose().translate(0, 0, 400);
+        graphics.pose().pushMatrix();
+        graphics.nextStratum();
 
         graphics.blitSprite(
-            RenderType::guiTextured,
+            RenderPipelines.GUI_TEXTURED,
             ResourceLocation.fromNamespaceAndPath("coreconfig", "ui/tooltip/background"),
             tooltipX, tooltipY, tooltipWidth, tooltipHeight
         );
 
         graphics.blitSprite(
-            RenderType::guiTextured,
+            RenderPipelines.GUI_TEXTURED,
             ResourceLocation.fromNamespaceAndPath("coreconfig", "ui/tooltip/frame"),
             tooltipX, tooltipY, tooltipWidth, tooltipHeight
         );
@@ -157,7 +156,7 @@ public class CCTooltip {
                 }
             }
             graphics.blit(
-                RenderType::guiTextured,
+                RenderPipelines.GUI_TEXTURED,
                 ResourceLocation.fromNamespaceAndPath(image.modID(), image.path()),
                 tooltipX + 12, tooltipY + 12,
                 0, frame * image.frameHeight(),
@@ -177,7 +176,7 @@ public class CCTooltip {
             textY += minecraft.font.lineHeight + 2;
         }
 
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
 
         if (hadScissor) graphics.enableScissor(
                 container.getX(), container.getY(),
