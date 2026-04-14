@@ -2,7 +2,6 @@ package com.pryzmm.coreconfig.network;
 
 import com.pryzmm.coreconfig.CoreConfigConstants;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +34,9 @@ public class BufferHelper {
                 } case Boolean b -> {
                     buf.writeByte(4);
                     buf.writeBoolean(b);
+                } case Long l -> {
+                    buf.writeByte(5);
+                    buf.writeLong(l);
                 } default -> throw new IllegalArgumentException("Unsupported type: " + value.getClass());
             }
         }
@@ -57,8 +59,9 @@ public class BufferHelper {
                 case 2 -> value = buf.readFloat();
                 case 3 -> value = buf.readDouble();
                 case 4 -> value = buf.readBoolean();
+                case 5 -> value = buf.readLong();
                 default -> CoreConfigConstants.LOGGER.error("Unknown type: {}", type);
-            };
+            }
             if (value != null) list.add(new Entry(id, path, value));
         }
 
