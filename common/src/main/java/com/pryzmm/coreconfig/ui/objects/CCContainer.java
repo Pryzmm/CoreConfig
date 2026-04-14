@@ -2,7 +2,7 @@ package com.pryzmm.coreconfig.ui.objects;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractScrollWidget;
+import net.minecraft.client.gui.components.AbstractTextAreaWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -59,22 +59,14 @@ public class CCContainer implements CCElement {
     }
 
     public boolean scrollable() {
-        return scrollWidget.getMaxScrollAmount() > 0;
+        return scrollWidget.maxScrollAmount() > 0;
     }
 
     public InnerScrollWidget getLayout() {
         return scrollWidget;
     }
 
-    public static class InnerScrollWidget extends AbstractScrollWidget {
-
-        private static Field SCROLLING_FIELD = null;
-        static {
-            try {
-                SCROLLING_FIELD = AbstractScrollWidget.class.getDeclaredField("scrolling");
-                SCROLLING_FIELD.setAccessible(true);
-            } catch (Exception ignored) {}
-        }
+    public static class InnerScrollWidget extends AbstractTextAreaWidget {
 
         private final LinearLayout content;
 
@@ -110,7 +102,7 @@ public class CCContainer implements CCElement {
             if (this.scrollbarVisible()) {
                 int i = getScrollbarHeight();
                 int j = this.getX() + this.width - 6;
-                int k = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.getMaxScrollAmount() + this.getY());
+                int k = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.maxScrollAmount() + this.getY());
                 RenderSystem.enableBlend();
                 pGuiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_SPRITE, j, k, 6, i);
                 RenderSystem.disableBlend();
@@ -120,41 +112,21 @@ public class CCContainer implements CCElement {
 
         @Override
         public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-            try {
-                if (this.visible && this.isFocused() && SCROLLING_FIELD != null && (boolean) SCROLLING_FIELD.get(this)) {
-                    if (pMouseY < (double)this.getY()) this.setScrollAmount(0.0F);
-                    else if (pMouseY > (double)(this.getY() + this.height)) this.setScrollAmount(this.getMaxScrollAmount());
-                    else {
-                        int i = getScrollbarHeight();
-                        double d0 = Math.max(1, this.getMaxScrollAmount() / (this.height - i));
-                        this.setScrollAmount(this.scrollAmount() + pDragY * d0);
-                    }
-                    return true;
-                } else return false;
-            } catch (IllegalAccessException ignored) {}
-            return false;
+            if (this.visible && this.isFocused()) {
+                if (pMouseY < (double)this.getY()) this.setScrollAmount(0.0F);
+                else if (pMouseY > (double)(this.getY() + this.height)) this.setScrollAmount(this.maxScrollAmount());
+                else {
+                    int i = getScrollbarHeight();
+                    double d0 = Math.max(1, this.maxScrollAmount() / (this.height - i));
+                    this.setScrollAmount(this.scrollAmount() + pDragY * d0);
+                }
+                return true;
+            } else return false;
         }
 
         @Override
         protected void renderContents(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
             content.visitWidgets(widget -> widget.render(guiGraphics, mouseX, (int) (mouseY + scrollAmount()), partialTick));
-        }
-
-        public int getMaxScrollAmount() {
-            return super.getMaxScrollAmount();
-        }
-
-        @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            boolean isScrolling = this.scrollbarVisible() && mouseX >= (double)(this.getX() + this.width - 6) && mouseX <= (double)(this.getX() + this.width) && mouseY >= (double)this.getY() && mouseY < (double)(this.getY() + this.height);
-            if (isScrolling) try { SCROLLING_FIELD.setBoolean(this, true); } catch (Exception ignored) {}
-            return super.mouseClicked(mouseX, mouseY, button);
-        }
-
-        @Override
-        public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-            if (pButton == 0) try { SCROLLING_FIELD.setBoolean(this, true); } catch (Exception ignored) {}
-            return super.mouseReleased(pMouseX, pMouseY, pButton);
         }
 
         @Override
