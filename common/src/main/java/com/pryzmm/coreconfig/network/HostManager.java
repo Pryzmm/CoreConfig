@@ -22,6 +22,7 @@ public class HostManager {
 
     public static void clear() {
         hostUUID = null;
+        CommonClientNetworkHandler.clearServerConfig();
     }
 
     public static void setHostKey(String key) {
