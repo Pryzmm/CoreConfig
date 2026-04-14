@@ -19,6 +19,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
@@ -137,56 +141,55 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
     }
 
     @Override
-    public boolean mouseReleased(double pMouseX, double pMouseY, int button) {
-        if (activePopup instanceof ColorPopup popup) popup.mouseReleased(pMouseX, pMouseY, button);
-        return super.mouseReleased(pMouseX, pMouseY, button);
+    public boolean mouseReleased(@NotNull MouseButtonEvent event) {
+        if (activePopup instanceof ColorPopup popup) popup.mouseReleased(event);
+        return super.mouseReleased(event);
     }
 
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int button) {
+    public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClick) {
         if (activePopup != null) {
-            if (activePopup.isMouseOver(pMouseX, pMouseY)) activePopup.mouseClicked(pMouseX, pMouseY, button);
+            if (activePopup.isMouseOver(event.x(), event.y())) activePopup.mouseClicked(event, doubleClick);
             return false;
         }
-        double mouseYModList = pMouseY + modListContainer.getLayout().getScrollAmount();
-        double mouseYOptions = pMouseY + configContainer.getLayout().getScrollAmount();
+        double mouseYOptions = event.y() + configContainer.getLayout().getScrollAmount();
         for (AbstractWidget widget : configWidgets) {
-            if (widget instanceof CCButtonString stringWidget) stringWidget.updateFocus(pMouseX, mouseYOptions);
-            else if (widget instanceof CCButtonInteger integerWidget) integerWidget.updateFocus(pMouseX, mouseYOptions);
-            else if (widget instanceof CCButtonFloat floatWidget) floatWidget.updateFocus(pMouseX, mouseYOptions);
-            else if (widget instanceof CCButtonDouble doubleWidget) doubleWidget.updateFocus(pMouseX, mouseYOptions);
-            else if (widget instanceof CCButtonLong longWidget) longWidget.updateFocus(pMouseX, mouseYOptions);
-            if (!(widget instanceof CCDivider)) widget.mouseClicked(pMouseX, mouseYOptions, button);
+            if (widget instanceof CCButtonString stringWidget) stringWidget.updateFocus(event.x(), mouseYOptions);
+            else if (widget instanceof CCButtonInteger integerWidget) integerWidget.updateFocus(event.x(), mouseYOptions);
+            else if (widget instanceof CCButtonFloat floatWidget) floatWidget.updateFocus(event.x(), mouseYOptions);
+            else if (widget instanceof CCButtonDouble doubleWidget) doubleWidget.updateFocus(event.x(), mouseYOptions);
+            else if (widget instanceof CCButtonLong longWidget) longWidget.updateFocus(event.x(), mouseYOptions);
+            if (!(widget instanceof CCDivider)) widget.mouseClicked(event, doubleClick);
         }
-        for (AbstractWidget widget : modListWidgets) widget.mouseClicked(pMouseX, mouseYModList, button);
-        return super.mouseClicked(pMouseX, pMouseY, button);
+        for (AbstractWidget widget : modListWidgets) widget.mouseClicked(event, doubleClick);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(@NotNull KeyEvent event) {
         if (activePopup != null) {
-            activePopup.keyPressed(keyCode, scanCode, modifiers);
+            activePopup.keyPressed(event);
             return false;
         }
-        if (keyCode == InputConstants.KEY_ESCAPE) {
+        if (event.isEscape()) {
             boolean anyFocused = configWidgets.stream().anyMatch(w ->
                     (w instanceof CCButtonFloat f && f.isEditBoxFocused()) ||
-                            (w instanceof CCButtonString s && s.isEditBoxFocused()) ||
-                            (w instanceof CCButtonInteger i && i.isEditBoxFocused()) ||
-                            (w instanceof CCButtonDouble d && d.isEditBoxFocused()) ||
-                            (w instanceof CCButtonLong l && l.isEditBoxFocused())
+                    (w instanceof CCButtonString s && s.isEditBoxFocused()) ||
+                    (w instanceof CCButtonInteger i && i.isEditBoxFocused()) ||
+                    (w instanceof CCButtonDouble d && d.isEditBoxFocused()) ||
+                    (w instanceof CCButtonLong l && l.isEditBoxFocused())
             );
-            if (!anyFocused) return exitButton.mouseClicked(exitButton.getX() + 1, exitButton.getY() + 1, 0);
+            if (!anyFocused) return exitButton.mouseClicked(new MouseButtonEvent(exitButton.getX() + 1, exitButton.getY() + 1, new MouseButtonInfo(0, 0)), false);
         }
-        for (AbstractWidget widget : configWidgets) widget.keyPressed(keyCode, scanCode, modifiers);
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        for (AbstractWidget widget : configWidgets) widget.keyPressed(event);
+        return super.keyPressed(event);
     }
 
     @Override
-    public boolean charTyped(char codePoint, int modifiers) {
+    public boolean charTyped(@NotNull CharacterEvent event) {
         if (activePopup != null) return false;
-        for (AbstractWidget widget : configWidgets) widget.charTyped(codePoint, modifiers);
-        return super.charTyped(codePoint, modifiers);
+        for (AbstractWidget widget : configWidgets) widget.charTyped(event);
+        return super.charTyped(event);
     }
 
     public void acceptClosedPopup() {

@@ -7,6 +7,7 @@ import com.pryzmm.coreconfigapi.entry.ColorEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -176,15 +177,15 @@ public class ColorPopup extends AbstractPopup {
     private ColorComponent grabbedComponent = null;
 
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        if (button.isMouseOver(pMouseX, pMouseY)) button.mouseClicked(pMouseX, pMouseY, pButton);
-        grabbedComponent = getComponentFromCoords(pMouseX, pMouseY);
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (button.isMouseOver(event.x(), event.y())) button.mouseClicked(event, doubleClick);
+        grabbedComponent = getComponentFromCoords(event.x(), event.y());
         return true;
     }
 
     @Override
-    public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-        if (button.isMouseOver(pMouseX, pMouseY)) button.mouseReleased(pMouseX, pMouseY, pButton);
+    public boolean mouseReleased(MouseButtonEvent event) {
+        if (button.isMouseOver(event.x(), event.y())) button.mouseReleased(event);
         grabbedComponent = null;
         return true;
     }

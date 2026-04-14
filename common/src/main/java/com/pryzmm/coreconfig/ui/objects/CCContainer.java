@@ -5,6 +5,7 @@ import net.minecraft.client.gui.components.AbstractTextAreaWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -96,7 +97,7 @@ public class CCContainer implements CCElement {
 
         private static final ResourceLocation SCROLLER_SPRITE = ResourceLocation.withDefaultNamespace("widget/scroller");
         @Override
-        protected void renderDecorations(@NotNull GuiGraphics pGuiGraphics) {
+        protected void renderScrollbar(@NotNull GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
             if (this.scrollbarVisible()) {
                 int i = getScrollbarHeight();
                 int j = this.getX() + this.width - 6;
@@ -107,10 +108,10 @@ public class CCContainer implements CCElement {
         }
 
         @Override
-        public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+        public boolean mouseDragged(@NotNull MouseButtonEvent event, double pDragX, double pDragY) {
             if (this.visible && this.isFocused()) {
-                if (pMouseY < (double)this.getY()) this.setScrollAmount(0.0F);
-                else if (pMouseY > (double)(this.getY() + this.height)) this.setScrollAmount(this.maxScrollAmount());
+                if (event.y() < (double)this.getY()) this.setScrollAmount(0.0F);
+                else if (event.y() > (double)(this.getY() + this.height)) this.setScrollAmount(this.maxScrollAmount());
                 else {
                     int i = getScrollbarHeight();
                     double d0 = Math.max(1, this.maxScrollAmount() / Math.max(this.height - i, 1));

@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,8 +67,8 @@ public class CCButton extends AbstractWidget implements CCElement {
     }
 
     @Override
-    public void onClick(double pMouseX, double pMouseY) {
-        super.onClick(pMouseX, pMouseY);
+    public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
+        super.onClick(event, doubleClick);
         if (isSaveButton && EntryHolder.containsAnyInvalidConfigs()) return;
         runnable.run();
     }

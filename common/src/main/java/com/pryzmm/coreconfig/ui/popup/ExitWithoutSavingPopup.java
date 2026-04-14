@@ -6,6 +6,7 @@ import com.pryzmm.coreconfig.ui.objects.CCButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
@@ -71,9 +72,9 @@ public class ExitWithoutSavingPopup extends AbstractPopup {
     }
 
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        if (confirmButton.isMouseOver(pMouseX, pMouseY)) confirmButton.mouseClicked(pMouseX, pMouseY, pButton);
-        if (cancelButton.isMouseOver(pMouseX, pMouseY)) cancelButton.mouseClicked(pMouseX, pMouseY, pButton);
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (confirmButton.isMouseOver(event.x(), event.y())) confirmButton.mouseClicked(event, doubleClick);
+        if (cancelButton.isMouseOver(event.x(), event.y())) cancelButton.mouseClicked(event, doubleClick);
         return true;
     }
 

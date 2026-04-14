@@ -5,6 +5,7 @@ import com.pryzmm.coreconfig.ui.objects.CCButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
@@ -62,8 +63,8 @@ public class RestartPopup extends AbstractPopup {
     }
 
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        if (button.isMouseOver(pMouseX, pMouseY)) button.mouseClicked(pMouseX, pMouseY, pButton);
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (button.isMouseOver(event.x(), event.y())) button.mouseClicked(event, doubleClick);
         return true;
     }
 

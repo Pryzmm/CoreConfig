@@ -13,6 +13,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -113,8 +116,8 @@ public class CCButtonInteger extends AbstractWidget {
     protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {}
 
     @Override
-    public void onClick(double pMouseX, double pMouseY) {
-        super.onClick(pMouseX, pMouseY);
+    public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
+        super.onClick(event, doubleClick);
         if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) entry.change(entry.getUnsavedValue());
     }
 
@@ -123,25 +126,25 @@ public class CCButtonInteger extends AbstractWidget {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        editBox.keyPressed(keyCode, scanCode, modifiers);
+    public boolean keyPressed(@NotNull KeyEvent event) {
+        editBox.keyPressed(event);
         entry.change(editBox.getValue());
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER) editBox.setFocused(false);
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        if (event.isEscape() || event.isConfirmation()) editBox.setFocused(false);
+        return super.keyPressed(event);
     }
 
     @Override
-    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        editBox.keyReleased(keyCode, scanCode, modifiers);
+    public boolean keyReleased(@NotNull KeyEvent event) {
+        editBox.keyReleased(event);
         entry.change(editBox.getValue());
-        return super.keyReleased(keyCode, scanCode, modifiers);
+        return super.keyReleased(event);
     }
 
     @Override
-    public boolean charTyped(char codePoint, int modifiers) {
-        editBox.charTyped(codePoint, modifiers);
+    public boolean charTyped(@NotNull CharacterEvent event) {
+        editBox.charTyped(event);
         entry.change(editBox.getValue());
-        return super.charTyped(codePoint, modifiers);
+        return super.charTyped(event);
     }
 
 }

@@ -5,6 +5,7 @@ import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.ui.CoreConfig;
 import com.pryzmm.coreconfig.network.HostManager;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -29,7 +30,7 @@ public class CoreConfigNeoforgeClient {
                 "key.coreconfig.open_config",
                 InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_INSERT,
-                "config.coreconfig.coreconfig"
+                new KeyMapping.Category(ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "coreconfig"))
             );
             event.register(OPEN_CONFIG);
         }

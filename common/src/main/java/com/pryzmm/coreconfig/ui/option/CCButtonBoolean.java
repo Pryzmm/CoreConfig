@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -95,8 +96,8 @@ public class CCButtonBoolean extends AbstractWidget {
     protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {}
 
     @Override
-    public void onClick(double pMouseX, double pMouseY) {
-        super.onClick(pMouseX, pMouseY);
+    public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
+        super.onClick(event, doubleClick);
         if (entry.type() != ConfigType.SERVER || Server.isHostingServer()) entry.change(!entry.getUnsavedValue());
     }
 }
