@@ -68,7 +68,6 @@ public class CCFileHandler extends CCFile implements ConfigRegistrar {
         CCFileHandler.serverConfigs.put(modName, configMap);
     }
 
-
     private static boolean saveConfig(String modName, File configFile) throws Exception {
         boolean requiresRestart = false;
         List<String> existingLines;
@@ -82,9 +81,9 @@ public class CCFileHandler extends CCFile implements ConfigRegistrar {
                 String key = entry.translation() + ":";
                 String newLine = key + entry.getUnsavedValue();
                 String oldLine = existingLines.stream()
-                    .filter(l -> l.startsWith(key))
-                    .findFirst()
-                    .orElse(null);
+                        .filter(l -> l.startsWith(key))
+                        .findFirst()
+                        .orElse(null);
                 if (oldLine != null) {
                     String oldValue = oldLine.substring(oldLine.indexOf(":") + 1).trim();
                     String newValue = String.valueOf(entry.getUnsavedValue());
@@ -103,22 +102,25 @@ public class CCFileHandler extends CCFile implements ConfigRegistrar {
     }
 
     @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> T getConfigValue(String modName, String translation, Class<T> clazz) {
         File configFile = getConfigFile(modName);
         if (!configFile.exists()) return null;
         try (BufferedReader reader = new BufferedReader(new FileReader(configFile))) {
             String line = reader.lines()
-                .filter(l -> l.startsWith(translation + ":"))
-                .findFirst()
-                .orElse(null);
+                    .filter(l -> l.startsWith(translation + ":"))
+                    .findFirst()
+                    .orElse(null);
             if (line == null) return null;
             String valueStr = line.substring(line.indexOf(":") + 1).trim();
             Object value;
-            if (clazz == Boolean.class)      value = Boolean.parseBoolean(valueStr);
-            else if (clazz == String.class)  value = valueStr;
+            if      (clazz == Boolean.class) value = Boolean.parseBoolean(valueStr);
+            else if (clazz ==  String.class) value = valueStr;
             else if (clazz == Integer.class) value = Integer.parseInt(valueStr);
-            else if (clazz == Float.class)   value = Float.parseFloat(valueStr);
-            else if (clazz == Double.class)  value = Double.parseDouble(valueStr);
+            else if (clazz ==   Float.class) value = Float.parseFloat(valueStr);
+            else if (clazz ==  Double.class) value = Double.parseDouble(valueStr);
+            else if (clazz ==    Long.class) value = Long.parseLong(valueStr);
+            else if (clazz.        isEnum()) value = Enum.valueOf((Class<Enum>) clazz, valueStr);
             else {
                 Constants.LOGGER.error("Unsupported config type: {}", clazz.getName());
                 return null;
@@ -135,11 +137,14 @@ public class CCFileHandler extends CCFile implements ConfigRegistrar {
     public static Map<String, Map<String, Object>> serverConfigs = new HashMap<>();
 
     @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> T getServerValue(String modName, String translation, Class<T> clazz) {
         Map<String, Object> config = serverConfigs.get(modName);
-        if (config == null) return null; // assume its client sided
-        //noinspection unchecked
-        return (T) config.get(translation);
+        if (config == null) return null;
+        Object raw = config.get(translation);
+        if (raw == null) return null;
+        if (clazz.isEnum() && raw instanceof String valueStr)
+            return clazz.cast(Enum.valueOf((Class<Enum>) clazz, valueStr));
+        return (T) raw;
     }
-
 }
