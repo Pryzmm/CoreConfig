@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public record ServerHostPayload(UUID uuid, String hostKey) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<@NotNull ServerHostPayload> ID = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("coreconfig", "server_host"));
+    public static final CustomPacketPayload.Type<@NotNull ServerHostPayload> ID = new CustomPacketPayload.Type<>(new ResourceLocation("coreconfig", "server_host"));
 
     public static final StreamCodec<@NotNull FriendlyByteBuf, @NotNull ServerHostPayload> CODEC = CustomPacketPayload.codec(ServerHostPayload::write, ServerHostPayload::read);
 

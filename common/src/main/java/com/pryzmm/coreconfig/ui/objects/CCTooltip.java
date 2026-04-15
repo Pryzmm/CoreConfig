@@ -137,12 +137,12 @@ public class CCTooltip {
         graphics.pose().translate(0, 0, 400);
 
         graphics.blitSprite(
-            ResourceLocation.fromNamespaceAndPath("coreconfig", "ui/tooltip/background"),
+            new ResourceLocation("coreconfig", "ui/tooltip/background"),
             tooltipX, tooltipY, tooltipWidth, tooltipHeight
         );
 
         graphics.blitSprite(
-            ResourceLocation.fromNamespaceAndPath("coreconfig", "ui/tooltip/frame"),
+            new ResourceLocation("coreconfig", "ui/tooltip/frame"),
             tooltipX, tooltipY, tooltipWidth, tooltipHeight
         );
 
@@ -156,7 +156,7 @@ public class CCTooltip {
                 }
             }
             graphics.blit(
-                ResourceLocation.fromNamespaceAndPath(image.modID(), image.path()),
+                new ResourceLocation(image.modID(), image.path()),
                 tooltipX + 12, tooltipY + 12,
                 0, frame * image.frameHeight(),
                 image.imageWidth(), image.frameHeight(),

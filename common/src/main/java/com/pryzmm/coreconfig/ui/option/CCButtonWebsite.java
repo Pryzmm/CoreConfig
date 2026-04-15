@@ -59,7 +59,7 @@ public class CCButtonWebsite extends AbstractWidget {
             true
         );
         graphics.blit(
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/goto_website.png"),
+            new ResourceLocation(CoreConfigConstants.MOD_ID, "textures/ui/goto_website.png"),
             this.getX() + width - 16,
             this.getY() + 4,
             0, 0,

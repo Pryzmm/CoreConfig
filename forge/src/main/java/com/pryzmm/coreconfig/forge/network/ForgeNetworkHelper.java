@@ -36,7 +36,7 @@ public class ForgeNetworkHelper implements INetworkHelper {
         }
         registered = true;
 
-        channel = ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "network"))
+        channel = ChannelBuilder.named(new ResourceLocation(CoreConfigConstants.MOD_ID, "network"))
             .networkProtocolVersion(1)
             .payloadChannel()
             .play()

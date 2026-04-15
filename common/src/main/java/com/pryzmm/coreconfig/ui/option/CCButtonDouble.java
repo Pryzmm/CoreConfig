@@ -87,7 +87,7 @@ public class CCButtonDouble extends AbstractWidget {
         if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
-                ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                new ResourceLocation(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
                 this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
                 this.getY(),
                 0, 0,

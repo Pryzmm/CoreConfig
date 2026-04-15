@@ -65,7 +65,7 @@ public class CCButtonColor extends AbstractWidget {
         graphics.fill(this.getX() + width - 19, this.getY() + 1, this.getX() + width - 1, this.getY() + this.height - 1, 0xFF000000);
 
         graphics.blit(
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_background.png"),
+            new ResourceLocation(CoreConfigConstants.MOD_ID, "textures/ui/color_background.png"),
             this.getX() + width - 18,
             this.getY() + 2,
             0, 0,
@@ -79,7 +79,7 @@ public class CCButtonColor extends AbstractWidget {
         if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
-                ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                new ResourceLocation(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
                 this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
                 this.getY(),
                 0, 0,
