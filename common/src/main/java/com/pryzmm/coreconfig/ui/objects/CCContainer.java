@@ -103,7 +103,7 @@ public class CCContainer implements CCElement {
             return Mth.clamp((int)((float)(this.height * this.height) / (float)(this.getInnerHeight() + 4)), 32, this.height);
         }
 
-        private static final ResourceLocation SCROLLER_SPRITE = ResourceLocation.withDefaultNamespace("widget/scroller");
+        private static final ResourceLocation SCROLLER_SPRITE = new ResourceLocation("minecraft", "widget/scroller");
         @Override
         protected void renderDecorations(@NotNull GuiGraphics pGuiGraphics) {
             if (this.scrollbarVisible()) {
