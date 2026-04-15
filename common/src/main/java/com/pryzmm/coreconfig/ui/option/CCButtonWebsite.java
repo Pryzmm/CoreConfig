@@ -6,7 +6,7 @@ import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import com.pryzmm.coreconfigapi.entry.WebsiteEntry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -39,7 +39,7 @@ public class CCButtonWebsite extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         int width = this.width;
         if (container.scrollable()) width = this.width - 6;
 
@@ -52,7 +52,7 @@ public class CCButtonWebsite extends AbstractWidget {
             if (HoveredEntry.value == entry) HoveredEntry.value = null;
         }
 
-        graphics.drawString(
+        graphics.text(
             Minecraft.getInstance().font,
             Component.translatable(this.translation),
             this.getX() + 5,

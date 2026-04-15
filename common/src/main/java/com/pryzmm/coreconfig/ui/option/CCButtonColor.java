@@ -10,7 +10,7 @@ import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.ColorEntry;
 import com.pryzmm.coreconfigapi.screen.IConfigScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.CharacterEvent;
@@ -44,7 +44,7 @@ public class CCButtonColor extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         int width = this.width;
         if (container.scrollable()) width = this.width - 6;
 
@@ -57,7 +57,7 @@ public class CCButtonColor extends AbstractWidget {
             if (HoveredEntry.value == entry) HoveredEntry.value = null;
         }
 
-        graphics.drawString(
+        graphics.text(
             Minecraft.getInstance().font,
             Component.translatable(this.translation).withStyle(style -> style.withItalic(!equals(entry.getClientValue(), entry.getUnsavedValue()))),
             this.getX() + 5,

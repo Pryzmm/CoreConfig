@@ -1,6 +1,6 @@
 package com.pryzmm.coreconfig.ui.objects;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractTextAreaWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -49,7 +49,7 @@ public class CCContainer implements CCElement {
         widgets.forEach(content::addChild);
         content.arrangeElements();
 
-        scrollWidget = new InnerScrollWidget(x, y, width, height, content);
+        scrollWidget = new InnerScrollWidget(x, y, width, height, content, AbstractTextAreaWidget.defaultSettings(9));
     }
 
     @Override
@@ -69,8 +69,8 @@ public class CCContainer implements CCElement {
 
         private final LinearLayout content;
 
-        public InnerScrollWidget(int x, int y, int width, int height, LinearLayout content) {
-            super(x, y, width, height, Component.empty());
+        public InnerScrollWidget(int x, int y, int width, int height, LinearLayout content, ScrollbarSettings settings) {
+            super(x, y, width, height, Component.empty(), settings);
             this.content = content;
         }
 
@@ -89,7 +89,7 @@ public class CCContainer implements CCElement {
         }
 
         @Override
-        protected void renderBackground(@NotNull GuiGraphics pGuiGraphics) {}
+        protected void extractBackground(@NotNull GuiGraphicsExtractor pGuiGraphics) {}
 
         private int getScrollbarHeight() {
             return Mth.clamp((int)((float)(this.height * this.height) / (float)(this.getInnerHeight() + 4)), 32, this.height);
@@ -97,8 +97,8 @@ public class CCContainer implements CCElement {
 
         private static final Identifier SCROLLER_SPRITE = Identifier.withDefaultNamespace("widget/scroller");
         @Override
-        protected void renderScrollbar(@NotNull GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
-            if (this.scrollbarVisible()) {
+        protected void extractScrollbar(@NotNull GuiGraphicsExtractor pGuiGraphics, int mouseX, int mouseY) {
+            if (this.scrollable()) {
                 int i = getScrollbarHeight();
                 int j = this.getX() + this.width - 6;
                 int k = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.maxScrollAmount() + this.getY());
@@ -122,8 +122,8 @@ public class CCContainer implements CCElement {
         }
 
         @Override
-        protected void renderContents(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-            content.visitWidgets(widget -> widget.render(guiGraphics, mouseX, (int) (mouseY + scrollAmount()), partialTick));
+        protected void extractContents(@NotNull GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+            content.visitWidgets(widget -> widget.extractRenderState(guiGraphics, mouseX, (int) (mouseY + scrollAmount()), partialTick));
         }
 
         @Override

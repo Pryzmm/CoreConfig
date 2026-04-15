@@ -4,7 +4,7 @@ import com.pryzmm.coreconfig.data.EntryHolder;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCButton;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
@@ -35,15 +35,15 @@ public class ExitWithoutSavingPopup extends AbstractPopup {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
-        super.renderWidget(graphics, mouseX, mouseY, a);
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractWidgetRenderState(graphics, mouseX, mouseY, a);
         if (this.minecraft == null) return;
         Component title = Component.translatable("ui.coreconfig.exit_without_saving");
 
         graphics.pose().pushMatrix();
         graphics.nextStratum();
 
-        graphics.drawString(
+        graphics.text(
             minecraft.font,
             title,
             this.getX() + (this.width / 2) - (minecraft.font.width(title) / 2),
@@ -56,7 +56,7 @@ public class ExitWithoutSavingPopup extends AbstractPopup {
         int lineY = this.getY() + 20;
         for (FormattedCharSequence line : lines) {
             int lineWidth = minecraft.font.width(line);
-            graphics.drawString(
+            graphics.text(
                 minecraft.font,
                 line,
                 this.getX() + (this.width / 2) - (lineWidth / 2),
@@ -66,8 +66,8 @@ public class ExitWithoutSavingPopup extends AbstractPopup {
             );
             lineY += minecraft.font.lineHeight;
         }
-        confirmButton.renderWidget(graphics, mouseX, mouseY, a);
-        cancelButton.renderWidget(graphics, mouseX, mouseY, a);
+        confirmButton.extractWidgetRenderState(graphics, mouseX, mouseY, a);
+        cancelButton.extractWidgetRenderState(graphics, mouseX, mouseY, a);
         graphics.pose().popMatrix();
     }
 

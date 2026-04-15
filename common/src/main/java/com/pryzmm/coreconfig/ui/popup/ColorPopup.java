@@ -5,7 +5,7 @@ import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCButton;
 import com.pryzmm.coreconfigapi.entry.ColorEntry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -42,8 +42,8 @@ public class ColorPopup extends AbstractPopup {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
-        super.renderWidget(graphics, mouseX, mouseY, a);
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractWidgetRenderState(graphics, mouseX, mouseY, a);
         if (this.minecraft == null) return;
 
         int multiThing = entry.allowAlpha() ? 11 : 9;
@@ -139,7 +139,7 @@ public class ColorPopup extends AbstractPopup {
 
         if (grabbedComponent == getComponentFromCoords(mouseX, mouseY)) setColorOfComponentFromCoords(mouseX, mouseY);
 
-        button.renderWidget(graphics, mouseX, mouseY, a);
+        button.extractWidgetRenderState(graphics, mouseX, mouseY, a);
         graphics.pose().popMatrix();
     }
 

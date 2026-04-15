@@ -4,7 +4,7 @@ import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import com.pryzmm.coreconfigapi.entry.DividerEntry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -26,7 +26,7 @@ public class CCDivider extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
 
         if (this.isHovered && HoveredEntry.value != entry) HoveredEntry.value = entry;
         else if (HoveredEntry.value == entry) HoveredEntry.value = null;
@@ -34,7 +34,7 @@ public class CCDivider extends AbstractWidget {
         int textWidth = Minecraft.getInstance().font.width(Component.translatable(this.translation));
         int bottomPadding = (this.height - 20) / 2;
 
-        graphics.drawString(
+        graphics.text(
             Minecraft.getInstance().font,
             Component.translatable(this.translation),
             container.getX() + (this.width / 2) - (textWidth / 2),

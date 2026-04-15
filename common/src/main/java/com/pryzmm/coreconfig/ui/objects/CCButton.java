@@ -3,7 +3,7 @@ package com.pryzmm.coreconfig.ui.objects;
 import com.pryzmm.coreconfig.data.EntryHolder;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -49,14 +49,14 @@ public class CCButton extends AbstractWidget implements CCElement {
     }
 
     @Override
-    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    public void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x551A1A1A);
         if (this.isHovered(mouseX, mouseY)) {
             if (CoreConfigScreen.activePopup == null || isInPopup) graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, hoverColor);
             if (EntryHolder.containsAnyInvalidConfigs() && isSaveButton) setTooltip(Tooltip.create(Component.translatable("ui.coreconfig.cant_save")));
             else setTooltip(null);
         }
-        graphics.drawString(
+        graphics.text(
             Minecraft.getInstance().font,
             this.getMessage(),
             this.getX() + (this.width / 2) - (Minecraft.getInstance().font.width(this.getMessage()) / 2),

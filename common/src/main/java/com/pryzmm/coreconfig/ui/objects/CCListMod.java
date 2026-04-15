@@ -4,7 +4,7 @@ import com.pryzmm.coreconfig.util.ModHolderUtil;
 import com.pryzmm.coreconfigapi.data.ModData;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -58,7 +58,7 @@ public class CCListMod extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
 
         int width = this.width;
         if (container.scrollable()) width = this.width - 6;
@@ -68,7 +68,7 @@ public class CCListMod extends AbstractWidget {
         if (this.isHovered && CoreConfigScreen.activePopup == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
         else if (data.bannerPath() == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x55000000);
 
-        graphics.drawString(
+        graphics.text(
             Minecraft.getInstance().font,
             Component.translatable(nameTranslation),
             this.getX() + 36,

@@ -9,7 +9,7 @@ import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.DoubleEntry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -53,7 +53,7 @@ public class CCButtonDouble extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         int width = this.width;
         if (container.scrollable()) width = this.width - 6;
 
@@ -76,7 +76,7 @@ public class CCButtonDouble extends AbstractWidget {
             if (HoveredEntry.value == entry) HoveredEntry.value = null;
         }
 
-        graphics.drawString(
+        graphics.text(
             Minecraft.getInstance().font,
             Component.translatable(this.translation).withStyle(style -> style.withItalic(!equals(entry.getClientValue(), entry.getUnsavedValue()))),
             this.getX() + 5,
@@ -85,7 +85,7 @@ public class CCButtonDouble extends AbstractWidget {
             true
         );
 
-        editBox.renderWidget(graphics, mouseX, mouseY, a);
+        editBox.extractWidgetRenderState(graphics, mouseX, mouseY, a);
 
         if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());

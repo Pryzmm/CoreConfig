@@ -15,7 +15,7 @@ import com.pryzmm.coreconfig.ui.popup.ExitWithoutSavingPopup;
 import com.pryzmm.coreconfig.ui.popup.RestartPopup;
 import com.pryzmm.coreconfigapi.screen.IConfigScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.CharacterEvent;
@@ -196,8 +196,8 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
     }
 
     @Override
-    public void renderBackground(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
-        super.renderBackground(graphics, mouseX, mouseY, a);
+    public void extractBackground(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
         containers.forEach(container -> graphics.fill(
                 container.getX(),
                 container.getY(),
@@ -208,8 +208,8 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
-        super.render(graphics, mouseX, mouseY, a);
+    public void extractRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractRenderState(graphics, mouseX, mouseY, a);
         CCTooltip.render(graphics, mouseX, mouseY, HoveredEntry.value, configContainer);
     }
 

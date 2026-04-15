@@ -1,12 +1,12 @@
 package com.pryzmm.coreconfig.ui.objects;
 
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
-import net.minecraft.client.gui.GuiGraphics;
 import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -19,7 +19,7 @@ public class CCTooltip {
     private static Long firstRenderTime = null;
     private static Integer frame = 0;
 
-    public static void render(GuiGraphics graphics, int mouseX, int mouseY, CCEntry entry, CCContainer container) {
+    public static void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, CCEntry entry, CCContainer container) {
         if (entry == null) {
             frame = 0;
             return;
@@ -167,11 +167,11 @@ public class CCTooltip {
 
         int textY = tooltipY + frameHeight + 14;
         for (FormattedCharSequence sequence : sequences) {
-            graphics.drawString(
-                    minecraft.font, sequence,
-                    tooltipX + 12, textY,
-                    0xFFFFFFFF,
-                    true
+            graphics.text(
+                minecraft.font, sequence,
+                tooltipX + 12, textY,
+                0xFFFFFFFF,
+                true
             );
             textY += minecraft.font.lineHeight + 2;
         }

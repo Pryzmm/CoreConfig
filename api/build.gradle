@@ -6,13 +6,13 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    neoforgeRuntime
+}
+
 dependencies {
     compileOnly 'org.jetbrains:annotations:24.0.0'
     compileOnly 'org.slf4j:slf4j-api:2.0.7'
-}
-
-configurations {
-    neoforgeRuntime
 }
 
 tasks.register('neoforgeJar', Jar) {

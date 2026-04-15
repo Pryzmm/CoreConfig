@@ -3,7 +3,7 @@ package com.pryzmm.coreconfig.ui.popup;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCButton;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
@@ -28,14 +28,14 @@ public class RestartPopup extends AbstractPopup {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         if (this.minecraft == null) return;
         Component title = Component.translatable("ui.coreconfig.restart_required");
 
         graphics.pose().pushMatrix();
         graphics.nextStratum();
 
-        graphics.drawString(
+        graphics.text(
             minecraft.font,
             title,
             this.getX() + (this.width / 2) - (minecraft.font.width(title) / 2),
@@ -48,7 +48,7 @@ public class RestartPopup extends AbstractPopup {
         int lineY = this.getY() + 20;
         for (FormattedCharSequence line : lines) {
             int lineWidth = minecraft.font.width(line);
-            graphics.drawString(
+            graphics.text(
                 minecraft.font,
                 line,
                 this.getX() + (this.width / 2) - (lineWidth / 2),
@@ -58,7 +58,7 @@ public class RestartPopup extends AbstractPopup {
             );
             lineY += minecraft.font.lineHeight;
         }
-        button.renderWidget(graphics, mouseX, mouseY, a);
+        button.extractWidgetRenderState(graphics, mouseX, mouseY, a);
         graphics.pose().popMatrix();
     }
 

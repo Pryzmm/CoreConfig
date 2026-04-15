@@ -1,6 +1,13 @@
 plugins {
     id 'multiloader-loader'
-    id 'net.minecraftforge.gradle' version '[6.0.40,6.0.47]'
+    id 'net.minecraftforge.gradle' version '[7.0,)'
+}
+
+repositories {
+    maven {
+        name = 'Forge'
+        url = uri('https://maven.minecraftforge.net')
+    }
 }
 
 base {
@@ -10,17 +17,15 @@ base {
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
-    copyIdeResources = true
-    reobf = false // Forge 1.20.6+ uses official mappings at runtime, so we shouldn't reobf from official to SRG
-
     def at = file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) accessTransformer = at
 
     runs {
         client {
-            workingDirectory file('runs/client')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Client'
+            workingDir.convention layout.projectDirectory.dir('runs/client')
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'forge.logging.console.level', 'debug'
+
             mods {
                 modClientRun {
                     source sourceSets.main
@@ -29,9 +34,7 @@ minecraft {
         }
 
         server {
-            workingDirectory file('runs/server')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Server'
+            workingDir.convention layout.projectDirectory.dir('runs/server')
             mods {
                 modServerRun {
                     source sourceSets.main
@@ -40,10 +43,8 @@ minecraft {
         }
 
         data {
-            workingDirectory file('runs/data')
-            ideaModule "${rootProject.name}.${project.name}.main"
+            workingDir.convention layout.projectDirectory.dir('runs/data')
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            taskName 'Data'
             mods {
                 modDataRun {
                     source sourceSets.main
@@ -56,27 +57,31 @@ minecraft {
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 
-    implementation(project(":api")) { transitive = false }
+    implementation(project(":api"))
     implementation(project(path: ':common', configuration: 'forgeRuntime')) { transitive = false }
     commonJava project(path: ':common', configuration: 'commonJava')
     commonResources project(path: ':common', configuration: 'commonResources')
+}
+
+
+repositories {
+    minecraft.mavenizer(it) // In Kotlin, it = this
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
 }
 
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from project(':common').sourceSets.main.output
     from project(':api').sourceSets.main.output
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            fg.component(it)
-        }
+    from(project(":api").sourceSets.main.resources) {
+        include "accesstransformer.cfg"
+        into "META-INF"
     }
 }
 

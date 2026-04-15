@@ -9,7 +9,7 @@ import com.pryzmm.coreconfig.network.Server;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.CustomEntry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -41,7 +41,7 @@ public class CCButtonCustom extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         int width = this.width;
         if (container.scrollable()) width = this.width - 6;
 
@@ -56,7 +56,7 @@ public class CCButtonCustom extends AbstractWidget {
 
         int textWidth = Minecraft.getInstance().font.width(Component.translatable(this.translation));
 
-        graphics.drawString(
+        graphics.text(
             Minecraft.getInstance().font,
             Component.translatable(this.translation),
             this.getX() + (this.width / 2) - (textWidth / 2),

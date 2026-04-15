@@ -9,7 +9,7 @@ import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.EnumEntry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -41,7 +41,7 @@ public class CCButtonEnum extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         int width = this.width;
         if (container.scrollable()) width = this.width - 6;
 
@@ -54,7 +54,7 @@ public class CCButtonEnum extends AbstractWidget {
             if (HoveredEntry.value == entry) HoveredEntry.value = null;
         }
 
-        graphics.drawString(
+        graphics.text(
             Minecraft.getInstance().font,
             Component.translatable(this.translation).withStyle(style -> style.withItalic(entry.getClientValue() != entry.getUnsavedValue())),
             this.getX() + 5,
@@ -63,7 +63,7 @@ public class CCButtonEnum extends AbstractWidget {
             true
         );
 
-        graphics.drawString(
+        graphics.text(
             Minecraft.getInstance().font,
             Component.literal(entry.getUnsavedValue().name()),
             this.getX() + this.width - 5 - Minecraft.getInstance().font.width(Component.literal(entry.getUnsavedValue().name())),
