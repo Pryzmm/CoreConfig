@@ -1,6 +1,5 @@
 package com.pryzmm.coreconfig.ui;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.data.CCFileHandler;
 import com.pryzmm.coreconfig.data.EntryHolder;
@@ -50,7 +49,6 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
 
     @Override
     protected void init() {
-        assert this.minecraft != null;
         assert this.minecraft.screen != null;
 
         this.containers.clear();

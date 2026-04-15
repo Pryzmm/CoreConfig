@@ -18,7 +18,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class CCButtonColor extends AbstractWidget {
@@ -70,7 +70,7 @@ public class CCButtonColor extends AbstractWidget {
 
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_background.png"),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_background.png"),
             this.getX() + width - 18,
             this.getY() + 2,
             0, 0,
@@ -85,7 +85,7 @@ public class CCButtonColor extends AbstractWidget {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
-                ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
                 this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
                 this.getY(),
                 0, 0,

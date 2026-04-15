@@ -5,7 +5,6 @@ import com.pryzmm.coreconfig.data.HoveredEntry;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import com.pryzmm.coreconfigapi.entry.WebsiteEntry;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -13,7 +12,8 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import org.jetbrains.annotations.NotNull;
 
 public class CCButtonWebsite extends AbstractWidget {
@@ -62,7 +62,7 @@ public class CCButtonWebsite extends AbstractWidget {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/goto_website.png"),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/goto_website.png"),
             this.getX() + width - 16,
             this.getY() + 4,
             0, 0,

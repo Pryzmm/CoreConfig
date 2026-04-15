@@ -10,7 +10,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
@@ -43,14 +43,14 @@ public class CCListMod extends AbstractWidget {
         ModData data = ModHolderUtil.getModData(modID);
         if (data.overrideIconPath() == null) {
             for (String location : resourceLocations) {
-                if (Minecraft.getInstance().getResourceManager().getResource(ResourceLocation.fromNamespaceAndPath(modID, location)).isPresent()) {
+                if (Minecraft.getInstance().getResourceManager().getResource(Identifier.fromNamespaceAndPath(modID, location)).isPresent()) {
                     this.imagePath = location;
                     return;
                 }
             }
             this.imagePath = "textures/ui/icon/missing.png";
             return;
-        } else if (Minecraft.getInstance().getResourceManager().getResource(ResourceLocation.fromNamespaceAndPath(modID, data.overrideIconPath())).isPresent()) {
+        } else if (Minecraft.getInstance().getResourceManager().getResource(Identifier.fromNamespaceAndPath(modID, data.overrideIconPath())).isPresent()) {
             this.imagePath = data.overrideIconPath();
             return;
         }
@@ -64,7 +64,7 @@ public class CCListMod extends AbstractWidget {
         if (container.scrollable()) width = this.width - 6;
 
         ModData data = ModHolderUtil.getModData(modID);
-        if (data.bannerPath() != null) graphics.blit(RenderPipelines.GUI_TEXTURED, ResourceLocation.fromNamespaceAndPath(data.modID(), data.bannerPath()), this.getX(), this.getY(), 0, 0, width, height, width, height);
+        if (data.bannerPath() != null) graphics.blit(RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath(data.modID(), data.bannerPath()), this.getX(), this.getY(), 0, 0, width, height, width, height);
         if (this.isHovered && CoreConfigScreen.activePopup == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, hoverColor);
         else if (data.bannerPath() == null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, 0x55000000);
 
@@ -78,7 +78,7 @@ public class CCListMod extends AbstractWidget {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(modID, imagePath),
+            Identifier.fromNamespaceAndPath(modID, imagePath),
             this.getX() + 1,
             this.getY() + 1,
             0, 0,

@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import java.util.List;
 
@@ -136,13 +136,13 @@ public class CCTooltip {
 
         graphics.blitSprite(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath("coreconfig", "ui/tooltip/background"),
+            Identifier.fromNamespaceAndPath("coreconfig", "ui/tooltip/background"),
             tooltipX, tooltipY, tooltipWidth, tooltipHeight
         );
 
         graphics.blitSprite(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath("coreconfig", "ui/tooltip/frame"),
+            Identifier.fromNamespaceAndPath("coreconfig", "ui/tooltip/frame"),
             tooltipX, tooltipY, tooltipWidth, tooltipHeight
         );
 
@@ -157,7 +157,7 @@ public class CCTooltip {
             }
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
-                ResourceLocation.fromNamespaceAndPath(image.modID(), image.path()),
+                Identifier.fromNamespaceAndPath(image.modID(), image.path()),
                 tooltipX + 12, tooltipY + 12,
                 0, frame * image.frameHeight(),
                 image.imageWidth(), image.frameHeight(),

@@ -8,7 +8,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
@@ -95,7 +95,7 @@ public class CCContainer implements CCElement {
             return Mth.clamp((int)((float)(this.height * this.height) / (float)(this.getInnerHeight() + 4)), 32, this.height);
         }
 
-        private static final ResourceLocation SCROLLER_SPRITE = ResourceLocation.withDefaultNamespace("widget/scroller");
+        private static final Identifier SCROLLER_SPRITE = Identifier.withDefaultNamespace("widget/scroller");
         @Override
         protected void renderScrollbar(@NotNull GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
             if (this.scrollbarVisible()) {

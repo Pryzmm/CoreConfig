@@ -63,7 +63,7 @@ public class RestartPopup extends AbstractPopup {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClick) {
         if (button.isMouseOver(event.x(), event.y())) button.mouseClicked(event, doubleClick);
         return true;
     }

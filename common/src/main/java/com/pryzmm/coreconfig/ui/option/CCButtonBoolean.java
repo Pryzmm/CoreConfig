@@ -15,7 +15,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class CCButtonBoolean extends AbstractWidget {
@@ -69,7 +69,7 @@ public class CCButtonBoolean extends AbstractWidget {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, !Config.useSwitchTexture.getValue() ? (entry.getUnsavedValue() ? boolTrueImage : boolFalseImage) : (entry.getUnsavedValue() ? boolTrueImageSwitch : boolFalseImageSwitch)),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, !Config.useSwitchTexture.getValue() ? (entry.getUnsavedValue() ? boolTrueImage : boolFalseImage) : (entry.getUnsavedValue() ? boolTrueImageSwitch : boolFalseImageSwitch)),
             this.getX() + width - 20,
             this.getY(),
             0, 0,
@@ -81,7 +81,7 @@ public class CCButtonBoolean extends AbstractWidget {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
-                ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
+                Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
                 this.getX() + this.width - 20,
                 this.getY(),
                 0, 0,

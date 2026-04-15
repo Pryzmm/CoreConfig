@@ -72,7 +72,7 @@ public class ExitWithoutSavingPopup extends AbstractPopup {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClick) {
         if (confirmButton.isMouseOver(event.x(), event.y())) confirmButton.mouseClicked(event, doubleClick);
         if (cancelButton.isMouseOver(event.x(), event.y())) cancelButton.mouseClicked(event, doubleClick);
         return true;

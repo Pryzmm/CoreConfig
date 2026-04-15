@@ -1,6 +1,5 @@
 package com.pryzmm.coreconfig.ui.popup;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -8,7 +7,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.Minecraft;
@@ -30,7 +28,7 @@ public class AbstractPopup extends AbstractWidget {
         graphics.fill(0, 0, screen.width, screen.height, 0x99443333);
         graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x88444444);
         graphics.fill(this.getX(), this.getY() + 14, this.getX() + this.getWidth(), this.getY() + 15, 0xFFFFFFFF);
-        graphics.submitOutline(this.getX(), this.getY(), this.width, this.height, 0xCC666666);
+        graphics.renderOutline(this.getX(), this.getY(), this.width, this.height, 0xCC666666);
         graphics.pose().popMatrix();
     }
 

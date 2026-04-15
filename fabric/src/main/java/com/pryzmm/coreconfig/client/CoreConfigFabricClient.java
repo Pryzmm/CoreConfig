@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class CoreConfigFabricClient implements ClientModInitializer {
@@ -26,7 +26,7 @@ public class CoreConfigFabricClient implements ClientModInitializer {
             "key.coreconfig.open_config",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_INSERT,
-            new KeyMapping.Category(ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "coreconfig"))
+            new KeyMapping.Category(Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "coreconfig"))
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

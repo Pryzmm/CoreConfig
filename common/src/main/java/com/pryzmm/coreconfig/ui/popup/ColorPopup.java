@@ -10,7 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class ColorPopup extends AbstractPopup {
@@ -54,7 +54,7 @@ public class ColorPopup extends AbstractPopup {
 
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_background.png"),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_background.png"),
             this.getX() + 1,
             this.getY() + 1,
             0, 0,
@@ -65,7 +65,7 @@ public class ColorPopup extends AbstractPopup {
 
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 2) - offsetThing, this.getY() + 17,
             1, 1,
             24, 110,
@@ -73,7 +73,7 @@ public class ColorPopup extends AbstractPopup {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 2) - offsetThing,
             this.getY() + 18 + (int) Math.round((1 - (redColor / 255.0)) * 107),
             104, 1,
@@ -83,7 +83,7 @@ public class ColorPopup extends AbstractPopup {
 
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 4) - offsetThing, this.getY() + 17,
             27, 1,
             24, 110,
@@ -91,7 +91,7 @@ public class ColorPopup extends AbstractPopup {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 4) - offsetThing,
             this.getY() + 18 + (int) Math.round((1 - (greenColor / 255.0)) * 107),
             104, 1,
@@ -101,7 +101,7 @@ public class ColorPopup extends AbstractPopup {
 
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 6) - offsetThing, this.getY() + 17,
             53, 1,
             24, 110,
@@ -109,7 +109,7 @@ public class ColorPopup extends AbstractPopup {
         );
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
-            ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
             this.getX() + (this.width / multiThing * 6) - offsetThing,
             this.getY() + 18 + (int) Math.round((1 - (blueColor / 255.0)) * 107),
             104, 1,
@@ -120,7 +120,7 @@ public class ColorPopup extends AbstractPopup {
         if (entry.allowAlpha()) {
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
-                ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
+                Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
                 this.getX() + (this.width / multiThing * 8) - offsetThing, this.getY() + 17,
                 79, 1,
                 24, 110,
@@ -128,7 +128,7 @@ public class ColorPopup extends AbstractPopup {
             );
             graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
-                ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
+                Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/color_selector.png"),
                 this.getX() + (this.width / multiThing * 8) - offsetThing,
                 this.getY() + 18 + (int) Math.round((1 - (alphaColor / 255.0)) * 107),
                 104, 1,
@@ -177,14 +177,14 @@ public class ColorPopup extends AbstractPopup {
     private ColorComponent grabbedComponent = null;
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    public boolean mouseClicked(@NotNull MouseButtonEvent event, boolean doubleClick) {
         if (button.isMouseOver(event.x(), event.y())) button.mouseClicked(event, doubleClick);
         grabbedComponent = getComponentFromCoords(event.x(), event.y());
         return true;
     }
 
     @Override
-    public boolean mouseReleased(MouseButtonEvent event) {
+    public boolean mouseReleased(@NotNull MouseButtonEvent event) {
         if (button.isMouseOver(event.x(), event.y())) button.mouseReleased(event);
         grabbedComponent = null;
         return true;
