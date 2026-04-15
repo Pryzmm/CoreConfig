@@ -13,6 +13,7 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.lwjgl.glfw.GLFW;
 
 @Mod("coreconfig")
@@ -20,21 +21,21 @@ public class CoreConfigForgeClient {
 
     public static KeyMapping OPEN_CONFIG;
 
-    public CoreConfigForgeClient() {
+    public CoreConfigForgeClient(FMLJavaModLoadingContext context) {
         Services.NETWORK.registerClientHandlers();
         Services.NETWORK.registerServerHandlers();
     }
 
-    @Mod.EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT)
     public static class ClientModEvents {
 
         @SubscribeEvent
         public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
             OPEN_CONFIG = new KeyMapping(
-                    "key.coreconfig.open_config",
-                    InputConstants.Type.KEYSYM,
-                    GLFW.GLFW_KEY_INSERT,
-                    new KeyMapping.Category(ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "coreconfig"))
+                "key.coreconfig.open_config",
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_INSERT,
+                new KeyMapping.Category(ResourceLocation.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "coreconfig"))
             );
             event.register(OPEN_CONFIG);
         }
