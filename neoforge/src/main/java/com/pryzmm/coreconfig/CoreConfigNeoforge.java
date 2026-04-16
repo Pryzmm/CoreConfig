@@ -11,16 +11,15 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.client.ConfigScreenHandler;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 @Mod("coreconfig")
-@EventBusSubscriber(modid = "coreconfig", bus = EventBusSubscriber.Bus.GAME) // Game bus for ServerStarting, PlayerLoggedIn
+@Mod.EventBusSubscriber(modid = "coreconfig", bus = Mod.EventBusSubscriber.Bus.FORGE) // Game bus for ServerStarting, PlayerLoggedIn
 public class CoreConfigNeoforge {
 
     public static IEventBus eventBus;
@@ -31,14 +30,17 @@ public class CoreConfigNeoforge {
         CoreConfigNeoforge.modContainer = modContainer;
     }
 
-    @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD) // Mod bus — FMLClientSetupEvent is IModBusEvent
+    @Mod.EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD) // Mod bus — FMLClientSetupEvent is IModBusEvent
     public static class ClientModEvents {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             CoreConfigCommon.initFirst();
 
-            modContainer.registerExtensionPoint(IConfigScreenFactory.class, (mc, screen) -> new CoreConfigScreen("coreconfig"));
+            modContainer.registerExtensionPoint(
+                ConfigScreenHandler.ConfigScreenFactory.class,
+                () -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, screen) -> new CoreConfigScreen("coreconfig"))
+            );
 
             ConfigRegistrar.register(
                     CoreConfigConstants.MOD_ID,
@@ -55,7 +57,7 @@ public class CoreConfigNeoforge {
         }
     }
 
-    @EventBusSubscriber(modid = "coreconfig", value = Dist.DEDICATED_SERVER, bus = EventBusSubscriber.Bus.MOD) // Mod bus — FMLDedicatedServerSetupEvent is IModBusEvent
+    @Mod.EventBusSubscriber(modid = "coreconfig", value = Dist.DEDICATED_SERVER, bus = Mod.EventBusSubscriber.Bus.MOD) // Mod bus — FMLDedicatedServerSetupEvent is IModBusEvent
     public static class ServerModEvents {
 
         @SubscribeEvent

@@ -104,6 +104,7 @@ public class FloatEntry implements MainEntry {
 
         public FloatEntry build() {
             FloatEntry entry = new FloatEntry();
+            entry.modID = modID;
             entry.value = defaultValue;
             entry.translation = translation;
             entry.modID = modID;

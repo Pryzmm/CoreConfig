@@ -102,6 +102,7 @@ public class ColorEntry implements MainEntry {
 
         public ColorEntry build() {
             ColorEntry entry = new ColorEntry();
+            entry.modID = modID;
             entry.value = defaultValue;
             entry.translation = translation;
             entry.modID = modID;

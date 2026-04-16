@@ -72,6 +72,7 @@ public class CustomEntry implements MainEntry {
 
         public CustomEntry build() {
             CustomEntry entry = new CustomEntry();
+            entry.modID = modID;
             entry.runnable = runnable;
             entry.modID = modID;
             entry.translation = translation;

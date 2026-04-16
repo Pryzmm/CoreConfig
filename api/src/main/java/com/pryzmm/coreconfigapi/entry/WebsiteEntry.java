@@ -74,6 +74,7 @@ public class WebsiteEntry implements MainEntry {
 
         public WebsiteEntry build() {
             WebsiteEntry entry = new WebsiteEntry();
+            entry.modID = modID;
             entry.value = website;
             entry.translation = translation;
             entry.modID = modID;

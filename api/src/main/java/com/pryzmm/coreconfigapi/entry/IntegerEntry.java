@@ -52,7 +52,7 @@ public class IntegerEntry implements MainEntry {
         return value;
     }
     public Integer getServerValue() {
-        return CCFile.getInstance().getServerValue(modID, translation, Integer.class);
+        return CCFile.getInstance().getServerValue(modID(), translation(), Integer.class);
     }
     public void setValue(Integer value) { this.value = value; }
 

@@ -96,6 +96,7 @@ public class EnumEntry implements MainEntry {
 
         public EnumEntry build() {
             EnumEntry entry = new EnumEntry();
+            entry.modID = modID;
             entry.value = defaultValue.name();
             entry.modID = modID;
             entry.translation = translation;
