@@ -104,6 +104,7 @@ public class DoubleEntry implements MainEntry {
 
         public DoubleEntry build() {
             DoubleEntry entry = new DoubleEntry();
+            entry.modID = modID;
             entry.value = defaultValue;
             entry.translation = translation;
             entry.descriptor = descriptor;

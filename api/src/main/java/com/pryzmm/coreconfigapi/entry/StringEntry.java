@@ -97,6 +97,7 @@ public class StringEntry implements MainEntry {
 
         public StringEntry build() {
             StringEntry entry = new StringEntry();
+            entry.modID = modID;
             entry.value = defaultValue;
             entry.translation = translation;
             entry.modID = modID;

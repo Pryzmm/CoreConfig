@@ -40,40 +40,30 @@ public class ServerPacketCommon {
             .toList();
         Map<String, Object> values = new HashMap<>();
         for (CCEntry e : entries) {
-            switch (e) {
-                case BooleanEntry booleanEntry -> {
-                    Boolean val = booleanEntry.getClientValue();
-                    if (val != null) values.put(booleanEntry.translation(), val);
-                }
-                case StringEntry stringEntry -> {
-                    String val = stringEntry.getClientValue();
-                    if (val != null) values.put(stringEntry.translation(), val);
-                }
-                case IntegerEntry integerEntry -> {
-                    Integer val = integerEntry.getClientValue();
-                    if (val != null) values.put(integerEntry.translation(), val);
-                }
-                case DoubleEntry doubleEntry -> {
-                    Double val = doubleEntry.getClientValue();
-                    if (val != null) values.put(doubleEntry.translation(), val);
-                }
-                case FloatEntry floatEntry -> {
-                    Float val = floatEntry.getClientValue();
-                    if (val != null) values.put(floatEntry.translation(), val);
-                }
-                case LongEntry longEntry -> {
-                    Long val = longEntry.getClientValue();
-                    if (val != null) values.put(longEntry.translation(), val);
-                }
-                case ColorEntry colorEntry -> {
-                    Integer val = colorEntry.getClientValue();
-                    if (val != null) values.put(colorEntry.translation(), val);
-                }
-                case EnumEntry enumEntry -> {
-                    Enum<?> val = enumEntry.getClientValue();
-                    if (val != null) values.put(enumEntry.translation(), val.name());
-                }
-                default -> {}
+            if (e instanceof BooleanEntry booleanEntry) {
+                Boolean val = booleanEntry.getClientValue();
+                if (val != null) values.put(booleanEntry.translation(), val);
+            } else if (e instanceof StringEntry stringEntry) {
+                String val = stringEntry.getClientValue();
+                if (val != null) values.put(stringEntry.translation(), val);
+            } else if (e instanceof IntegerEntry integerEntry) {
+                Integer val = integerEntry.getClientValue();
+                if (val != null) values.put(integerEntry.translation(), val);
+            } else if (e instanceof DoubleEntry doubleEntry) {
+                Double val = doubleEntry.getClientValue();
+                if (val != null) values.put(doubleEntry.translation(), val);
+            } else if (e instanceof FloatEntry floatEntry) {
+                Float val = floatEntry.getClientValue();
+                if (val != null) values.put(floatEntry.translation(), val);
+            } else if (e instanceof LongEntry longEntry) {
+                Long val = longEntry.getClientValue();
+                if (val != null) values.put(longEntry.translation(), val);
+            } else if (e instanceof ColorEntry colorEntry) {
+                Integer val = colorEntry.getClientValue();
+                if (val != null) values.put(colorEntry.translation(), val);
+            } else if (e instanceof EnumEntry enumEntry) {
+                Enum<?> val = enumEntry.getClientValue();
+                if (val != null) values.put(enumEntry.translation(), val.name());
             }
         }
         return new ServerSyncConfigPayload(modID, HostManager.getHostKey(), values);

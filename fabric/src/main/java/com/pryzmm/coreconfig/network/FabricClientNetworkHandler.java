@@ -12,11 +12,17 @@ final class FabricClientNetworkHandler {
     static void register() {
         ClientPlayNetworking.registerGlobalReceiver(
             ServerHostPayload.ID,
-            (payload, context) -> HostManager.setHostUUID(payload.uuid())
+            (client, handler, buf, responseSender) -> {
+                ServerHostPayload payload = ServerHostPayload.read(buf);
+                client.execute(() -> HostManager.setHostUUID(payload.uuid()));
+            }
         );
         ClientPlayNetworking.registerGlobalReceiver(
             ServerSyncConfigPayload.ID,
-            (payload, context) -> CommonClientNetworkHandler.receiveServerConfigPayload(payload)
+            (client, handler, buf, responseSender) -> {
+                ServerSyncConfigPayload payload = ServerSyncConfigPayload.read(buf);
+                client.execute(() -> CommonClientNetworkHandler.receiveServerConfigPayload(payload));
+            }
         );
     }
 

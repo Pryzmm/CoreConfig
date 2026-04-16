@@ -89,6 +89,7 @@ public class BooleanEntry implements MainEntry {
 
         public BooleanEntry build() {
             BooleanEntry entry = new BooleanEntry();
+            entry.modID = modID;
             entry.value = defaultValue;
             entry.modID = modID;
             entry.translation = translation;

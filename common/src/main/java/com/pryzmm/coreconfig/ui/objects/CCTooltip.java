@@ -44,63 +44,56 @@ public class CCTooltip {
 
         }
 
-        switch (entry) {
-            case IntegerEntry integerEntry -> {
-                try {
-                    int value = Integer.parseInt(String.valueOf(integerEntry.getUnsavedValue()));
-                    if (value < integerEntry.minimum())
-                        descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min", value, integerEntry.minimum()));
-                    if (value > integerEntry.maximum())
-                        descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max", value, integerEntry.maximum()));
-                } catch (Exception ignored) {
-                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.not_int"));
-                }
+        if (entry instanceof IntegerEntry integerEntry) {
+            try {
+                int value = Integer.parseInt(String.valueOf(integerEntry.getUnsavedValue()));
+                if (value < integerEntry.minimum())
+                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min", value, integerEntry.minimum()));
+                if (value > integerEntry.maximum())
+                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max", value, integerEntry.maximum()));
+            } catch (Exception ignored) {
+                descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.not_int"));
             }
-            case FloatEntry floatEntry -> {
-                try {
-                    float value = Float.parseFloat(String.valueOf(floatEntry.getUnsavedValue()));
-                    if (value < floatEntry.minimum())
-                        descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min", value, floatEntry.minimum()));
-                    if (value > floatEntry.maximum())
-                        descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max", value, floatEntry.maximum()));
-                } catch (Exception ignored) {
-                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.not_float"));
-                }
+        } else if (entry instanceof FloatEntry floatEntry) {
+            try {
+                float value = Float.parseFloat(String.valueOf(floatEntry.getUnsavedValue()));
+                if (value < floatEntry.minimum())
+                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min", value, floatEntry.minimum()));
+                if (value > floatEntry.maximum())
+                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max", value, floatEntry.maximum()));
+            } catch (Exception ignored) {
+                descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.not_float"));
             }
-            case DoubleEntry doubleEntry -> {
-                try {
-                    double value = Double.parseDouble(String.valueOf(doubleEntry.getUnsavedValue()));
-                    if (value < doubleEntry.minimum())
-                        descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min", value, doubleEntry.minimum()));
-                    if (value > doubleEntry.maximum())
-                        descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max", value, doubleEntry.maximum()));
-                } catch (Exception ignored) {
-                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.not_double"));
-                }
+        } else if (entry instanceof DoubleEntry doubleEntry)  {
+            try {
+                double value = Double.parseDouble(String.valueOf(doubleEntry.getUnsavedValue()));
+                if (value < doubleEntry.minimum())
+                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min", value, doubleEntry.minimum()));
+                if (value > doubleEntry.maximum())
+                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max", value, doubleEntry.maximum()));
+            } catch (Exception ignored) {
+                descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.not_double"));
             }
-            case LongEntry longEntry -> {
-                try {
-                    double value = Long.parseLong(String.valueOf(longEntry.getUnsavedValue()));
-                    if (value < longEntry.minimum())
-                        descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min", value, longEntry.minimum()));
-                    if (value > longEntry.maximum())
-                        descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max", value, longEntry.maximum()));
-                } catch (Exception ignored) {
-                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.not_long"));
-                }
+        } else if (entry instanceof LongEntry longEntry)  {
+            try {
+                double value = Long.parseLong(String.valueOf(longEntry.getUnsavedValue()));
+                if (value < longEntry.minimum())
+                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min", value, longEntry.minimum()));
+                if (value > longEntry.maximum())
+                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max", value, longEntry.maximum()));
+            } catch (Exception ignored) {
+                descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.not_long"));
             }
-            case StringEntry stringEntry -> {
-                try {
-                    String value = stringEntry.getUnsavedValue();
-                    if (value.length() < stringEntry.minimumLength())
-                        descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min_string", value.length(), stringEntry.minimumLength()));
-                    if (value.length() > stringEntry.maximumLength())
-                        descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max_string", value.length(), stringEntry.maximumLength()));
-                } catch (Exception ignored) {
-                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.unknown"));
-                }
+        } else if (entry instanceof StringEntry stringEntry)  {
+            try {
+                String value = stringEntry.getUnsavedValue();
+                if (value.length() < stringEntry.minimumLength())
+                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.lower_than_min_string", value.length(), stringEntry.minimumLength()));
+                if (value.length() > stringEntry.maximumLength())
+                    descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.higher_than_max_string", value.length(), stringEntry.maximumLength()));
+            } catch (Exception ignored) {
+                descriptor.append(descriptor.getString().isEmpty() ? "" : "\n\n").append(Component.translatable("error.coreconfig.error")).append("\n").append(Component.translatable("error.coreconfig.unknown"));
             }
-            default -> {}
         }
 
         if (entry instanceof MainEntry mainEntry) {

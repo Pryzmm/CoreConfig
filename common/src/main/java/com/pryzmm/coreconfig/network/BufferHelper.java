@@ -18,27 +18,25 @@ public class BufferHelper {
 
             Object value = entry.value();
 
-            switch (value) {
-                case String s -> {
-                    buf.writeByte(0);
-                    buf.writeUtf(s);
-                } case Integer i -> {
-                    buf.writeByte(1);
-                    buf.writeVarInt(i);
-                } case Float f -> {
-                    buf.writeByte(2);
-                    buf.writeFloat(f);
-                } case Double d -> {
-                    buf.writeByte(3);
-                    buf.writeDouble(d);
-                } case Boolean b -> {
-                    buf.writeByte(4);
-                    buf.writeBoolean(b);
-                } case Long l -> {
-                    buf.writeByte(5);
-                    buf.writeLong(l);
-                } default -> throw new IllegalArgumentException("Unsupported type: " + value.getClass());
-            }
+            if (value instanceof String s) {
+                buf.writeByte(0);
+                buf.writeUtf(s);
+            } else if (value instanceof Integer i) {
+                buf.writeByte(1);
+                buf.writeVarInt(i);
+            } else if (value instanceof Float f) {
+                buf.writeByte(2);
+                buf.writeFloat(f);
+            } else if (value instanceof Double d) {
+                buf.writeByte(3);
+                buf.writeDouble(d);
+            } else if (value instanceof Boolean b) {
+                buf.writeByte(4);
+                buf.writeBoolean(b);
+            } else if (value instanceof Long l) {
+                buf.writeByte(5);
+                buf.writeLong(l);
+            } else throw new IllegalArgumentException("Unsupported type: " + value.getClass());
         }
     }
 

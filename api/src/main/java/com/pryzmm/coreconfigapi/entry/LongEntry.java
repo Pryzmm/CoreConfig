@@ -47,7 +47,7 @@ public class LongEntry implements MainEntry {
     public Long getDefaultValue() { return defaultValue; }
     public Long getValue() { return getServerValue() != null ? getServerValue() : value; }
     public Long getClientValue() { return value; }
-    public Long getServerValue() { return CCFile.getInstance().getServerValue(modID, translation, Long.class); }
+    public Long getServerValue() { return CCFile.getInstance().getServerValue(modID(), translation(), Long.class); }
     public void setValue(Long value) { this.value = value; }
 
     public void refreshValue() { this.newValue = String.valueOf(value); }
@@ -100,6 +100,7 @@ public class LongEntry implements MainEntry {
 
         public LongEntry build() {
             LongEntry entry = new LongEntry();
+            entry.modID = modID;
             entry.value = defaultValue;
             entry.translation = translation;
             entry.descriptor = descriptor;

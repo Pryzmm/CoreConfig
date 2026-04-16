@@ -11,7 +11,8 @@ public class FabricServerNetworkHandler {
     static void register() {
         ServerPlayNetworking.registerGlobalReceiver(
             ServerSyncConfigPayload.ID,
-            (payload, context) -> {
+            (server, player, handler, buf, responseSender) -> {
+                ServerSyncConfigPayload payload = ServerSyncConfigPayload.read(buf);
                 Constants.LOGGER.info("Received config sync payload for mod {} with {} value(s), sending to all clients...", payload.modID(), payload.values().size());
                 if (!payload.hostKey().equals(HostManager.getHostKey())) {
                     Constants.LOGGER.warn("Received server sync packet, but contained an invalid host key!");

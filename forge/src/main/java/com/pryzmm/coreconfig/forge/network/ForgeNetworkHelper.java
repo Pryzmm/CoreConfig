@@ -1,18 +1,17 @@
 package com.pryzmm.coreconfig.forge.network;
 
 import com.pryzmm.coreconfig.CoreConfigConstants;
+import com.pryzmm.coreconfig.network.CoreConfigPacket;
 import com.pryzmm.coreconfig.network.INetworkHelper;
 import com.pryzmm.coreconfig.network.ServerHostPayload;
 import com.pryzmm.coreconfig.network.ServerSyncConfigPayload;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.network.Channel;
-import net.minecraftforge.network.ChannelBuilder;
-import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.*;
 
+@SuppressWarnings("removal")
 public class ForgeNetworkHelper implements INetworkHelper {
 
     interface ClientHandler {
@@ -24,34 +23,38 @@ public class ForgeNetworkHelper implements INetworkHelper {
         void handleServerSyncConfigSent(ServerSyncConfigPayload payload, ServerPlayer sender);
     }
 
-    private static Channel<CustomPacketPayload> channel;
+    private static SimpleChannel channel;
     private static boolean registered;
     private static ClientHandler clientHandler;
     private static ServerHandler serverHandler;
 
+    private static final int PROTOCOL_VERSION = 1;
+    private static final ResourceLocation CHANNEL_ID = new ResourceLocation(CoreConfigConstants.MOD_ID, "network");
+
     @Override
     public void registerPayloads() {
-        if (registered) {
-            return;
-        }
+        if (registered) return;
         registered = true;
 
-        channel = ChannelBuilder.named(new ResourceLocation(CoreConfigConstants.MOD_ID, "network"))
-            .networkProtocolVersion(1)
-            .payloadChannel()
-            .play()
-            .bidirectional()
-            .addMain(
-                ServerHostPayload.ID,
-                ServerHostPayload.CODEC.cast(),
-                ForgeNetworkHelper::handleServerHost
-            )
-            .addMain(
-                ServerSyncConfigPayload.ID,
-                ServerSyncConfigPayload.CODEC.cast(),
-                ForgeNetworkHelper::handleServerSyncConfig
-            )
-            .build();
+        channel = ChannelBuilder
+            .named(CHANNEL_ID)
+            .networkProtocolVersion(PROTOCOL_VERSION)
+            .clientAcceptedVersions(Channel.VersionTest.exact(1))
+            .serverAcceptedVersions(Channel.VersionTest.exact(1))
+            .simpleChannel();
+
+        channel.messageBuilder(ServerHostPayload.class)
+            .encoder(ServerHostPayload::write)
+            .decoder(ServerHostPayload::read)
+            .consumerMainThread(ForgeNetworkHelper::handleServerHost)
+            .add();
+
+        channel.messageBuilder(ServerSyncConfigPayload.class)
+            .encoder(ServerSyncConfigPayload::write)
+            .decoder(ServerSyncConfigPayload::read)
+            .consumerMainThread(ForgeNetworkHelper::handleServerSyncConfig)
+            .add();
+
     }
 
     @Override
@@ -65,7 +68,7 @@ public class ForgeNetworkHelper implements INetworkHelper {
     }
 
     @Override
-    public void sendToPlayers(MinecraftServer server, CustomPacketPayload payload) {
+    public void sendToPlayers(MinecraftServer server, CoreConfigPacket payload) {
         if (channel == null) {
             return;
         }
@@ -76,7 +79,7 @@ public class ForgeNetworkHelper implements INetworkHelper {
     }
 
     @Override
-    public void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {
+    public void sendToPlayer(ServerPlayer player, CoreConfigPacket payload) {
         if (channel == null) {
             return;
         }
@@ -85,7 +88,7 @@ public class ForgeNetworkHelper implements INetworkHelper {
     }
 
     @Override
-    public void sendToServer(CustomPacketPayload payload) {
+    public void sendToServer(CoreConfigPacket payload) {
         if (channel == null) {
             return;
         }

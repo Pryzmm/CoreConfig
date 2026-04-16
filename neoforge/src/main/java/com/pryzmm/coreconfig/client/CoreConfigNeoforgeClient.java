@@ -8,7 +8,7 @@ import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -20,7 +20,7 @@ public class CoreConfigNeoforgeClient {
 
     public static KeyMapping OPEN_CONFIG;
 
-    @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModEvents {
 
         @SubscribeEvent
@@ -36,7 +36,7 @@ public class CoreConfigNeoforgeClient {
 
     }
 
-    @EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
+    @Mod.EventBusSubscriber(modid = "coreconfig", value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class ClientGameModEvents {
 
         @SubscribeEvent

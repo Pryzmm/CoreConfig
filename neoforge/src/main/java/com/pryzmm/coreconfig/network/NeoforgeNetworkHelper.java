@@ -4,13 +4,12 @@ import com.pryzmm.coreconfig.CoreConfigNeoforge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 public class NeoforgeNetworkHelper implements INetworkHelper {
 
@@ -36,17 +35,19 @@ public class NeoforgeNetworkHelper implements INetworkHelper {
         CoreConfigNeoforge.eventBus.addListener(NeoforgeNetworkHelper::onRegisterPayloads);
     }
 
-    private static void onRegisterPayloads(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar("1");
-        registrar.playToClient(
+    private static void onRegisterPayloads(RegisterPayloadHandlerEvent event) {
+        IPayloadRegistrar registrar = event.registrar("coreconfig");
+        registrar.play(
             ServerHostPayload.ID,
-            ServerHostPayload.CODEC.cast(),
-            NeoforgeNetworkHelper::handleServerHost
+            ServerHostPayload::new,
+            handler -> handler.client(NeoforgeNetworkHelper::handleServerHost)
         );
-        registrar.playBidirectional(
+        registrar.play(
             ServerSyncConfigPayload.ID,
-            ServerSyncConfigPayload.CODEC.cast(),
-            NeoforgeNetworkHelper::handleServerSyncConfig
+            ServerSyncConfigPayload::new,
+            handler -> handler
+            .client(NeoforgeNetworkHelper::handleServerSyncConfig)
+            .server(NeoforgeNetworkHelper::handleServerSyncConfig)
         );
     }
 
@@ -61,23 +62,23 @@ public class NeoforgeNetworkHelper implements INetworkHelper {
     }
 
     @Override
-    public void sendToPlayers(MinecraftServer server, CustomPacketPayload payload) {
-        PacketDistributor.sendToAllPlayers(payload);
+    public void sendToPlayers(MinecraftServer server, CoreConfigPacket payload) {
+        PacketDistributor.ALL.noArg().send(payload);
     }
 
     @Override
-    public void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {
-        PacketDistributor.sendToPlayer(player, payload);
+    public void sendToPlayer(ServerPlayer player, CoreConfigPacket payload) {
+        PacketDistributor.PLAYER.with(player).send(payload);
     }
 
     @Override
-    public void sendToServer(CustomPacketPayload payload) {
+    public void sendToServer(CoreConfigPacket payload) {
         ClientPacketListener connection = Minecraft.getInstance().getConnection();
         if (connection != null) connection.send(payload);
     }
 
     private static void handleServerHost(ServerHostPayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
+        context.workHandler().execute(() -> {
             ClientHandler handler = clientHandler;
             if (handler != null) {
                 handler.handleServerHost(payload);
@@ -86,7 +87,7 @@ public class NeoforgeNetworkHelper implements INetworkHelper {
     }
 
     private static void handleServerSyncConfig(ServerSyncConfigPayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
+        context.workHandler().execute(() -> {
             if (context.flow() == PacketFlow.CLIENTBOUND) {
                 ClientHandler handler = clientHandler;
                 if (handler != null) {

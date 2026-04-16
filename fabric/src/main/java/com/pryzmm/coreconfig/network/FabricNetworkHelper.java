@@ -1,9 +1,9 @@
 package com.pryzmm.coreconfig.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -11,18 +11,7 @@ public class FabricNetworkHelper implements INetworkHelper {
 
     @Override
     public void registerPayloads() {
-        PayloadTypeRegistry.playS2C().register(
-            ServerHostPayload.ID,
-            ServerHostPayload.CODEC
-        );
-        PayloadTypeRegistry.playS2C().register(
-            ServerSyncConfigPayload.ID,
-            ServerSyncConfigPayload.CODEC
-        );
-        PayloadTypeRegistry.playC2S().register(
-            ServerSyncConfigPayload.ID,
-            ServerSyncConfigPayload.CODEC
-        );
+        // 1.20.1 Fabric networking uses channel identifiers + raw FriendlyByteBuf.
     }
 
     @Override
@@ -36,20 +25,24 @@ public class FabricNetworkHelper implements INetworkHelper {
     }
 
     @Override
-    public void sendToPlayers(MinecraftServer server, CustomPacketPayload payload) {
+    public void sendToPlayers(MinecraftServer server, CoreConfigPacket payload) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             this.sendToPlayer(player, payload);
         }
     }
 
     @Override
-    public void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {
-        ServerPlayNetworking.send(player, payload);
+    public void sendToPlayer(ServerPlayer player, CoreConfigPacket payload) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        payload.write(buf);
+        ServerPlayNetworking.send(player, payload.id(), buf);
     }
 
     @Override
-    public void sendToServer(CustomPacketPayload payload) {
-        ClientPlayNetworking.send(payload);
+    public void sendToServer(CoreConfigPacket payload) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        payload.write(buf);
+        ClientPlayNetworking.send(payload.id(), buf);
     }
 
 }
