@@ -41,12 +41,12 @@ public class CoreConfigNeoforge {
             modContainer.registerExtensionPoint(IConfigScreenFactory.class, (mc, screen) -> new CoreConfigScreen("coreconfig"));
 
             ConfigRegistrar.register(
-                    CoreConfigConstants.MOD_ID,
-                    "config.coreconfig.coreconfig",
-                    "textures/config/banner.png",
-                    "icon.png",
-                    0x11CAF3FF,
-                    0x3384BAFF
+                CoreConfigConstants.MOD_ID,
+                "config.coreconfig.coreconfig",
+                "textures/config/banner.png",
+                "icon.png",
+                0x11CAF3FF,
+                0x3384BAFF
             );
             Config.register();
             CoreConfigCommon.init();
