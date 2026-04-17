@@ -3,6 +3,9 @@ plugins {
     id 'maven-publish'
 }
 
+group = 'com.pryzmm'
+version = '1.0.0'
+
 repositories {
     mavenCentral()
 }
