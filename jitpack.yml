@@ -1,6 +1,6 @@
 jdk:
   - openjdk25
 
-jitpack:
-  modules:
-    - api
+build:
+  artifacts:
+    - build/libs/*.jar
