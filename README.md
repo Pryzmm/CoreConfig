@@ -29,8 +29,8 @@ repositories {
 }
 
 dependencies {
-    implementation "com.github.Pryzmm.CoreConfig:coreconfig-api:7a09fde"
-    // 7a09fde is the commit, and may change. Make sure to check the GitHub's main page for the latest API version!
+    implementation "com.github.Pryzmm.CoreConfig:coreconfig-api:9a7ff3661a"
+    // 9a7ff3661a is the commit, and may change. Make sure to check the GitHub's main page for the latest API version!
 }
 ```
 
