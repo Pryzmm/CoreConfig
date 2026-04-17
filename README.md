@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.github.Pryzmm.CoreConfig:coreconfig-api:9a7ff3661a"
+    implementation "com.github.pryzmm:CoreConfig:9a7ff3661a"
     // 9a7ff3661a is the commit, and may change. Make sure to check the GitHub's main page for the latest API version!
 }
 ```
@@ -46,9 +46,9 @@ dependencies {
 
 <dependencies>
     <dependency>
-        <groupId>com.github.Pryzmm.CoreConfig</groupId>
-        <artifactId>coreconfig-api</artifactId>
-        <version>7a09fde</version>
+        <groupId>com.github.pryzmm</groupId>
+        <artifactId>CoreConfig</artifactId>
+        <version>9a7ff3661a</version>
     </dependency>
 </dependencies>
 ```
