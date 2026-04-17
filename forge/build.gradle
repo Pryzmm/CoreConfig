@@ -59,6 +59,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:1.20.4-${forge_version}"
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+    implementation "com.github.pryzmm:CoreConfig:9a7ff3661a"
 
     implementation(project(path: ':common', configuration: 'forgeRuntime')) { transitive = false }
     commonJava project(path: ':common', configuration: 'commonJava')
