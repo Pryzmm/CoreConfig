@@ -4,5 +4,3 @@ jdk:
 jitpack:
   modules:
     - api
-    - core
-    - fabric
