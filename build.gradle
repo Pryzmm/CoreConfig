@@ -6,5 +6,8 @@ plugins {
 }
 
 subprojects {
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
     plugins.withId('java') { java.toolchain.languageVersion = JavaLanguageVersion.of(25) }
 }

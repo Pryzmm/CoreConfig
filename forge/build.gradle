@@ -61,7 +61,6 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 
-    implementation(project(":api"))
     implementation(project(path: ':common', configuration: 'forgeRuntime')) { transitive = false }
     commonJava project(path: ':common', configuration: 'commonJava')
     commonResources project(path: ':common', configuration: 'commonResources')
@@ -78,11 +77,6 @@ repositories {
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from project(':common').sourceSets.main.output
-    from project(':api').sourceSets.main.output
-    from(project(":api").sourceSets.main.resources) {
-        include "accesstransformer.cfg"
-        into "META-INF"
-    }
 }
 
 sourceSets.each {
