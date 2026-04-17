@@ -41,14 +41,11 @@ dependencies {
     }
     commonJava project(path: ':common', configuration: 'commonJava')
     commonResources project(path: ':common', configuration: 'commonResources')
-
-    implementation(project(":api")) { transitive = false }
 }
 
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from project(':common').sourceSets.main.output
-    from project(':api').sourceSets.main.output
 }
 
 tasks.named('compileJava', JavaCompile) {
