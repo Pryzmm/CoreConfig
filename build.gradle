@@ -9,11 +9,5 @@ subprojects {
     repositories {
         maven { url "https://jitpack.io" }
     }
-
-    plugins.withId('java-library') {
-        dependencies {
-            implementation "com.github.pryzmm:CoreConfig:API-SNAPSHOT"
-        }
-    }
     plugins.withId('java') { java.toolchain.languageVersion = JavaLanguageVersion.of(21) }
 }
