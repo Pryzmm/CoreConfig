@@ -26,6 +26,7 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
     }
 
+    modImplementation "com.github.pryzmm:CoreConfig:9a7ff3661a"
     modImplementation "com.terraformersmc:modmenu:11.0.4"
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
