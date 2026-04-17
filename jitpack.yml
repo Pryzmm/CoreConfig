@@ -1,6 +1,8 @@
 jdk:
   - openjdk25
 
+install: ./gradlew publishToMavenLocal
+
 build:
   artifacts:
     - build/libs/*.jar
