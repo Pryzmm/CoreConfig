@@ -62,13 +62,25 @@ publishing {
             name = 'local'
             url = layout.buildDirectory.dir('staging-deploy')
         }
+        maven {
+            credentials {
+                username = localProps.getProperty("ossrhUsername")
+                password = localProps.getProperty("ossrhPassword")
+            }
+        }
     }
+}
+
+def localProps = new Properties()
+def localPropsFile = rootProject.file('local.properties')
+if (localPropsFile.exists()) {
+    localPropsFile.withInputStream { localProps.load(it) }
 }
 
 signing {
     def secretKey = new File("${System.getProperty('user.home')}/.gnupg/seckey.asc").text
-    def password = findProperty("signing.password")
-    def keyId = findProperty("signing.keyId")
+    def password = localProps.getProperty("signing.password")
+    def keyId = localProps.getProperty("signing.keyId")
     useInMemoryPgpKeys(keyId, secretKey, password)
     sign publishing.publications.mavenJava
 }

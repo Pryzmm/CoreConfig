@@ -21,4 +21,4 @@ hs_err_pid*
 run
 
 # Gradle properties, contains secrets
-/gradle.properties
+/local.properties
