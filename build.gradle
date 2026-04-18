@@ -1,10 +1,20 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'signing'
 }
 
-group = 'com.pryzmm'
+group = 'io.github.pryzmm'
 version = '1.0.0'
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
 
 repositories {
     mavenCentral()
@@ -17,8 +27,55 @@ dependencies {
 
 publishing {
     publications {
-        release(MavenPublication) {
+        mavenJava(MavenPublication) {
+            groupId = 'io.github.pryzmm'
+            artifactId = 'coreconfig'
+            version = '1.0.0'
             from components.java
+            pom {
+                name = 'CoreConfig'
+                description = 'An API for the CoreConfig Minecraft Mod'
+                url = 'https://github.com/pryzmm/CoreConfig'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'pryzmm'
+                        name = 'Pryzmm'
+                        email = 'pryzmmtheproto@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/pryzmm/CoreConfig.git'
+                    developerConnection = 'scm:git:ssh://github.com/pryzmm/CoreConfig.git'
+                    url = 'https://github.com/pryzmm/CoreConfig'
+                }
+            }
         }
     }
+    repositories {
+        maven {
+            name = 'local'
+            url = layout.buildDirectory.dir('staging-deploy')
+        }
+    }
+}
+
+signing {
+    def secretKey = new File("${System.getProperty('user.home')}/.gnupg/seckey.asc").text
+    def password = findProperty("signing.password")
+    def keyId = findProperty("signing.keyId")
+    useInMemoryPgpKeys(keyId, secretKey, password)
+    sign publishing.publications.mavenJava
+}
+
+tasks.register('bundleForMavenCentral', Zip) {
+    dependsOn 'publishMavenJavaPublicationToLocalRepository'
+    from layout.buildDirectory.dir('staging-deploy')
+    archiveFileName = 'bundle.zip'
+    destinationDirectory = layout.buildDirectory
 }
