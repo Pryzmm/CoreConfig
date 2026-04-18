@@ -29,11 +29,11 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = 'io.github.pryzmm'
-            artifactId = 'coreconfig'
-            version = '1.0.0'
+            artifactId = 'coreconfigapi'
+            version = '1.0.1'
             from components.java
             pom {
-                name = 'CoreConfig'
+                name = 'CoreConfigAPI'
                 description = 'An API for the CoreConfig Minecraft Mod'
                 url = 'https://github.com/pryzmm/CoreConfig'
                 licenses {
