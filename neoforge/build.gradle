@@ -43,8 +43,7 @@ jar {
 }
 
 dependencies {
-    implementation "com.github.pryzmm:CoreConfig:9a7ff3661a"
-    additionalRuntimeClasspath "com.github.pryzmm:CoreConfig:9a7ff3661a"
+    implementation "io.github.pryzmm:coreconfigapi:1.0.2"
     implementation(project(path: ':common', configuration: 'neoforgeRuntime')) { transitive = false }
     commonJava project(path: ':common', configuration: 'commonJava')
     commonResources project(path: ':common', configuration: 'commonResources')
