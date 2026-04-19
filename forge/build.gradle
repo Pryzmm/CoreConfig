@@ -61,7 +61,7 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 
-    implementation "com.github.pryzmm:CoreConfig:9a7ff3661a"
+    implementation "io.github.pryzmm:coreconfigapi:1.0.2"
     implementation(project(path: ':common', configuration: 'forgeRuntime')) { transitive = false }
     commonJava project(path: ':common', configuration: 'commonJava')
     commonResources project(path: ':common', configuration: 'commonResources')
