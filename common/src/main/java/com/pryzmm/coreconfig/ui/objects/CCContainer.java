@@ -1,5 +1,6 @@
 package com.pryzmm.coreconfig.ui.objects;
 
+import com.pryzmm.coreconfigapi.entry.MainEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractTextAreaWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -46,7 +47,10 @@ public class CCContainer implements CCElement {
         LinearLayout content = LinearLayout.vertical();
         content.defaultCellSetting().padding(2).paddingBottom(0);
         content.setPosition(x, y);
-        widgets.forEach(content::addChild);
+        widgets.forEach(widget -> {
+            if (!(widget instanceof MainEntry entry) || entry.divider() == null || !entry.divider().getFoldedState()) content.addChild(widget);
+        });
+
         content.arrangeElements();
 
         scrollWidget = new InnerScrollWidget(x, y, width, height, content);

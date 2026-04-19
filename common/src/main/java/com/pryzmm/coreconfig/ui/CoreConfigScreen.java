@@ -1,6 +1,5 @@
 package com.pryzmm.coreconfig.ui;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.data.CCFileHandler;
 import com.pryzmm.coreconfig.data.EntryHolder;
@@ -26,11 +25,13 @@ import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class CoreConfigScreen extends Screen implements IConfigScreen {
 
     private final List<CCElement> containers = new ArrayList<>();
+    public static CoreConfigScreen screen;
     private String activeModID;
     public static AbstractPopup activePopup = null;
     private final List<AbstractWidget> configWidgets = new ArrayList<>();
@@ -46,6 +47,7 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
     public CoreConfigScreen(@NotNull String ModID) {
         super(Component.empty());
         activeModID = ModID;
+        screen = this;
     }
 
     @Override
@@ -89,6 +91,9 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
         configWidgets.clear();
         try {
             for (CCEntry entry : EntryHolder.get(activeModID)) {
+
+                if (entry instanceof MainEntry mainEntry && mainEntry.divider() != null && mainEntry.divider().getFoldedState()) continue;
+
                 switch (entry) {
                     case BooleanEntry booleanEntry -> configWidgets.add(new CCButtonBoolean(booleanEntry, configContainer.getWidth(), 20, booleanEntry.translation(),  configContainer, booleanEntry.hoverColor() != null ? booleanEntry.hoverColor() : 0x55000000, data.buttonColor()));
                     case StringEntry  stringEntry  -> configWidgets.add(new CCButtonString(stringEntry,   configContainer.getWidth(), 20, stringEntry.translation(),   configContainer, stringEntry.hoverColor()  != null ? stringEntry.hoverColor()  : 0x55000000, data.buttonColor()));
@@ -153,14 +158,16 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
             return false;
         }
         double mouseYOptions = event.y() + configContainer.getLayout().getScrollAmount();
-        for (AbstractWidget widget : configWidgets) {
-            if (widget instanceof CCButtonString stringWidget) stringWidget.updateFocus(event.x(), mouseYOptions);
-            else if (widget instanceof CCButtonInteger integerWidget) integerWidget.updateFocus(event.x(), mouseYOptions);
-            else if (widget instanceof CCButtonFloat floatWidget) floatWidget.updateFocus(event.x(), mouseYOptions);
-            else if (widget instanceof CCButtonDouble doubleWidget) doubleWidget.updateFocus(event.x(), mouseYOptions);
-            else if (widget instanceof CCButtonLong longWidget) longWidget.updateFocus(event.x(), mouseYOptions);
-            if (!(widget instanceof CCDivider)) widget.mouseClicked(event, doubleClick);
-        }
+        try {
+            for (AbstractWidget widget : configWidgets) {
+                if (widget instanceof CCButtonString stringWidget) stringWidget.updateFocus(event.x(), mouseYOptions);
+                else if (widget instanceof CCButtonInteger integerWidget) integerWidget.updateFocus(event.x(), mouseYOptions);
+                else if (widget instanceof CCButtonFloat floatWidget) floatWidget.updateFocus(event.x(), mouseYOptions);
+                else if (widget instanceof CCButtonDouble doubleWidget) doubleWidget.updateFocus(event.x(), mouseYOptions);
+                else if (widget instanceof CCButtonLong longWidget) longWidget.updateFocus(event.x(), mouseYOptions);
+                widget.mouseClicked(event, doubleClick);
+            }
+        } catch (ConcurrentModificationException ignored) {}
         for (AbstractWidget widget : modListWidgets) widget.mouseClicked(event, doubleClick);
         return super.mouseClicked(event, doubleClick);
     }
