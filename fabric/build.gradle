@@ -25,8 +25,8 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
     }
-    
-    modImplementation "com.github.pryzmm:CoreConfig:9a7ff3661a"
+
+    implementation "io.github.pryzmm:coreconfigapi:1.0.2"
     modImplementation "com.terraformersmc:modmenu:10.0.0"
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"

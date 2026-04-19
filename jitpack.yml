@@ -1,8 +1,0 @@
-jdk:
-  - openjdk25
-
-jitpack:
-  modules:
-    - api
-    - core
-    - fabric
