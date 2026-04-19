@@ -1,13 +1,18 @@
 package com.pryzmm.coreconfig.ui.option;
 
+import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.data.HoveredEntry;
+import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import com.pryzmm.coreconfig.ui.objects.CCContainer;
 import com.pryzmm.coreconfigapi.entry.DividerEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class CCDivider extends AbstractWidget {
@@ -45,15 +50,32 @@ public class CCDivider extends AbstractWidget {
 
         // Divider lines
         if (textWidth == 0) {
-            graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + this.width, this.getY() + (this.height / 2) + bottomPadding + 1, color);
+            graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + this.width - 7, this.getY() + (this.height / 2) + bottomPadding + 1, color);
         } else {
             graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + (this.width / 2) - (textWidth / 2) - 5, this.getY() + (this.height / 2) + bottomPadding + 1, color);
-            graphics.fill(container.getX() + (this.width / 2) + (textWidth / 2) + 5, this.getY() + (this.height / 2) + bottomPadding, container.getX() + this.width + 3, this.getY() + (this.height / 2) + bottomPadding + 1, color);
+            graphics.fill(container.getX() + (this.width / 2) + (textWidth / 2) + 5, this.getY() + (this.height / 2) + bottomPadding, container.getX() + this.width - 7, this.getY() + (this.height / 2) + bottomPadding + 1, color);
         }
+
+        graphics.blit(
+            RenderPipelines.GUI_TEXTURED,
+            Identifier.fromNamespaceAndPath(CoreConfigConstants.MOD_ID, "textures/ui/divider_arrows.png"),
+            this.getX() + this.width - 8,
+            this.getY() + (this.height / 2) + bottomPadding - 4,
+            entry.getFoldedState() ? 0 : 8, 0,
+            8, 8,
+            16, 8
+        );
 
     }
 
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {}
+
+    @Override
+    public void onClick(@NotNull MouseButtonEvent event, boolean doubleClick) {
+        super.onClick(event, doubleClick);
+        entry.setFoldedState(!entry.getFoldedState());
+        CoreConfigScreen.screen.init(CoreConfigScreen.screen.width, CoreConfigScreen.screen.height);
+    }
 
 }
