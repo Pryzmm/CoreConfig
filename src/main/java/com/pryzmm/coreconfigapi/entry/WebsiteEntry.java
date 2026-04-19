@@ -20,7 +20,6 @@ public class WebsiteEntry implements MainEntry {
     private Integer hoverColor;
     private int priority;
     private DividerEntry divider;
-    private boolean isFolded;
 
     private WebsiteEntry() {}
 
@@ -33,8 +32,6 @@ public class WebsiteEntry implements MainEntry {
     public int priority() { return priority; }
     public DividerEntry divider() { return divider; }
     public ConfigType type() { return ConfigType.CLIENT; }
-    public boolean getFoldedState() { return isFolded; }
-    public void setFoldedState(boolean isFolded) { this.isFolded = isFolded; }
 
     public String getUnsavedValue() { return value; }
     public String getDefaultValue() { return value; }
@@ -61,7 +58,6 @@ public class WebsiteEntry implements MainEntry {
         private Integer hoverColor = null;
         private int priority = 0;
         private DividerEntry divider = null;
-        private boolean isFolded = false;
 
         public Builder(String modID, String translation, @NotNull String website) {
             this.website = website;
@@ -75,7 +71,6 @@ public class WebsiteEntry implements MainEntry {
         public Builder divider(DividerEntry divider) { this.divider = divider; return this; }
         public Builder image(String path, int width, int height) { this.image = new ImageComponent(this.modID, path, width, height); return this; }
         public Builder image(String path, int width, int height, int frameHeight, int ticks) { this.image = new ImageComponent(this.modID, path, width, height, frameHeight, ticks); return this; }
-        public Builder initiallyFolded(boolean isFolded) { this.isFolded = isFolded; return this; };
 
         public WebsiteEntry build() {
             WebsiteEntry entry = new WebsiteEntry();
@@ -88,7 +83,6 @@ public class WebsiteEntry implements MainEntry {
             entry.hoverColor = hoverColor;
             entry.priority = priority;
             entry.divider = divider;
-            entry.isFolded = isFolded;
 
             CCEntries.addEntry(entry.modID(), entry);
             return entry;

@@ -14,6 +14,7 @@ public class DividerEntry implements CategoryEntry {
     private String modID;
     private Integer textColor;
     private int priority;
+    private boolean isFolded;
 
     private DividerEntry() {}
 
@@ -21,6 +22,8 @@ public class DividerEntry implements CategoryEntry {
     public String modID() { return modID; }
     public Integer textColor() { return textColor; }
     public int priority() { return priority; }
+    public boolean getFoldedState() { return isFolded; }
+    public void setFoldedState(boolean isFolded) { this.isFolded = isFolded; }
 
     public Boolean getValue() { return value; }
     public void setValue(boolean value) { this.value = value; }
@@ -30,6 +33,7 @@ public class DividerEntry implements CategoryEntry {
         private final String modID;
         private Integer textColor = null;
         private int priority = 0;
+        private boolean isFolded = false;
 
         public Builder(String modID, String translation) {
             this.translation = translation;
@@ -38,6 +42,7 @@ public class DividerEntry implements CategoryEntry {
 
         public Builder textColor(int textColor) { this.textColor = textColor; return this; }
         public Builder priority(int priority) { this.priority = priority; return this; }
+        public Builder initiallyFolded(boolean isFolded) { this.isFolded = isFolded; return this; };
 
         public DividerEntry build() {
             DividerEntry entry = new DividerEntry();
@@ -45,6 +50,7 @@ public class DividerEntry implements CategoryEntry {
             entry.translation = translation;
             entry.textColor = textColor;
             entry.priority = priority;
+            entry.isFolded = isFolded;
 
             CCEntries.addEntry(entry.modID(), entry);
             return entry;
