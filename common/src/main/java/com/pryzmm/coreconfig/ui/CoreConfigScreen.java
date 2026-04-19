@@ -22,11 +22,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class CoreConfigScreen extends Screen implements IConfigScreen {
 
     private final List<CCElement> containers = new ArrayList<>();
+    public static CoreConfigScreen screen;
     private String activeModID;
     public static AbstractPopup activePopup = null;
     private final List<AbstractWidget> configWidgets = new ArrayList<>();
@@ -48,6 +50,7 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
     protected void init() {
         assert this.minecraft != null;
         assert this.minecraft.screen != null;
+        screen = this;
 
         this.containers.clear();
         this.clearWidgets();
@@ -85,6 +88,9 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
         configWidgets.clear();
         try {
             for (CCEntry entry : EntryHolder.get(activeModID)) {
+
+                if (entry instanceof MainEntry mainEntry && mainEntry.divider() != null && mainEntry.divider().getFoldedState()) continue;
+
                 switch (entry) {
                     case BooleanEntry booleanEntry -> configWidgets.add(new CCButtonBoolean(booleanEntry, configContainer.getWidth(), 20, booleanEntry.translation(),  configContainer, booleanEntry.hoverColor() != null ? booleanEntry.hoverColor() : 0x55000000, data.buttonColor()));
                     case StringEntry  stringEntry  -> configWidgets.add(new CCButtonString(stringEntry,   configContainer.getWidth(), 20, stringEntry.translation(),   configContainer, stringEntry.hoverColor()  != null ? stringEntry.hoverColor()  : 0x55000000, data.buttonColor()));
@@ -150,14 +156,16 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
         }
         double mouseYModList = pMouseY + modListContainer.getLayout().getScrollAmount();
         double mouseYOptions = pMouseY + configContainer.getLayout().getScrollAmount();
-        for (AbstractWidget widget : configWidgets) {
-            if (widget instanceof CCButtonString stringWidget) stringWidget.updateFocus(pMouseX, mouseYOptions);
-            else if (widget instanceof CCButtonInteger integerWidget) integerWidget.updateFocus(pMouseX, mouseYOptions);
-            else if (widget instanceof CCButtonFloat floatWidget) floatWidget.updateFocus(pMouseX, mouseYOptions);
-            else if (widget instanceof CCButtonDouble doubleWidget) doubleWidget.updateFocus(pMouseX, mouseYOptions);
-            else if (widget instanceof CCButtonLong longWidget) longWidget.updateFocus(pMouseX, mouseYOptions);
-            if (!(widget instanceof CCDivider)) widget.mouseClicked(pMouseX, mouseYOptions, button);
-        }
+        try {
+            for (AbstractWidget widget : configWidgets) {
+                if (widget instanceof CCButtonString stringWidget) stringWidget.updateFocus(pMouseX, mouseYOptions);
+                else if (widget instanceof CCButtonInteger integerWidget) integerWidget.updateFocus(pMouseX, mouseYOptions);
+                else if (widget instanceof CCButtonFloat floatWidget) floatWidget.updateFocus(pMouseX, mouseYOptions);
+                else if (widget instanceof CCButtonDouble doubleWidget) doubleWidget.updateFocus(pMouseX, mouseYOptions);
+                else if (widget instanceof CCButtonLong longWidget) longWidget.updateFocus(pMouseX, mouseYOptions);
+                widget.mouseClicked(pMouseX, mouseYOptions, button);
+            }
+        } catch (ConcurrentModificationException ignored) {}
         for (AbstractWidget widget : modListWidgets) widget.mouseClicked(pMouseX, mouseYModList, button);
         return super.mouseClicked(pMouseX, pMouseY, button);
     }
