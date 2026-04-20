@@ -74,6 +74,8 @@ public class CCButtonBoolean extends AbstractWidget {
             19, 19
         );
 
+        graphics.pose().pushPose();
+        graphics.pose().translate(0, 0, 400);
         if ((entry.type() == ConfigType.SERVER && !Server.isHostingServer()) || (entry.type() == ConfigType.COMMON && entry.getServerValue() != null && !Server.isHostingServer())) {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
@@ -85,6 +87,7 @@ public class CCButtonBoolean extends AbstractWidget {
                 19, 19
             );
         }
+        graphics.pose().popPose();
 
     }
 
