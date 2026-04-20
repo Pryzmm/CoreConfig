@@ -27,6 +27,7 @@ dependencies {
     }
 
     implementation "io.github.pryzmm:coreconfigapi:1.0.2"
+    include "io.github.pryzmm:coreconfigapi:1.0.2"
     modImplementation "com.terraformersmc:modmenu:17.0.0"
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"

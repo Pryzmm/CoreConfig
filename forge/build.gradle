@@ -1,6 +1,17 @@
+import net.minecraftforge.gradle.userdev.tasks.JarJar
+
 plugins {
     id 'multiloader-loader'
     id 'net.minecraftforge.gradle' version '[6.0.40,6.0.47]'
+}
+
+tasks.named('jarJar', JarJar) {
+    setEnabled(true)
+}
+
+tasks.named('jarJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from project(':common').sourceSets.main.output
 }
 
 base {
@@ -60,7 +71,8 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 
-    implementation "io.github.pryzmm:coreconfigapi:1.0.2"
+    implementation "io.github.pryzmm:coreconfigapi:[1.0.2,1.0.3)"
+    jarJar(implementation("io.github.pryzmm:coreconfigapi:[1.0.2,1.0.3)"))
     implementation(project(path: ':common', configuration: 'forgeRuntime')) { transitive = false }
     commonJava project(path: ':common', configuration: 'commonJava')
     commonResources project(path: ':common', configuration: 'commonResources')

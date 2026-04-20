@@ -43,7 +43,13 @@ tasks.register('neoforgeJar', Jar) {
 }
 
 tasks.register('forgeJar', Jar) {
+    if (!project.hasProperty('development')) {
+        from sourceSets.main.output
+        exclude 'fabric.mod.json'
+        archiveClassifier = 'forge'
+    }
 }
+
 
 artifacts {
     neoforgeRuntime tasks.neoforgeJar
