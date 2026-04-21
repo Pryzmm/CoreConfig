@@ -23,6 +23,7 @@ public class CoreConfigFabric implements ModInitializer {
             0x11CAF3FF,
             0x3384BAFF
         );
+
         Config.register();
         CoreConfigCommon.init();
 

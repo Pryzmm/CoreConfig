@@ -57,7 +57,7 @@ public class CCButtonCustom extends AbstractWidget {
         graphics.drawString(
             Minecraft.getInstance().font,
             Component.translatable(this.translation),
-            this.getX() + (this.width / 2) - (textWidth / 2),
+            this.getX() + (width / 2) - (textWidth / 2),
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             0xFFFFFFFF,
             true

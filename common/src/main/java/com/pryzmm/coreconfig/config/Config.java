@@ -34,20 +34,6 @@ public class Config {
     public static DividerEntry tempDivider = new DividerEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Divider")
         .build();
 
-    public static BooleanEntry tempBoolean = new BooleanEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Boolean", true)
-        .divider(tempDivider)
-        .build();
-
-    public static ColorEntry tempColor = new ColorEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Color", 0xFF0000)
-        .divider(tempDivider)
-        .allowAlpha(false)
-        .build();
-
-    public static ColorEntry tempColorAlpha = new ColorEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Color (Alpha)", 0x55FF0000)
-        .divider(tempDivider)
-        .allowAlpha(true)
-        .build();
-
     public static CustomEntry tempCustom = new CustomEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Custom")
         .divider(tempDivider)
         .build();

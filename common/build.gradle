@@ -43,6 +43,9 @@ tasks.register('neoforgeJar', Jar) {
 }
 
 tasks.register('forgeJar', Jar) {
+    from sourceSets.main.output
+    exclude 'fabric.mod.json'
+    archiveClassifier = 'forge'
 }
 
 artifacts {

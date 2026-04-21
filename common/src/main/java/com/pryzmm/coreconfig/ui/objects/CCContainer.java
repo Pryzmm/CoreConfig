@@ -107,16 +107,17 @@ public class CCContainer implements CCElement {
             return Mth.clamp((int)((float)(this.height * this.height) / (float)(this.getInnerHeight() + 4)), 32, this.height);
         }
 
-        private static final ResourceLocation SCROLLER_SPRITE = new ResourceLocation("minecraft", "widget/scroller");
-
         @Override
         protected void renderDecorations(@NotNull GuiGraphics guiGraphics) {
-            if (this.scrollbarVisible()) {
+            if (this.getInnerHeight() + 2 > this.getHeight()) {
                 int i = getScrollbarHeight();
                 int j = this.getX() + this.width - 6;
-                int k = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.getMaxScrollAmount() + this.getY());
+                int k = this.getX() + this.width;
+                int l = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.getMaxScrollAmount() + this.getY());
+                int i1 = l + i;
                 RenderSystem.enableBlend();
-                guiGraphics.blit(SCROLLER_SPRITE, j, k, 0, 0, 6, i);
+                guiGraphics.fill(j, l, k, i1, -8355712);
+                guiGraphics.fill(j, l, k - 1, i1 - 1, -4144960);
                 RenderSystem.disableBlend();
             }
         }

@@ -35,7 +35,7 @@ public class CCButtonInteger extends AbstractWidget {
         this.entry = entry;
         this.color = color;
 
-        editBox = new EditBox(Minecraft.getInstance().font, 0, 0, 200, 20, Component.empty());
+        editBox = new EditBox(Minecraft.getInstance().font, 0, 0, 200, 16, Component.empty());
         editBox.insertText(entry.getUnsavedValue().toString());
         editBox.setMaxLength(256);
     }
@@ -54,8 +54,8 @@ public class CCButtonInteger extends AbstractWidget {
         int width = this.width;
         if (container.scrollable()) width = this.width - 7;
 
-        editBox.setX(this.getX() + width - 151);
-        editBox.setY(this.getY() + (this.height / 2) - 9);
+        editBox.setX(this.getX() + width - 152 - (container.scrollable() ? 0 : 1));
+        editBox.setY(this.getY() + (this.height / 2) - 8);
         editBox.setWidth(150);
         //editBox.setHeight(18);
 

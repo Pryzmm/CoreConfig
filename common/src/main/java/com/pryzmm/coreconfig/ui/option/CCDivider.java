@@ -56,12 +56,12 @@ public class CCDivider extends AbstractWidget {
             graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + width - 7, this.getY() + (this.height / 2) + bottomPadding + 1, color);
         } else {
             graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + (width / 2) - (textWidth / 2) - 5, this.getY() + (this.height / 2) + bottomPadding + 1, color);
-            graphics.fill(container.getX() + (width / 2) + (textWidth / 2) + 5, this.getY() + (this.height / 2) + bottomPadding, container.getX() + width - 7, this.getY() + (this.height / 2) + bottomPadding + 1, color);
+            graphics.fill(container.getX() + (width / 2) + (textWidth / 2) + 5, this.getY() + (this.height / 2) + bottomPadding, container.getX() + width - 11, this.getY() + (this.height / 2) + bottomPadding + 1, color);
         }
 
         graphics.blit(
             new ResourceLocation(CoreConfigConstants.MOD_ID, "textures/ui/divider_arrows.png"),
-            this.getX() + width - 8,
+            this.getX() + width - 10,
             this.getY() + (this.height / 2) + bottomPadding - 4,
             entry.getFoldedState() ? 0 : 8, 0,
             8, 8,
