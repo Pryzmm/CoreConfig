@@ -1,15 +1,13 @@
 package com.pryzmm.coreconfig.network;
 
-import com.pryzmm.coreconfig.CoreConfigNeoforge;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.network.protocol.PacketFlow;
+import com.pryzmm.coreconfig.CoreConfigConstants;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 public class NeoforgeNetworkHelper implements INetworkHelper {
 
@@ -22,33 +20,38 @@ public class NeoforgeNetworkHelper implements INetworkHelper {
         void handleServerSyncConfigSent(ServerSyncConfigPayload payload);
     }
 
+    private static SimpleChannel channel;
     private static boolean registered;
     private static ClientHandler clientHandler;
     private static ServerHandler serverHandler;
 
+    private static final String PROTOCOL_VERSION = "1";
+    private static final ResourceLocation CHANNEL_ID =
+            new ResourceLocation(CoreConfigConstants.MOD_ID, "network");
+
     @Override
     public void registerPayloads() {
-        if (registered) {
-            return;
-        }
+        if (registered) return;
         registered = true;
-        CoreConfigNeoforge.eventBus.addListener(NeoforgeNetworkHelper::onRegisterPayloads);
-    }
 
-    private static void onRegisterPayloads(RegisterPayloadHandlerEvent event) {
-        IPayloadRegistrar registrar = event.registrar("coreconfig");
-        registrar.play(
-            ServerHostPayload.ID,
-            ServerHostPayload::new,
-            handler -> handler.client(NeoforgeNetworkHelper::handleServerHost)
-        );
-        registrar.play(
-            ServerSyncConfigPayload.ID,
-            ServerSyncConfigPayload::new,
-            handler -> handler
-            .client(NeoforgeNetworkHelper::handleServerSyncConfig)
-            .server(NeoforgeNetworkHelper::handleServerSyncConfig)
-        );
+        channel = NetworkRegistry.ChannelBuilder
+            .named(CHANNEL_ID)
+            .networkProtocolVersion(() -> PROTOCOL_VERSION)
+            .clientAcceptedVersions(v -> true)
+            .serverAcceptedVersions(v -> true)
+            .simpleChannel();
+
+        channel.messageBuilder(ServerHostPayload.class, 0)
+            .encoder(ServerHostPayload::write)
+            .decoder(ServerHostPayload::read)
+            .consumerMainThread((payload, ctx) -> handleServerHost(payload, ctx.get()))
+            .add();
+
+        channel.messageBuilder(ServerSyncConfigPayload.class, 1)
+            .encoder(ServerSyncConfigPayload::write)
+            .decoder(ServerSyncConfigPayload::read)
+            .consumerMainThread((payload, ctx) -> handleServerSyncConfig(payload, ctx.get()))
+            .add();
     }
 
     @Override
@@ -63,43 +66,40 @@ public class NeoforgeNetworkHelper implements INetworkHelper {
 
     @Override
     public void sendToPlayers(MinecraftServer server, CoreConfigPacket payload) {
-        PacketDistributor.ALL.noArg().send(payload);
+        if (channel == null) return;
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            channel.send(PacketDistributor.PLAYER.with(() -> player), payload);
+        }
     }
 
     @Override
     public void sendToPlayer(ServerPlayer player, CoreConfigPacket payload) {
-        PacketDistributor.PLAYER.with(player).send(payload);
+        if (channel == null) return;
+        channel.send(PacketDistributor.PLAYER.with(() -> player), payload);
     }
 
     @Override
     public void sendToServer(CoreConfigPacket payload) {
-        ClientPacketListener connection = Minecraft.getInstance().getConnection();
-        if (connection != null) connection.send(payload);
+        if (channel == null) return;
+        channel.sendToServer(payload);
     }
 
-    private static void handleServerHost(ServerHostPayload payload, IPayloadContext context) {
-        context.workHandler().execute(() -> {
+    private static void handleServerHost(ServerHostPayload payload, NetworkEvent.Context ctx) {
+        if (ctx.getDirection().getReceptionSide().isClient()) {
             ClientHandler handler = clientHandler;
-            if (handler != null) {
-                handler.handleServerHost(payload);
-            }
-        });
+            if (handler != null) handler.handleServerHost(payload);
+        }
+        ctx.setPacketHandled(true);
     }
 
-    private static void handleServerSyncConfig(ServerSyncConfigPayload payload, IPayloadContext context) {
-        context.workHandler().execute(() -> {
-            if (context.flow() == PacketFlow.CLIENTBOUND) {
-                ClientHandler handler = clientHandler;
-                if (handler != null) {
-                    handler.handleServerSyncConfig(payload);
-                }
-            } else {
-                ServerHandler handler = serverHandler;
-                if (handler != null) {
-                    handler.handleServerSyncConfigSent(payload);
-                }
-            }
-        });
+    private static void handleServerSyncConfig(ServerSyncConfigPayload payload, NetworkEvent.Context ctx) {
+        if (ctx.getDirection().getReceptionSide().isClient()) {
+            ClientHandler handler = clientHandler;
+            if (handler != null) handler.handleServerSyncConfig(payload);
+        } else {
+            ServerHandler handler = serverHandler;
+            if (handler != null) handler.handleServerSyncConfigSent(payload);
+        }
+        ctx.setPacketHandled(true);
     }
-
 }

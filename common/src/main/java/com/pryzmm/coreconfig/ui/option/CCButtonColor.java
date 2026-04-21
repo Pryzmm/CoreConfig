@@ -35,14 +35,14 @@ public class CCButtonColor extends AbstractWidget {
     }
 
     private boolean isHovered(double pMouseX, double pMouseY) {
-        int width = container.scrollable() ? this.width - 6 : this.width;
+        int width = container.scrollable() ? this.width - 7 : this.width;
         return pMouseX >= this.getX() && pMouseY >= this.getY() && pMouseX < this.getX() + width && pMouseY < this.getY() + this.height;
     }
 
     @Override
     protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
         int width = this.width;
-        if (container.scrollable()) width = this.width - 6;
+        if (container.scrollable()) width = this.width - 7;
 
         if (color != null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, color);
         if (isHovered(mouseX, mouseY)) {
@@ -62,17 +62,17 @@ public class CCButtonColor extends AbstractWidget {
             true
         );
 
-        graphics.fill(this.getX() + width - 19, this.getY() + 1, this.getX() + width - 1, this.getY() + this.height - 1, 0xFF000000);
+        graphics.fill(this.getX() + width - 19 - (container.scrollable() ? 0 : 1), this.getY() + 1, this.getX() + width - 1 - (container.scrollable() ? 0 : 1), this.getY() + this.height - 1, 0xFF000000);
 
         graphics.blit(
             new ResourceLocation(CoreConfigConstants.MOD_ID, "textures/ui/color_background.png"),
-            this.getX() + width - 18,
+            this.getX() + width - 18 - (container.scrollable() ? 0 : 1),
             this.getY() + 2,
             0, 0,
             16, 16,
             16, 16
         );
-        graphics.fill(this.getX() + width - 18, this.getY() + 2, this.getX() + width - 2, this.getY() + 18,
+        graphics.fill(this.getX() + width - 18 - (container.scrollable() ? 0 : 1), this.getY() + 2, this.getX() + width - 2 - (container.scrollable() ? 0 : 1), this.getY() + 18,
             entry.allowAlpha() ? (int) entry.getUnsavedValue() : (int) entry.getUnsavedValue() | 0xFF000000
         );
 
@@ -82,7 +82,7 @@ public class CCButtonColor extends AbstractWidget {
             graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, Config.lockedColor.getValue());
             graphics.blit(
                 new ResourceLocation(CoreConfigConstants.MOD_ID, "textures/ui/locked_option.png"),
-                this.getX() + this.width - 20 - (container.scrollable() ? 6 : 0),
+                this.getX() + this.width - 21 - (container.scrollable() ? 6 : 0),
                 this.getY(),
                 0, 0,
                 19, 19,

@@ -129,14 +129,14 @@ public class CCTooltip {
         graphics.pose().pushPose();
         graphics.pose().translate(0, 0, 400);
 
-        graphics.blitSprite(
+        graphics.blit(
             new ResourceLocation("coreconfig", "ui/tooltip/background"),
-            tooltipX, tooltipY, tooltipWidth, tooltipHeight
+            tooltipX, tooltipY, 0, 0, tooltipWidth, tooltipHeight
         );
 
-        graphics.blitSprite(
+        graphics.blit(
             new ResourceLocation("coreconfig", "ui/tooltip/frame"),
-            tooltipX, tooltipY, tooltipWidth, tooltipHeight
+            tooltipX, tooltipY, 0, 0, tooltipWidth, tooltipHeight
         );
 
         if (image != null) {

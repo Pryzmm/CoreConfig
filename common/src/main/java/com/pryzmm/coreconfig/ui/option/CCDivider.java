@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class CCDivider extends AbstractWidget {
 
     private final String translation;
-    private final Integer color;
+    private Integer color;
     private final DividerEntry entry;
     private final CCContainer container;
 
@@ -31,6 +31,11 @@ public class CCDivider extends AbstractWidget {
     @Override
     protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
 
+        int width = this.width;
+        if (container.scrollable()) width = this.width - 7;
+
+        if (color == null) color = 0xFFFFFFFF;
+
         if (this.isHovered && HoveredEntry.value != entry) HoveredEntry.value = entry;
         else if (HoveredEntry.value == entry) HoveredEntry.value = null;
 
@@ -40,7 +45,7 @@ public class CCDivider extends AbstractWidget {
         graphics.drawString(
             Minecraft.getInstance().font,
             Component.translatable(this.translation),
-            container.getX() + (this.width / 2) - (textWidth / 2),
+            container.getX() + (width / 2) - (textWidth / 2),
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2) + bottomPadding,
             color,
             true
@@ -48,15 +53,15 @@ public class CCDivider extends AbstractWidget {
 
         // Divider lines
         if (textWidth == 0) {
-            graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + this.width - 7, this.getY() + (this.height / 2) + bottomPadding + 1, color);
+            graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + width - 7, this.getY() + (this.height / 2) + bottomPadding + 1, color);
         } else {
-            graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + (this.width / 2) - (textWidth / 2) - 5, this.getY() + (this.height / 2) + bottomPadding + 1, color);
-            graphics.fill(container.getX() + (this.width / 2) + (textWidth / 2) + 5, this.getY() + (this.height / 2) + bottomPadding, container.getX() + this.width - 7, this.getY() + (this.height / 2) + bottomPadding + 1, color);
+            graphics.fill(container.getX(), this.getY() + (this.height / 2) + bottomPadding, container.getX() + (width / 2) - (textWidth / 2) - 5, this.getY() + (this.height / 2) + bottomPadding + 1, color);
+            graphics.fill(container.getX() + (width / 2) + (textWidth / 2) + 5, this.getY() + (this.height / 2) + bottomPadding, container.getX() + width - 7, this.getY() + (this.height / 2) + bottomPadding + 1, color);
         }
 
         graphics.blit(
             new ResourceLocation(CoreConfigConstants.MOD_ID, "textures/ui/divider_arrows.png"),
-            this.getX() + this.width - 8,
+            this.getX() + width - 8,
             this.getY() + (this.height / 2) + bottomPadding - 4,
             entry.getFoldedState() ? 0 : 8, 0,
             8, 8,

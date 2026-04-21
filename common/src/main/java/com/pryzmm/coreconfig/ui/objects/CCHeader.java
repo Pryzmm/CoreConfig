@@ -35,8 +35,8 @@ public class CCHeader implements CCElement {
         this.height = height;
         this.color = color;
 
-        this.layout = LinearLayout.vertical();
-        this.layout.defaultCellSetting().alignHorizontallyCenter();
+        this.layout = new LinearLayout(width, height, LinearLayout.Orientation.VERTICAL);
+        this.layout.defaultChildLayoutSetting().alignHorizontallyCenter();
         this.layout.setPosition(this.x + (this.width / 2) - (minecraft.font.width(text) / 2), this.y + (height / 2) - (minecraft.font.lineHeight / 2));
         this.layout.addChild(new StringWidget(text, minecraft.font));
         this.layout.arrangeElements();

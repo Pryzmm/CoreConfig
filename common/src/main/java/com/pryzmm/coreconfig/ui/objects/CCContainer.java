@@ -1,11 +1,9 @@
 package com.pryzmm.coreconfig.ui.objects;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.pryzmm.coreconfigapi.entry.MainEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractScrollWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -44,15 +42,16 @@ public class CCContainer implements CCElement {
     }
 
     public void populate(List<AbstractWidget> widgets) {
-        LinearLayout content = LinearLayout.vertical();
-        content.defaultCellSetting().padding(2).paddingBottom(0);
-        content.setPosition(x, y);
-        widgets.forEach(widget -> {
-            if (!(widget instanceof MainEntry entry) || entry.divider() == null || !entry.divider().getFoldedState()) content.addChild(widget);
-        });
-        content.arrangeElements();
-
-        scrollWidget = new InnerScrollWidget(x, y, width, height, content);
+        final int GAP = 2;
+        int currentY = y;
+        for (AbstractWidget widget : widgets) {
+            widget.setX(x);
+            widget.setY(currentY);
+            widget.setWidth(width);
+            currentY += widget.getHeight() + GAP;
+        }
+        int totalHeight = currentY - y;
+        scrollWidget = new InnerScrollWidget(x, y, width, height, widgets, totalHeight);
     }
 
     @Override
@@ -78,11 +77,13 @@ public class CCContainer implements CCElement {
             } catch (Exception ignored) {}
         }
 
-        private final LinearLayout content;
+        private final List<AbstractWidget> widgets;
+        private final int totalHeight;
 
-        public InnerScrollWidget(int x, int y, int width, int height, LinearLayout content) {
+        public InnerScrollWidget(int x, int y, int width, int height, List<AbstractWidget> widgets, int totalHeight) {
             super(x, y, width, height, Component.empty());
-            this.content = content;
+            this.widgets = widgets;
+            this.totalHeight = totalHeight;
         }
 
         public double getScrollAmount() {
@@ -91,7 +92,7 @@ public class CCContainer implements CCElement {
 
         @Override
         protected int getInnerHeight() {
-            return content.getHeight();
+            return totalHeight;
         }
 
         @Override
@@ -100,31 +101,54 @@ public class CCContainer implements CCElement {
         }
 
         @Override
-        protected void renderBackground(@NotNull GuiGraphics pGuiGraphics) {}
+        protected void renderBackground(@NotNull GuiGraphics guiGraphics) {}
 
         private int getScrollbarHeight() {
             return Mth.clamp((int)((float)(this.height * this.height) / (float)(this.getInnerHeight() + 4)), 32, this.height);
         }
 
         private static final ResourceLocation SCROLLER_SPRITE = new ResourceLocation("minecraft", "widget/scroller");
+
         @Override
-        protected void renderDecorations(@NotNull GuiGraphics pGuiGraphics) {
+        protected void renderDecorations(@NotNull GuiGraphics guiGraphics) {
             if (this.scrollbarVisible()) {
                 int i = getScrollbarHeight();
                 int j = this.getX() + this.width - 6;
                 int k = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.getMaxScrollAmount() + this.getY());
                 RenderSystem.enableBlend();
-                pGuiGraphics.blitSprite(SCROLLER_SPRITE, j, k, 6, i);
+                guiGraphics.blit(SCROLLER_SPRITE, j, k, 0, 0, 6, i);
                 RenderSystem.disableBlend();
             }
+        }
 
+        @Override
+        protected void renderContents(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+            int offset = (int) scrollAmount();
+            for (AbstractWidget widget : widgets) {
+                // Only render widgets that are within the visible area
+                int widgetY = widget.getY() - offset;
+                if (widgetY + widget.getHeight() < this.getY()) continue;
+                if (widgetY > this.getY() + this.height) continue;
+                widget.render(guiGraphics, mouseX, mouseY + offset, partialTick);
+            }
+        }
+
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            boolean isScrolling = this.scrollbarVisible()
+                    && mouseX >= (double)(this.getX() + this.width - 6)
+                    && mouseX <= (double)(this.getX() + this.width)
+                    && mouseY >= (double)this.getY()
+                    && mouseY < (double)(this.getY() + this.height);
+            if (isScrolling) try { SCROLLING_FIELD.setBoolean(this, true); } catch (Exception ignored) {}
+            return super.mouseClicked(mouseX, mouseY, button);
         }
 
         @Override
         public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
             try {
                 if (this.visible && this.isFocused() && SCROLLING_FIELD != null && (boolean) SCROLLING_FIELD.get(this)) {
-                    if (pMouseY < (double)this.getY()) this.setScrollAmount(0.0F);
+                    if (pMouseY < (double)this.getY()) this.setScrollAmount(0.0);
                     else if (pMouseY > (double)(this.getY() + this.height)) this.setScrollAmount(this.getMaxScrollAmount());
                     else {
                         int i = getScrollbarHeight();
@@ -132,31 +156,19 @@ public class CCContainer implements CCElement {
                         this.setScrollAmount(this.scrollAmount() + pDragY * d0);
                     }
                     return true;
-                } else return false;
+                }
             } catch (IllegalAccessException ignored) {}
             return false;
         }
 
         @Override
-        protected void renderContents(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-            content.visitWidgets(widget -> widget.render(guiGraphics, mouseX, (int) (mouseY + scrollAmount()), partialTick));
+        public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
+            if (pButton == 0) try { SCROLLING_FIELD.setBoolean(this, false); } catch (Exception ignored) {}
+            return super.mouseReleased(pMouseX, pMouseY, pButton);
         }
 
         public int getMaxScrollAmount() {
             return super.getMaxScrollAmount();
-        }
-
-        @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            boolean isScrolling = this.scrollbarVisible() && mouseX >= (double)(this.getX() + this.width - 6) && mouseX <= (double)(this.getX() + this.width) && mouseY >= (double)this.getY() && mouseY < (double)(this.getY() + this.height);
-            if (isScrolling) try { SCROLLING_FIELD.setBoolean(this, true); } catch (Exception ignored) {}
-            return super.mouseClicked(mouseX, mouseY, button);
-        }
-
-        @Override
-        public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-            if (pButton == 0) try { SCROLLING_FIELD.setBoolean(this, true); } catch (Exception ignored) {}
-            return super.mouseReleased(pMouseX, pMouseY, pButton);
         }
 
         @Override

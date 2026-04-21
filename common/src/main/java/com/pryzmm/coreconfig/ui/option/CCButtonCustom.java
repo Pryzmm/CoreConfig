@@ -34,14 +34,14 @@ public class CCButtonCustom extends AbstractWidget {
     }
 
     private boolean isHovered(double pMouseX, double pMouseY) {
-        int width = container.scrollable() ? this.width - 6 : this.width;
+        int width = container.scrollable() ? this.width - 7 : this.width;
         return pMouseX >= this.getX() && pMouseY >= this.getY() && pMouseX < this.getX() + width && pMouseY < this.getY() + this.height;
     }
 
     @Override
     protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
         int width = this.width;
-        if (container.scrollable()) width = this.width - 6;
+        if (container.scrollable()) width = this.width - 7;
 
         if (color != null) graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + this.height, color);
         if (isHovered(mouseX, mouseY)) {

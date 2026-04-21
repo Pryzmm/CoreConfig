@@ -1,13 +1,14 @@
 package com.pryzmm.coreconfig.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.PacketListener;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Map;
 
-public record ServerSyncConfigPayload(String modID, String hostKey, Map<String, Object> values) implements CoreConfigPacket, CustomPacketPayload {
+public record ServerSyncConfigPayload(String modID, String hostKey, Map<String, Object> values) implements CoreConfigPacket, Packet {
 
     public static final ResourceLocation ID = new ResourceLocation("coreconfig", "server_sync_config");
 
@@ -21,6 +22,9 @@ public record ServerSyncConfigPayload(String modID, String hostKey, Map<String, 
         buf.writeUtf(hostKey());
         BufferHelper.writeEntries(buf, values().entrySet().stream().map(e -> new BufferHelper.Entry(modID(), e.getKey(), e.getValue())).toList());
     }
+
+    @Override
+    public void handle(@NotNull PacketListener packetListener) {}
 
     public static ServerSyncConfigPayload read(FriendlyByteBuf buf) {
         String modID = buf.readUtf();

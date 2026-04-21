@@ -41,7 +41,7 @@ public class CCButtonDouble extends AbstractWidget {
     }
 
     private boolean isHovered(double pMouseX, double pMouseY) {
-        int width = container.scrollable() ? this.width - 6 : this.width;
+        int width = container.scrollable() ? this.width - 7 : this.width;
         return pMouseX >= this.getX() && pMouseY >= this.getY() && pMouseX < this.getX() + width && pMouseY < this.getY() + this.height;
     }
 
@@ -52,12 +52,12 @@ public class CCButtonDouble extends AbstractWidget {
     @Override
     protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
         int width = this.width;
-        if (container.scrollable()) width = this.width - 6;
+        if (container.scrollable()) width = this.width - 7;
 
         editBox.setX(this.getX() + width - 151);
         editBox.setY(this.getY() + (this.height / 2) - 9);
         editBox.setWidth(150);
-        editBox.setHeight(18);
+        //editBox.setHeight(18);
 
 
         boolean canParse = false;

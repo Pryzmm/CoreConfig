@@ -1,11 +1,11 @@
 package com.pryzmm.coreconfig.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public interface CoreConfigPacket extends CustomPacketPayload {
+public interface CoreConfigPacket extends Packet {
 
     @NotNull ResourceLocation id();
 
