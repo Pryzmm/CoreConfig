@@ -1,3 +1,5 @@
+import net.minecraftforge.gradle.userdev.tasks.JarJar
+
 plugins {
     id 'multiloader-loader'
     id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
@@ -7,11 +9,18 @@ base {
     archivesName = "${mod_name}-forge-${minecraft_version}"
 }
 
+jarJar.enable()
+
+tasks.named('jarJar', JarJar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from project(':common').sourceSets.main.output
+}
+
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
     copyIdeResources = true
-    reobf = false // Forge 1.20.6+ uses official mappings at runtime, so we shouldn't reobf from official to SRG
+    reobf = true // Forge 1.20.6+ uses official mappings at runtime, so we shouldn't reobf from official to SRG
 
     def at = file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) accessTransformer = at
@@ -59,7 +68,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
-    implementation "io.github.pryzmm:coreconfigapi:1.0.2"
+    minecraftLibrary "io.github.pryzmm:coreconfigapi:[1.0.2,1.0.3)"
+    jarJar(implementation("io.github.pryzmm:coreconfigapi:[1.0.2,1.0.3)"))
 
     implementation(project(path: ':common', configuration: 'forgeRuntime')) { transitive = false }
     commonJava project(path: ':common', configuration: 'commonJava')

@@ -64,7 +64,7 @@ public class CCButtonEnum extends AbstractWidget {
         graphics.drawString(
             Minecraft.getInstance().font,
             Component.literal(entry.getUnsavedValue().name()),
-            this.getX() + this.width - 5 - Minecraft.getInstance().font.width(Component.literal(entry.getUnsavedValue().name())),
+            this.getX() + width - 5 - Minecraft.getInstance().font.width(Component.literal(entry.getUnsavedValue().name())),
             this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             0xFFFFFFFF,
             true

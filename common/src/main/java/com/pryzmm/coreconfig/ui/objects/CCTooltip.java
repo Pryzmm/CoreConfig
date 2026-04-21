@@ -1,6 +1,7 @@
 package com.pryzmm.coreconfig.ui.objects;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import com.pryzmm.coreconfig.network.Server;
@@ -8,6 +9,7 @@ import com.pryzmm.coreconfigapi.component.ImageComponent;
 import com.pryzmm.coreconfigapi.data.ConfigType;
 import com.pryzmm.coreconfigapi.entry.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -129,15 +131,7 @@ public class CCTooltip {
         graphics.pose().pushPose();
         graphics.pose().translate(0, 0, 400);
 
-        graphics.blit(
-            new ResourceLocation("coreconfig", "ui/tooltip/background"),
-            tooltipX, tooltipY, 0, 0, tooltipWidth, tooltipHeight
-        );
-
-        graphics.blit(
-            new ResourceLocation("coreconfig", "ui/tooltip/frame"),
-            tooltipX, tooltipY, 0, 0, tooltipWidth, tooltipHeight
-        );
+        TooltipRenderUtil.renderTooltipBackground(graphics, tooltipX + 12, tooltipY + 12, tooltipWidth - 24, tooltipHeight - 24, -1);
 
         if (image != null) {
             if (image.animationTime() >= 0) {
