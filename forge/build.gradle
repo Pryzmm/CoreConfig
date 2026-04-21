@@ -1,7 +1,14 @@
 plugins {
     id 'multiloader-loader'
     id 'net.minecraftforge.gradle' version '[7.0,)'
+    id 'com.gradleup.shadow' version '8.3.6'
 }
+
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
 
 repositories {
     maven {
@@ -61,8 +68,7 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 
-    implementation "io.github.pryzmm:coreconfigapi:1.0.2"
-    implementation(project(path: ':common', configuration: 'forgeRuntime')) { transitive = false }
+    shade "io.github.pryzmm:coreconfigapi:[1.0.2,1.0.3)"
     commonJava project(path: ':common', configuration: 'commonJava')
     commonResources project(path: ':common', configuration: 'commonResources')
 }
@@ -75,9 +81,10 @@ repositories {
     mavenCentral()
 }
 
-jar {
+shadowJar {
+    configurations = [project.configurations.shade]
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from project(':common').sourceSets.main.output
+    archiveClassifier = ''
 }
 
 sourceSets.each {
