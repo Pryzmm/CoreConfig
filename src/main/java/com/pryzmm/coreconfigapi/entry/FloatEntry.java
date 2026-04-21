@@ -79,7 +79,7 @@ public class FloatEntry implements MainEntry {
         private ImageComponent image = null;
         private boolean requiresRestart = false;
         private Integer hoverColor = null;
-        private float minimum = Float.MIN_VALUE;
+        private float minimum = -Float.MAX_VALUE;
         private float maximum = Float.MAX_VALUE;
         private int priority = 0;
         private DividerEntry divider = null;
