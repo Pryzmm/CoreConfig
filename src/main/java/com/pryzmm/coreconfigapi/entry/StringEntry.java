@@ -105,7 +105,7 @@ public class StringEntry implements MainEntry {
             entry.image = image;
             entry.requiresRestart = requiresRestart;
             entry.hoverColor = hoverColor;
-            entry.minimumLength = Math.max(minimumLength, 1);
+            entry.minimumLength = Math.max(minimumLength, 0);
             entry.maximumLength = (maximumLength == Integer.MAX_VALUE) ? Integer.MAX_VALUE - 1 : Math.max(maximumLength, 1);
             entry.priority = priority;
             entry.defaultValue = defaultValue;
