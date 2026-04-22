@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.stream.Collectors;
 import java.util.Map;
 
-public record ServerSyncConfigPayload(String modID, String hostKey, Map<String, Object> values) implements CoreConfigPacket, Packet {
+public record ServerSyncConfigPayload(String modID, String hostKey, Map<String, Object> values) implements CoreConfigPacket, Packet<PacketListener> {
 
     public static final ResourceLocation ID = new ResourceLocation("coreconfig", "server_sync_config");
 

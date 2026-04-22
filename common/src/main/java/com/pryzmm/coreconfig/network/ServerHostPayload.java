@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
-public record ServerHostPayload(UUID uuid, String hostKey) implements CoreConfigPacket, Packet {
+public record ServerHostPayload(UUID uuid, String hostKey) implements CoreConfigPacket, Packet<PacketListener> {
 
     public static final ResourceLocation ID = new ResourceLocation("coreconfig", "server_host");
 

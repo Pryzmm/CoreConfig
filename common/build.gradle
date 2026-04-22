@@ -1,19 +1,15 @@
 plugins {
     id 'multiloader-common'
-    id 'net.neoforged.moddev.legacyforge'
-}
-
-legacyForge {
-    enable {
-        neoForgeVersion = project.neoforge_version
-    }
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
-    }
+    id 'fabric-loom'
 }
 
 dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
+    }
+
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
@@ -32,14 +28,7 @@ configurations {
 }
 
 configurations {
-    neoforgeRuntime
     forgeRuntime
-}
-
-tasks.register('neoforgeJar', Jar) {
-    from sourceSets.main.output
-    exclude 'fabric.mod.json'
-    archiveClassifier = 'neoforge'
 }
 
 tasks.register('forgeJar', Jar) {
@@ -49,7 +38,6 @@ tasks.register('forgeJar', Jar) {
 }
 
 artifacts {
-    neoforgeRuntime tasks.neoforgeJar
     forgeRuntime tasks.forgeJar
     commonJava sourceSets.main.java.sourceDirectories.singleFile
     commonResources sourceSets.main.resources.sourceDirectories.singleFile

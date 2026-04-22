@@ -40,7 +40,7 @@ public class ColorPopup extends AbstractPopup {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
         super.renderWidget(graphics, mouseX, mouseY, a);
         if (this.minecraft == null) return;
 

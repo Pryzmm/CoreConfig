@@ -21,7 +21,7 @@ public class AbstractPopup extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
         graphics.pose().pushPose();
         graphics.pose().translate(0, 0, 400);
         graphics.fill(0, 0, screen.width, screen.height, 0x99443333);
