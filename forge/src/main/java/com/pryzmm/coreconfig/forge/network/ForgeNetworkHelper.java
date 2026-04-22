@@ -8,12 +8,9 @@ import com.pryzmm.coreconfig.network.ServerSyncConfigPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.network.*;
-import net.minecraftforge.network.simple.SimpleChannel;
 
-import java.util.function.Supplier;
-
-@SuppressWarnings("removal")
 public class ForgeNetworkHelper implements INetworkHelper {
 
     interface ClientHandler {
@@ -30,7 +27,7 @@ public class ForgeNetworkHelper implements INetworkHelper {
     private static ClientHandler clientHandler;
     private static ServerHandler serverHandler;
 
-    private static final Supplier<String> PROTOCOL_VERSION = () -> "1";
+    private static final int PROTOCOL_VERSION = 1;
     private static final ResourceLocation CHANNEL_ID = new ResourceLocation(CoreConfigConstants.MOD_ID, "network");
 
     @Override
@@ -38,24 +35,24 @@ public class ForgeNetworkHelper implements INetworkHelper {
         if (registered) return;
         registered = true;
 
-        channel = NetworkRegistry.ChannelBuilder
-            .named(CHANNEL_ID)
-            .networkProtocolVersion(PROTOCOL_VERSION)
-            .clientAcceptedVersions(v -> true)
-            .serverAcceptedVersions(v -> true)
-            .simpleChannel();
+        channel = ChannelBuilder
+                .named(CHANNEL_ID)
+                .networkProtocolVersion(PROTOCOL_VERSION)
+                .clientAcceptedVersions(Channel.VersionTest.exact(1))
+                .serverAcceptedVersions(Channel.VersionTest.exact(1))
+                .simpleChannel();
 
-        channel.messageBuilder(ServerHostPayload.class, 0)
-            .encoder(ServerHostPayload::write)
-            .decoder(ServerHostPayload::read)
-            .consumerMainThread((payload, ctx) -> handleServerHost(payload, ctx.get()))
-            .add();
+        channel.messageBuilder(ServerHostPayload.class)
+                .encoder(ServerHostPayload::write)
+                .decoder(ServerHostPayload::read)
+                .consumerMainThread(ForgeNetworkHelper::handleServerHost)
+                .add();
 
-        channel.messageBuilder(ServerSyncConfigPayload.class, 1)
-            .encoder(ServerSyncConfigPayload::write)
-            .decoder(ServerSyncConfigPayload::read)
-            .consumerMainThread((payload, ctx) -> handleServerSyncConfig(payload, ctx.get()))
-            .add();
+        channel.messageBuilder(ServerSyncConfigPayload.class)
+                .encoder(ServerSyncConfigPayload::write)
+                .decoder(ServerSyncConfigPayload::read)
+                .consumerMainThread(ForgeNetworkHelper::handleServerSyncConfig)
+                .add();
 
     }
 
@@ -76,7 +73,7 @@ public class ForgeNetworkHelper implements INetworkHelper {
         }
 
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            channel.send(PacketDistributor.PLAYER.with(() -> player), payload);
+            channel.send(payload, PacketDistributor.PLAYER.with(player));
         }
     }
 
@@ -86,7 +83,7 @@ public class ForgeNetworkHelper implements INetworkHelper {
             return;
         }
 
-        channel.send( PacketDistributor.PLAYER.with(() -> player), payload);
+        channel.send(payload, PacketDistributor.PLAYER.with(player));
     }
 
     @Override
@@ -94,12 +91,12 @@ public class ForgeNetworkHelper implements INetworkHelper {
         if (channel == null) {
             return;
         }
-        channel.send(PacketDistributor.SERVER.noArg(), payload);
+        channel.send(payload, PacketDistributor.SERVER.noArg());
 
     }
 
-    private static void handleServerHost(ServerHostPayload payload, NetworkEvent.Context context) {
-        if (context.getDirection() != NetworkDirection.PLAY_TO_CLIENT) {
+    private static void handleServerHost(ServerHostPayload payload, CustomPayloadEvent.Context context) {
+        if (!context.isClientSide()) {
             return;
         }
 
@@ -109,8 +106,8 @@ public class ForgeNetworkHelper implements INetworkHelper {
         }
     }
 
-    private static void handleServerSyncConfig(ServerSyncConfigPayload payload, NetworkEvent.Context context) {
-        if (context.getDirection() != NetworkDirection.PLAY_TO_CLIENT) {
+    private static void handleServerSyncConfig(ServerSyncConfigPayload payload, CustomPayloadEvent.Context context) {
+        if (context.isClientSide()) {
             ClientHandler handler = clientHandler;
             if (handler != null) {
                 handler.handleServerSyncConfig(payload);

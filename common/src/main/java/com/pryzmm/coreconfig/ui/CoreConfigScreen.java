@@ -201,8 +201,8 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
     }
 
     @Override
-    public void renderBackground(@NotNull GuiGraphics graphics) {
-        super.renderBackground(graphics);
+    public void renderBackground(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(graphics, mouseX, mouseY, partialTick);
         containers.forEach(container -> graphics.fill(
             container.getX(),
             container.getY(),
@@ -214,7 +214,7 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
-        renderBackground(graphics);
+        renderBackground(graphics, mouseX, mouseY, a);
         super.render(graphics, mouseX, mouseY, a);
         CCTooltip.render(graphics, mouseX, mouseY, HoveredEntry.value, configContainer);
     }
