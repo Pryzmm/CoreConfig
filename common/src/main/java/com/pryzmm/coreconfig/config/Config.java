@@ -31,44 +31,6 @@ public class Config {
         .divider(visualsDivider)
         .build();
 
-    public static DividerEntry tempDivider = new DividerEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Divider")
-        .build();
-
-    public static CustomEntry tempCustom = new CustomEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Custom")
-        .divider(tempDivider)
-        .build();
-
-    public static DoubleEntry tempDouble = new DoubleEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Double", 0d)
-        .divider(tempDivider)
-        .build();
-
-    public enum TempEnums {
-        TEST1, test2, test_3
-    }
-    public static EnumEntry tempEnum = new EnumEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Enum", TempEnums.class, TempEnums.TEST1)
-        .divider(tempDivider)
-        .build();
-
-    public static FloatEntry tempFloat = new FloatEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Float", 0f)
-        .divider(tempDivider)
-        .build();
-
-    public static IntegerEntry tempInt = new IntegerEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Integer", 0)
-        .divider(tempDivider)
-        .build();
-
-    public static LongEntry tempLong = new LongEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Long", 0L)
-        .divider(tempDivider)
-        .build();
-
-    public static StringEntry tempString = new StringEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary String", "")
-        .divider(tempDivider)
-        .build();
-
-    public static WebsiteEntry tempWebsite = new WebsiteEntry.Builder(CoreConfigConstants.MOD_ID, "Temporary Website", "https://google.com/")
-        .divider(tempDivider)
-        .build();
-
     public static void register() {}
 
 }
