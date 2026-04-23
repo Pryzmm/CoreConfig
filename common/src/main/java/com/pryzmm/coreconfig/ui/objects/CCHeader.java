@@ -13,10 +13,10 @@ public class CCHeader implements CCElement {
     private final int x, y, width, height;
     private final Integer color;
 
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public int getWidth() { return width; }
-    public int getHeight() { return height; }
+    public int ccGetX() { return x; }
+    public int ccGetY() { return y; }
+    public int ccGetWidth() { return width; }
+    public int ccGetHeight() { return height; }
     public Integer getColor() { return color; }
 
     @Override

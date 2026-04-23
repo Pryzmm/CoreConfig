@@ -6,10 +6,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 public interface CCElement {
-    int getX();
-    int getY();
-    int getWidth();
-    int getHeight();
+    int ccGetX();
+    int ccGetY();
+    int ccGetWidth();
+    int ccGetHeight();
     @Nullable Integer getColor();
     void visitWidgets(Consumer<AbstractWidget> consumer);
 }
