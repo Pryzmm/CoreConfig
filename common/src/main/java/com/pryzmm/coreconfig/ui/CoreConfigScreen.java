@@ -91,17 +91,17 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
 
                      if (entry instanceof MainEntry mainEntry && mainEntry.divider() != null && mainEntry.divider().getFoldedState()) continue;
 
-                     if (entry instanceof BooleanEntry booleanEntry) configWidgets.add(new CCButtonBoolean(booleanEntry, configContainer.getWidth(), 20, booleanEntry.translation(),  configContainer, booleanEntry.hoverColor() != null ? booleanEntry.hoverColor() : 0x55000000, data.buttonColor()));
-                else if (entry instanceof StringEntry   stringEntry) configWidgets.add(new CCButtonString(stringEntry,   configContainer.getWidth(), 20, stringEntry.translation(),   configContainer, stringEntry.hoverColor()  != null ? stringEntry.hoverColor()  : 0x55000000, data.buttonColor()));
-                else if (entry instanceof IntegerEntry integerEntry) configWidgets.add(new CCButtonInteger(integerEntry, configContainer.getWidth(), 20, integerEntry.translation(),  configContainer, integerEntry.hoverColor() != null ? integerEntry.hoverColor() : 0x55000000, data.buttonColor()));
-                else if (entry instanceof FloatEntry     floatEntry) configWidgets.add(new CCButtonFloat(floatEntry,     configContainer.getWidth(), 20, floatEntry.translation(),    configContainer, floatEntry.hoverColor()   != null ? floatEntry.hoverColor()   : 0x55000000, data.buttonColor()));
-                else if (entry instanceof DoubleEntry   doubleEntry) configWidgets.add(new CCButtonDouble(doubleEntry,   configContainer.getWidth(), 20, doubleEntry.translation(),   configContainer, doubleEntry.hoverColor()  != null ? doubleEntry.hoverColor()  : 0x55000000, data.buttonColor()));
-                else if (entry instanceof LongEntry       longEntry) configWidgets.add(new CCButtonLong(longEntry,       configContainer.getWidth(), 20, longEntry.translation(),     configContainer, longEntry.hoverColor()    != null ? longEntry.hoverColor()    : 0x55000000, data.buttonColor()));
-                else if (entry instanceof ColorEntry     colorEntry) configWidgets.add(new CCButtonColor(colorEntry,     configContainer.getWidth(), 20, colorEntry.translation(),    configContainer, colorEntry.hoverColor()   != null ? colorEntry.hoverColor()   : 0x55000000, data.buttonColor()));
-                else if (entry instanceof WebsiteEntry websiteEntry) configWidgets.add(new CCButtonWebsite(websiteEntry, configContainer.getWidth(), 20, websiteEntry.translation(),  configContainer, websiteEntry.hoverColor() != null ? websiteEntry.hoverColor() : 0x55000000, data.buttonColor()));
-                else if (entry instanceof EnumEntry       enumEntry) configWidgets.add(new CCButtonEnum(enumEntry,       configContainer.getWidth(), 20, enumEntry.translation(),     configContainer, enumEntry.hoverColor()    != null ? enumEntry.hoverColor()    : 0x55000000, data.buttonColor()));
-                else if (entry instanceof CustomEntry   customEntry) configWidgets.add(new CCButtonCustom(customEntry,   configContainer.getWidth(), 20, customEntry.translation(),   configContainer, customEntry.hoverColor()  != null ? customEntry.hoverColor()  : 0x55000000, data.buttonColor()));
-                else if (entry instanceof DividerEntry dividerEntry) configWidgets.add(new CCDivider(dividerEntry, configContainer.getWidth(), configWidgets.isEmpty() ? 20 : 30, dividerEntry.translation(), configContainer, dividerEntry.textColor()));
+                     if (entry instanceof BooleanEntry booleanEntry) configWidgets.add(new CCButtonBoolean(booleanEntry, configContainer.ccGetWidth(), 20, booleanEntry.translation(),  configContainer, booleanEntry.hoverColor() != null ? booleanEntry.hoverColor() : 0x55000000, data.buttonColor()));
+                else if (entry instanceof StringEntry   stringEntry) configWidgets.add(new CCButtonString(stringEntry,   configContainer.ccGetWidth(), 20, stringEntry.translation(),   configContainer, stringEntry.hoverColor()  != null ? stringEntry.hoverColor()  : 0x55000000, data.buttonColor()));
+                else if (entry instanceof IntegerEntry integerEntry) configWidgets.add(new CCButtonInteger(integerEntry, configContainer.ccGetWidth(), 20, integerEntry.translation(),  configContainer, integerEntry.hoverColor() != null ? integerEntry.hoverColor() : 0x55000000, data.buttonColor()));
+                else if (entry instanceof FloatEntry     floatEntry) configWidgets.add(new CCButtonFloat(floatEntry,     configContainer.ccGetWidth(), 20, floatEntry.translation(),    configContainer, floatEntry.hoverColor()   != null ? floatEntry.hoverColor()   : 0x55000000, data.buttonColor()));
+                else if (entry instanceof DoubleEntry   doubleEntry) configWidgets.add(new CCButtonDouble(doubleEntry,   configContainer.ccGetWidth(), 20, doubleEntry.translation(),   configContainer, doubleEntry.hoverColor()  != null ? doubleEntry.hoverColor()  : 0x55000000, data.buttonColor()));
+                else if (entry instanceof LongEntry       longEntry) configWidgets.add(new CCButtonLong(longEntry,       configContainer.ccGetWidth(), 20, longEntry.translation(),     configContainer, longEntry.hoverColor()    != null ? longEntry.hoverColor()    : 0x55000000, data.buttonColor()));
+                else if (entry instanceof ColorEntry     colorEntry) configWidgets.add(new CCButtonColor(colorEntry,     configContainer.ccGetWidth(), 20, colorEntry.translation(),    configContainer, colorEntry.hoverColor()   != null ? colorEntry.hoverColor()   : 0x55000000, data.buttonColor()));
+                else if (entry instanceof WebsiteEntry websiteEntry) configWidgets.add(new CCButtonWebsite(websiteEntry, configContainer.ccGetWidth(), 20, websiteEntry.translation(),  configContainer, websiteEntry.hoverColor() != null ? websiteEntry.hoverColor() : 0x55000000, data.buttonColor()));
+                else if (entry instanceof EnumEntry       enumEntry) configWidgets.add(new CCButtonEnum(enumEntry,       configContainer.ccGetWidth(), 20, enumEntry.translation(),     configContainer, enumEntry.hoverColor()    != null ? enumEntry.hoverColor()    : 0x55000000, data.buttonColor()));
+                else if (entry instanceof CustomEntry   customEntry) configWidgets.add(new CCButtonCustom(customEntry,   configContainer.ccGetWidth(), 20, customEntry.translation(),   configContainer, customEntry.hoverColor()  != null ? customEntry.hoverColor()  : 0x55000000, data.buttonColor()));
+                else if (entry instanceof DividerEntry dividerEntry) configWidgets.add(new CCDivider(dividerEntry, configContainer.ccGetWidth(), configWidgets.isEmpty() ? 20 : 30, dividerEntry.translation(), configContainer, dividerEntry.textColor()));
                 else CoreConfigConstants.LOGGER.warn("Unsupported config entry type: {}", entry == null ? "null" : entry.getClass());
             }
         } catch (Exception ignored) {}
@@ -182,7 +182,7 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
                 (w instanceof CCButtonDouble d && d.isEditBoxFocused()) ||
                 (w instanceof CCButtonLong l && l.isEditBoxFocused())
             );
-            if (!anyFocused) return exitButton.mouseClicked(exitButton.getX() + 1, exitButton.getY() + 1, 0);
+            if (!anyFocused) return exitButton.mouseClicked(exitButton.ccGetX() + 1, exitButton.ccGetY() + 1, 0);
         }
         for (AbstractWidget widget : configWidgets) widget.keyPressed(keyCode, scanCode, modifiers);
         return super.keyPressed(keyCode, scanCode, modifiers);
@@ -204,10 +204,10 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
     public void renderBackground(@NotNull GuiGraphics graphics) {
         super.renderBackground(graphics);
         containers.forEach(container -> graphics.fill(
-            container.getX(),
-            container.getY(),
-            container.getX() + container.getWidth(),
-            container.getY() + container.getHeight(),
+            container.ccGetX(),
+            container.ccGetY(),
+            container.ccGetX() + container.ccGetWidth(),
+            container.ccGetY() + container.ccGetHeight(),
             container.getColor() != null ? container.getColor() : 0x551A1A1A
         ));
     }

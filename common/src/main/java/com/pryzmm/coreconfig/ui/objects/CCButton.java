@@ -17,10 +17,10 @@ public class CCButton extends AbstractWidget implements CCElement {
     private final Runnable runnable;
     private final boolean isSaveButton, isInPopup;
 
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public int getWidth() { return width; }
-    public int getHeight() { return height; }
+    public int ccGetX() { return x; }
+    public int ccGetY() { return y; }
+    public int ccGetWidth() { return width; }
+    public int ccGetHeight() { return height; }
 
     public Integer getColor() { return color; }
 
@@ -44,22 +44,22 @@ public class CCButton extends AbstractWidget implements CCElement {
     }
 
     private boolean isHovered(double pMouseX, double pMouseY) {
-        return pMouseX >= this.getX() && pMouseY >= this.getY() && pMouseX < this.getX() + this.width && pMouseY < this.getY() + this.height;
+        return pMouseX >= this.ccGetX() && pMouseY >= this.ccGetY() && pMouseX < this.ccGetX() + this.width && pMouseY < this.ccGetY() + this.height;
     }
 
     @Override
     public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float a) {
-        graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0x551A1A1A);
+        graphics.fill(this.ccGetX(), this.ccGetY(), this.ccGetX() + this.width, this.ccGetY() + this.height, 0x551A1A1A);
         if (this.isHovered(mouseX, mouseY)) {
-            if (CoreConfigScreen.activePopup == null || isInPopup) graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, hoverColor);
+            if (CoreConfigScreen.activePopup == null || isInPopup) graphics.fill(this.ccGetX(), this.ccGetY(), this.ccGetX() + this.width, this.ccGetY() + this.height, hoverColor);
             if (EntryHolder.containsAnyInvalidConfigs() && isSaveButton) setTooltip(Tooltip.create(Component.translatable("ui.coreconfig.cant_save")));
             else setTooltip(null);
         }
         graphics.drawString(
             Minecraft.getInstance().font,
             this.getMessage(),
-            this.getX() + (this.width / 2) - (Minecraft.getInstance().font.width(this.getMessage()) / 2),
-            this.getY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
+            this.ccGetX() + (this.width / 2) - (Minecraft.getInstance().font.width(this.getMessage()) / 2),
+            this.ccGetY() + (this.height / 2) - (Minecraft.getInstance().font.lineHeight / 2),
             0xFFFFFFFF,
             true
         );
