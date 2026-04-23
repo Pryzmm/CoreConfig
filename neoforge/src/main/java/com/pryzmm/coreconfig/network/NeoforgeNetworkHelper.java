@@ -46,7 +46,6 @@ public class NeoforgeNetworkHelper implements INetworkHelper {
         registrar.playBidirectional(
             ServerSyncConfigPayload.ID,
             ServerSyncConfigPayload.CODEC.cast(),
-            NeoforgeNetworkHelper::handleServerSyncConfig,
             NeoforgeNetworkHelper::handleServerSyncConfig
         );
     }
