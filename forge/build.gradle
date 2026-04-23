@@ -5,13 +5,20 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
 }
 
+tasks.named('jar') {
+    archiveClassifier = 'slim'
+}
+
 tasks.named('jarJar', JarJar) {
     setEnabled(true)
 }
 
 tasks.named('jarJar') {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from project(':common').sourceSets.main.output
+    archiveClassifier = ''
+}
+
+artifacts {
+    archives tasks.named('jarJar')
 }
 
 
@@ -23,7 +30,7 @@ minecraft {
     mappings channel: 'official', version: minecraft_version
 
     copyIdeResources = true
-    reobf = "${minecraft_version}" != "1.20.6"
+    reobf = false
 
     def at = file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) accessTransformer = at
