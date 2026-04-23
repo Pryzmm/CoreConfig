@@ -1,7 +1,6 @@
 package com.pryzmm.coreconfig.ui.objects;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.pryzmm.coreconfig.CoreConfigConstants;
 import com.pryzmm.coreconfig.ui.CoreConfigScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import com.pryzmm.coreconfig.network.Server;
@@ -120,8 +119,8 @@ public class CCTooltip {
 
         int tooltipX = mouseX;
         int tooltipY = mouseY;
-        if (mouseX + tooltipWidth > (container.getX() + container.getWidth())) tooltipX = (container.getX() + container.getWidth()) - tooltipWidth;
-        if (mouseY + tooltipHeight > (container.getY() + container.getHeight())) tooltipY = (container.getY() + container.getHeight()) - tooltipHeight;
+        if (mouseX + tooltipWidth > (container.ccGetX() + container.ccGetWidth())) tooltipX = (container.ccGetX() + container.ccGetWidth()) - tooltipWidth;
+        if (mouseY + tooltipHeight > (container.ccGetY() + container.ccGetHeight())) tooltipY = (container.ccGetY() + container.ccGetHeight()) - tooltipHeight;
 
         boolean hadScissor;
         try { graphics.disableScissor(); hadScissor = true; } catch (IllegalStateException ignored) { hadScissor = false; }
@@ -166,9 +165,9 @@ public class CCTooltip {
         RenderSystem.disableBlend();
 
         if (hadScissor) graphics.enableScissor(
-            container.getX(), container.getY(),
-            container.getX() + container.getWidth(),
-            container.getY() + container.getHeight()
+            container.ccGetX(), container.ccGetY(),
+            container.ccGetX() + container.ccGetWidth(),
+            container.ccGetY() + container.ccGetHeight()
         );
 
     }
