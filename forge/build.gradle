@@ -85,6 +85,14 @@ shadowJar {
     configurations = [project.configurations.shade]
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveClassifier = ''
+    finalizedBy 'reobfShadowJar'
+}
+
+jar {
+    from {
+        configurations.shade.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 sourceSets.each {
