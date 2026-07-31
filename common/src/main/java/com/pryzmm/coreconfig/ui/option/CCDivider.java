@@ -23,7 +23,7 @@ public class CCDivider extends AbstractWidget {
     private final CCContainer container;
 
     public CCDivider(DividerEntry entry, int width, int height, String translation, CCContainer container, Integer color) {
-        super(0, 0, width - 4, height, Component.empty());
+        super(0, 0, width - 10, height, Component.empty());
         this.translation = translation;
         this.entry = entry;
         this.color = color;

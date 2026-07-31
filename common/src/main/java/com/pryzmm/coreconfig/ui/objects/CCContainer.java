@@ -70,6 +70,8 @@ public class CCContainer implements CCElement {
 
     public static class InnerScrollWidget extends AbstractTextAreaWidget {
 
+        private boolean scrolling = false;
+
         private final LinearLayout content;
 
         public InnerScrollWidget(int x, int y, int width, int height, LinearLayout content) {
@@ -107,12 +109,17 @@ public class CCContainer implements CCElement {
                 int k = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.maxScrollAmount() + this.getY());
                 pGuiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_SPRITE, j, k, 6, i);
             }
-
         }
+
+        public boolean isMouseOverScrollbar(MouseButtonEvent event) {
+            return event.x() >= (double)this.scrollBarX() - 6 && event.x() <= (double)(this.scrollBarX()) && event.y() >= (double)this.getY() && event.y() < (double)this.getBottom();
+        }
+
+        public boolean isScrolling() { return scrolling; }
 
         @Override
         public boolean mouseDragged(@NotNull MouseButtonEvent event, double pDragX, double pDragY) {
-            if (this.visible && this.isFocused()) {
+            if (this.visible && this.isFocused() && this.scrolling) {
                 if (event.y() < (double)this.getY()) this.setScrollAmount(0.0F);
                 else if (event.y() > (double)(this.getY() + this.height)) this.setScrollAmount(this.maxScrollAmount());
                 else {
@@ -122,6 +129,17 @@ public class CCContainer implements CCElement {
                 }
                 return true;
             } else return false;
+        }
+
+        @Override
+        public void onRelease(@NotNull MouseButtonEvent event) {
+            this.scrolling = false;
+        }
+
+        @Override
+        public boolean updateScrolling(@NotNull MouseButtonEvent event) {
+            this.scrolling = this.scrollbarVisible() && this.isMouseOverScrollbar(event);
+            return this.scrolling;
         }
 
         @Override

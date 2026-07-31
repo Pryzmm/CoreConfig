@@ -156,6 +156,9 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
             if (activePopup.isMouseOver(event.x(), event.y())) activePopup.mouseClicked(event, doubleClick);
             return false;
         }
+        if (containers.stream().filter(e -> e instanceof CCContainer).map(element -> (CCContainer) element).anyMatch(c -> c.getLayout().isScrolling())) {
+            return false;
+        }
         double mouseYOptions = event.y() + configContainer.getLayout().getScrollAmount();
         try {
             for (AbstractWidget widget : configWidgets) {
@@ -167,7 +170,7 @@ public class CoreConfigScreen extends Screen implements IConfigScreen {
                 widget.mouseClicked(event, doubleClick);
             }
         } catch (ConcurrentModificationException ignored) {}
-        for (AbstractWidget widget : modListWidgets) widget.mouseClicked(event, doubleClick);
+        try { for (AbstractWidget widget : modListWidgets) widget.mouseClicked(event, doubleClick); } catch (Exception ignored) { super.mouseClicked(event, doubleClick); }
         return super.mouseClicked(event, doubleClick);
     }
 
